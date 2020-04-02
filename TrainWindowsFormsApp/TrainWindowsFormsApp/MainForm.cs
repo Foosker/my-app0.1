@@ -20,7 +20,7 @@ namespace TrainWindowsFormsApp
         private Label[] labelsMap;
         private Button[] executedButtons;
 
-        Exercise[] exercises = new Exercise[3];
+        Exercise[] exercises;
 
         public MainForm()
         {
@@ -29,11 +29,9 @@ namespace TrainWindowsFormsApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            exercises[0] = new Exercise("Бег", 3, false, "Кроссовок, один", "Ногами");
-            exercises[1] = new Exercise("Жим", 3, false, "Жми - разрешаю", "Руками");
-            exercises[2] = new Exercise("Тяга", 3, false, "Тяни, ты всё равно меня не вытянишь", "Мыслями");
-
             InitMap();
+            exercises = GetListExercise();
+            FillInTheTable();
         }
 
         private void InitMap()
@@ -59,7 +57,7 @@ namespace TrainWindowsFormsApp
                 var executedButton = CreateButton(1150, i, 100);
                 Controls.Add(executedButton);
                 executedButtons[i] = executedButton;
-            }   
+            }
         }
 
         private Button CreateButton(int indentLeftEdge, int indexRow, int width)
@@ -69,14 +67,14 @@ namespace TrainWindowsFormsApp
 
             var button = new Button
             {
-                BackColor = Color.Goldenrod,
+                BackColor = Color.IndianRed,
                 Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(204))),
-                Text = "OK",
+                Text = "NOK",
                 Size = new Size(width, 60),
                 TextAlign = ContentAlignment.MiddleCenter,
                 Location = new Point(x, y)
             };
-            return button;            
+            return button;
         }
 
         private Label CreateLabels(int indentLeftEdge, int indexRow, int width)
@@ -95,14 +93,31 @@ namespace TrainWindowsFormsApp
             return label;
         }
 
-        private void exerciseLabel1_MouseDown(object sender, MouseEventArgs e)
+        private Exercise[] GetListExercise()
         {
-            MessageBox.Show(exercises[0].remark);
+            var exercises = new Exercise[9];
+
+            exercises[0] = new Exercise("Бег", 0, false, "Кроссовок, один", "Ногами");
+            exercises[1] = new Exercise("Жим", 1, false, "Жми - разрешаю", "Руками");
+            exercises[2] = new Exercise("Тяга", 2, false, "Тяни, ты всё равно меня не вытянишь", "Мыслями");
+            exercises[3] = new Exercise("exerc3", 3, false, "load3", "remark3");
+            exercises[4] = new Exercise("exerc4", 4, false, "load4", "remark4");
+            exercises[5] = new Exercise("exerc5", 5, false, "load5", "remark5");
+            exercises[6] = new Exercise("exerc6", 6, false, "load6", "remark6");
+            exercises[7] = new Exercise("exerc7", 7, false, "load7", "remark7");
+            exercises[8] = new Exercise("exerc8", 8, false, "load8", "remark8");
+
+            return exercises;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void FillInTheTable()
         {
-
+            for (int i = 0; i < mapSize / 3; i++)
+            {
+                labelsMap[i].Text = exercises[i].text;
+                labelsMap[i + 9].Text = exercises[i].load;
+                labelsMap[i + 18].Text = exercises[i].repeat.ToString();
+            }
         }
     }
 }
