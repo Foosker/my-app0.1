@@ -15,9 +15,10 @@ namespace TrainWindowsFormsApp
         private readonly int cellSize = 60;
         private readonly int indentBetween = 10;
         private int indentUpEdge = 60;
-        public int mapSize = 9;
+        public int mapSize = 27;
 
         private Label[] labelsMap;
+        private Button[] executedButtons;
 
         Exercise[] exercises = new Exercise[3];
 
@@ -38,14 +39,44 @@ namespace TrainWindowsFormsApp
         private void InitMap()
         {
             labelsMap = new Label[mapSize];
+            executedButtons = new Button[mapSize / 3];
 
-            for (int i = 0; i < mapSize; i++)
+            for (int i = 0; i < mapSize / 3; i++)
             {
                 if (i % 3 == 0) indentUpEdge += 40;
-                var newLabel = CreateLabels(50, i, 600);
-                Controls.Add(newLabel);
-                labelsMap[i] = newLabel;                
+                var textLabel = CreateLabels(50, i, 650);
+                Controls.Add(textLabel);
+                labelsMap[i] = textLabel;
+
+                var loadLabel = CreateLabels(750, i, 200);
+                Controls.Add(loadLabel);
+                labelsMap[i + 9] = loadLabel;
+
+                var repeatLabel = CreateLabels(1000, i, 100);
+                Controls.Add(repeatLabel);
+                labelsMap[i + 18] = repeatLabel;
+
+                var executedButton = CreateButton(1150, i, 100);
+                Controls.Add(executedButton);
+                executedButtons[i] = executedButton;
             }   
+        }
+
+        private Button CreateButton(int indentLeftEdge, int indexRow, int width)
+        {
+            int x = indentLeftEdge;
+            int y = indentUpEdge + indexRow * (indentBetween + cellSize);
+
+            var button = new Button
+            {
+                BackColor = Color.Goldenrod,
+                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(204))),
+                Text = "OK",
+                Size = new Size(width, 60),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Location = new Point(x, y)
+            };
+            return button;            
         }
 
         private Label CreateLabels(int indentLeftEdge, int indexRow, int width)
@@ -55,13 +86,12 @@ namespace TrainWindowsFormsApp
 
             var label = new Label
             {
-                BackColor = Color.Red,
+                BackColor = Color.LightBlue,
                 Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(204))),
                 Size = new Size(width, 60),
                 TextAlign = ContentAlignment.MiddleCenter,
                 Location = new Point(x, y)
             };
-
             return label;
         }
 
