@@ -8,11 +8,15 @@ namespace TrainWindowsFormsApp
 {
     class Exercise
     {
-        public string text;
-        public int repeat;
-        public bool status;           // Выполнены все повторения или нет
+        public string text { get; }
+        public int repeat { get; }
+        public bool status { get; set; }           // Выполнены все повторения или нет
         public string load;
         public string remark;
-        public string specification;  // Какая группа мышц и спецификация упражнения
+
+        public Exercise Get()
+        {
+
+        }
     }
 }
