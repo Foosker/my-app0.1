@@ -12,7 +12,7 @@ namespace TrainWindowsFormsApp
 {
     public partial class MainForm : Form
     {
-        private readonly int cellSize = 60;
+        private readonly int cellHeight = 60;
         private readonly int indentBetween = 10;
         private int indentUpEdge = 60;
         public int mapSize = 27;
@@ -35,7 +35,7 @@ namespace TrainWindowsFormsApp
         }
 
         private void InitMap()
-        {
+        {   // Заполнение формы ячейками и кнопками
             labelsMap = new Label[mapSize];
             executedButtons = new Button[mapSize / 3];
 
@@ -61,9 +61,9 @@ namespace TrainWindowsFormsApp
         }
 
         private Button CreateButton(int indentLeftEdge, int indexRow, int width)
-        {
+        {   // Создание кнопок 
             int x = indentLeftEdge;
-            int y = indentUpEdge + indexRow * (indentBetween + cellSize);
+            int y = indentUpEdge + indexRow * (indentBetween + cellHeight);  // Формула расчёта координат эллемента по ординате
 
             var button = new Button
             {
@@ -78,9 +78,9 @@ namespace TrainWindowsFormsApp
         }
 
         private Label CreateLabels(int indentLeftEdge, int indexRow, int width)
-        {
+        {   // Создание ячеек
             int x = indentLeftEdge;
-            int y = indentUpEdge + indexRow * (indentBetween + cellSize);
+            int y = indentUpEdge + indexRow * (indentBetween + cellHeight); // Формула расчёта координат эллемента по ординате
 
             var label = new Label
             {
@@ -94,7 +94,7 @@ namespace TrainWindowsFormsApp
         }
 
         private Exercise[] GetListExercise()
-        {
+        {   // Вреенная функция, пока не будет готов класс
             var exercises = new Exercise[9];
 
             exercises[0] = new Exercise("Бег", 0, false, "Кроссовок, один", "Ногами");
@@ -114,9 +114,9 @@ namespace TrainWindowsFormsApp
         {
             for (int i = 0; i < mapSize / 3; i++)
             {
-                labelsMap[i].Text = exercises[i].text;
-                labelsMap[i + 9].Text = exercises[i].load;
-                labelsMap[i + 18].Text = exercises[i].repeat.ToString();
+                labelsMap[i].Text = exercises[i].text;                    // Заполнение ячеек с названием упражнения,
+                labelsMap[i + 9].Text = exercises[i].load;                // нагрузкой,
+                labelsMap[i + 18].Text = exercises[i].repeat.ToString();  // и количеством повторений.
             }
         }
     }
