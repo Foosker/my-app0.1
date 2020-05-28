@@ -37,7 +37,7 @@
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(2769, 1384);
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "Let\'s Rock";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
 

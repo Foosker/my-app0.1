@@ -97,7 +97,7 @@ namespace TrainWindowsFormsApp
         {   // Вреенная функция, пока не будет готов класс
             var exercises = new Exercise[9];
 
-            exercises[0] = new Exercise("Бег", 0, false, "Кроссовок, один", "Ногами");
+            exercises[0] = new Exercise("Бег", 0, false, "Кроссовок, один", "Ногами|234567890|234567890|234567890|234567890");
             exercises[1] = new Exercise("Жим", 1, false, "Жми - разрешаю", "Руками");
             exercises[2] = new Exercise("Тяга", 2, false, "Тяни, ты всё равно меня не вытянишь", "Мыслями");
             exercises[3] = new Exercise("exerc3", 3, false, "load3", "remark3");
@@ -125,9 +125,11 @@ namespace TrainWindowsFormsApp
         private void MainForm_MouseClick(object sender, MouseEventArgs e)
         {
             // Показ примечания к упражнению
+            var remark = new MyMessageBox();
+
             var index = Array.IndexOf(labelsMap, sender);                // Получаем индекс лейбла, на который нажали
-            var remarkShow = new MyMessageBox(exercises[index].remark);  // и выводим примечание к упражнению по полученному индексу.
-            remarkShow.ShowDialog();
+            remark.ShowRemark(exercises[index].remark);                 // и выводим примечание к упражнению по полученному индексу.
+            
         }
     }
 }
