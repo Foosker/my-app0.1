@@ -35,7 +35,7 @@ namespace TrainWindowsFormsApp
             var label = new Label()
             {
                 Location = new Point(0, 0),
-                Size = new Size(Height, Width),
+                Size = new Size(Height, Width),  // Размер лейбла во всю форму
                 AutoSize = true,
 
                 BackColor = Color.Ivory,

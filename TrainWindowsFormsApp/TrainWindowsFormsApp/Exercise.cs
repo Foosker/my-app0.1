@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace TrainWindowsFormsApp
 {
     class Exercise
-    {   public string text { get; }         // Название упражнения
+    {   
+        public string text { get; }         // Название упражнения
         public int repeat { get; set; }     // Количество повторенеий
         public bool status { get; set; }    // Выполнены все повторения или нет
         public string load;                 // Нагрузка
@@ -21,5 +22,7 @@ namespace TrainWindowsFormsApp
             this.load = load;
             this.remark = remark;
         }
+
+        public
     }
 }

@@ -135,8 +135,8 @@ namespace TrainWindowsFormsApp
 
         private void Button_Click(object sender, EventArgs e)
         {   // Нажатие на кнопки
-            var button = (sender as Button);        // Это чтобы обратиться к кнопке,
-            button.BackColor = Color.ForestGreen;   // изменить окраску кнопки
+            var button = (sender as Button);        // Обращается к кнопке,
+            button.BackColor = Color.ForestGreen;   // меняет окраску кнопки
             button.Text = "OK";                     // и текст на ней.
             button.Enabled = false;  // Отключение кнопки после нажатия.
 
