@@ -125,8 +125,9 @@ namespace TrainWindowsFormsApp
         private void MainForm_MouseClick(object sender, MouseEventArgs e)
         {
             // Показ примечания к упражнению
-            var index = Array.IndexOf(labelsMap, sender);  // Получаем индекс лейбла, на который нажали
-            MessageBox.Show(exercises[index].remark);      // и выводим примечание к упражнению по полученному индексу.
+            var index = Array.IndexOf(labelsMap, sender);                // Получаем индекс лейбла, на который нажали
+            var remarkShow = new MyMessageBox(exercises[index].remark);  // и выводим примечание к упражнению по полученному индексу.
+            remarkShow.ShowDialog();
         }
     }
 }
