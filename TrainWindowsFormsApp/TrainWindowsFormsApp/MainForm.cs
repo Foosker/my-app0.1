@@ -127,8 +127,8 @@ namespace TrainWindowsFormsApp
             // Показ примечания к упражнению
             var remark = new MyMessageBox();
 
-            var index = Array.IndexOf(labelsMap, sender);                // Получаем индекс лейбла, на который нажали
-            remark.ShowRemark(exercises[index].remark);                 // и выводим примечание к упражнению по полученному индексу.
+            var index = Array.IndexOf(labelsMap, sender); // Получаем индекс лейбла, на который нажали
+            remark.ShowText(exercises[index].remark);     // и выводим примечание к упражнению по полученному индексу.
             
         }
     }

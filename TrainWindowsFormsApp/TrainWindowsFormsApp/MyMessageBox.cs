@@ -15,23 +15,31 @@ namespace TrainWindowsFormsApp
         {
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Height = 50;
-            Location = new Point(MousePosition.X, MousePosition.Y);
-            ShowIcon = false;
+
             StartPosition = FormStartPosition.Manual;
-            Text = "Примечание";            
+            Location = new Point(MousePosition.X, MousePosition.Y);
+
+            FormBorderStyle = FormBorderStyle.None;  // None - yбирает шапку формы
+            ShowIcon = false;
+
+            KeyPress += MyMessageBox_KeyPress;            
         }
 
-        public void ShowRemark(string message)
+        private void MyMessageBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            Close();
+        }
+
+        public void ShowText(string message)
         {
             var label = new Label()
             {
-                AutoSize = true,
-                BackColor = Color.AliceBlue,
-                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(204))),
                 Location = new Point(0, 0),
                 Size = new Size(Height, Width),
+                AutoSize = true,
+
+                BackColor = Color.Ivory,
+                Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(204))),
                 Text = message,
                 TextAlign = ContentAlignment.TopLeft
             };
