@@ -44,7 +44,7 @@ namespace TrainWindowsFormsApp
                 TextAlign = ContentAlignment.TopLeft
             };
             Controls.Add(label);
-            ShowDialog();
+            Show();
         }
     }
 }

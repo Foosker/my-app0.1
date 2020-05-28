@@ -138,14 +138,17 @@ namespace TrainWindowsFormsApp
             var button = (sender as Button);        // Это чтобы обратиться к кнопке,
             button.BackColor = Color.ForestGreen;   // изменить окраску кнопки
             button.Text = "OK";                     // и текст на ней.
-            button.Enabled = false;
+            button.Enabled = false;  // Отключение кнопки после нажатия.
 
             var name = button.Name;                                          // Получаем имя, которое состоит только из цифры,
             var index = int.Parse(name);                                     // преоразуем имя в индекс,
             exercises[index].repeat++;                                       // меняем значение числа повторов,
             labelsMap[index + 18].Text = exercises[index].repeat.ToString(); // обновляем значение в ячейке.
+        }
 
-
+        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
