@@ -45,6 +45,7 @@ namespace TrainWindowsFormsApp
                 var textLabel = CreateLabels(50, i, 650);
                 Controls.Add(textLabel);
                 labelsMap[i] = textLabel;
+                textLabel.MouseClick += ExerciseName_MouseClick;   // Событие нажатия на текст с названием упражнения
 
                 var loadLabel = CreateLabels(750, i, 200);
                 Controls.Add(loadLabel);
@@ -55,8 +56,11 @@ namespace TrainWindowsFormsApp
                 labelsMap[i + 18] = repeatLabel;
 
                 var executedButton = CreateButton(1150, i, 100);
+                // Имя кнопки состоит только из цифры от 0 до 8, для более удобного получения индекса в событии нажатия кнопки
+                executedButton.Name = i.ToString();
                 Controls.Add(executedButton);
                 executedButtons[i] = executedButton;
+                executedButton.Click += Button_Click;  // Событие нажатия на кнопку
             }
         }
 
@@ -111,25 +115,37 @@ namespace TrainWindowsFormsApp
         }
 
         private void FillInTheTable()
-        {
+        {   // Заполнение ячеек
             for (int i = 0; i < mapSize / 3; i++)
             {
-                labelsMap[i].Text = exercises[i].text;                    // Заполнение ячеек с названием упражнения,
-                labelsMap[i + 9].Text = exercises[i].load;                // нагрузкой,
-                labelsMap[i + 18].Text = exercises[i].repeat.ToString();  // и количеством повторений.
-
-                labelsMap[i].MouseClick += MainForm_MouseClick;   // Событие нажатия на текст с названием упражнения
+                labelsMap[i].Text = exercises[i].text;                    // название упражнения
+                labelsMap[i + 9].Text = exercises[i].load;                // нагрузка
+                labelsMap[i + 18].Text = exercises[i].repeat.ToString();  // повторения
             }
         }
 
-        private void MainForm_MouseClick(object sender, MouseEventArgs e)
-        {
-            // Показ примечания к упражнению
+        private void ExerciseName_MouseClick(object sender, MouseEventArgs e)
+        {   // Показ примечания к упражнению
             var remark = new MyMessageBox();
 
             var index = Array.IndexOf(labelsMap, sender); // Получаем индекс лейбла, на который нажали
             remark.ShowText(exercises[index].remark);     // и выводим примечание к упражнению по полученному индексу.
             
+        }
+
+        private void Button_Click(object sender, EventArgs e)
+        {   // Нажатие на кнопки
+            var button = (sender as Button);        // Это чтобы обратиться к кнопке,
+            button.BackColor = Color.ForestGreen;   // изменить окраску кнопки
+            button.Text = "OK";                     // и текст на ней.
+            button.Enabled = false;
+
+            var name = button.Name;                                          // Получаем имя, которое состоит только из цифры,
+            var index = int.Parse(name);                                     // преоразуем имя в индекс,
+            exercises[index].repeat++;                                       // меняем значение числа повторов,
+            labelsMap[index + 18].Text = exercises[index].repeat.ToString(); // обновляем значение в ячейке.
+
+
         }
     }
 }
