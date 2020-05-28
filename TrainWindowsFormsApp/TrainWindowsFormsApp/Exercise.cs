@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace TrainWindowsFormsApp
 {
     class Exercise
-    {     public string text { get; }
-        public int repeat { get; set; }
-        public bool status { get; set; }           // Выполнены все повторения или нет
-        public string load;
-        public string remark;
+    {   public string text { get; }         // Название упражнения
+        public int repeat { get; set; }     // Количество повторенеий
+        public bool status { get; set; }    // Выполнены все повторения или нет
+        public string load;                 // Нагрузка
+        public string remark;               // Примечания
 
         public Exercise(string text, int repeat, bool status, string load, string remark)
         {

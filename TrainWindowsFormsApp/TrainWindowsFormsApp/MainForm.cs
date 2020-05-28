@@ -41,7 +41,7 @@ namespace TrainWindowsFormsApp
 
             for (int i = 0; i < mapSize / 3; i++)
             {
-                if (i % 3 == 0) indentUpEdge += 40;
+                if (i % 3 == 0) indentUpEdge += 40;  // Если индекс элемента кратен 3, то переходим на следующую строку.
                 var textLabel = CreateLabels(50, i, 650);
                 Controls.Add(textLabel);
                 labelsMap[i] = textLabel;
@@ -117,7 +117,16 @@ namespace TrainWindowsFormsApp
                 labelsMap[i].Text = exercises[i].text;                    // Заполнение ячеек с названием упражнения,
                 labelsMap[i + 9].Text = exercises[i].load;                // нагрузкой,
                 labelsMap[i + 18].Text = exercises[i].repeat.ToString();  // и количеством повторений.
+
+                labelsMap[i].MouseClick += MainForm_MouseClick;   // Событие нажатия на текст с названием упражнения
             }
+        }
+
+        private void MainForm_MouseClick(object sender, MouseEventArgs e)
+        {
+            // Показ примечания к упражнению
+            var index = Array.IndexOf(labelsMap, sender);  // Получаем индекс лейбла, на который нажали
+            MessageBox.Show(exercises[index].remark);      // и выводим примечание к упражнению по полученному индексу.
         }
     }
 }
