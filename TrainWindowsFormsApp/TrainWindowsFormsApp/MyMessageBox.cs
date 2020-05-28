@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,9 +17,10 @@ namespace TrainWindowsFormsApp
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Height = 50;
+            Location = new Point(MousePosition.X, MousePosition.Y);
             ShowIcon = false;
-            Text = "Примечание";
-            
+            StartPosition = FormStartPosition.Manual;
+            Text = "Примечание";            
         }
 
         public void ShowRemark(string message)
