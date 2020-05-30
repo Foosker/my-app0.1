@@ -23,6 +23,5 @@ namespace TrainWindowsFormsApp
             this.remark = remark;
         }
 
-        public
     }
 }
