@@ -98,7 +98,7 @@ namespace TrainWindowsFormsApp
         }
 
         private Exercise[] GetListExercise()
-        {   // Вреенная функция, пока не будет готов класс
+        {   // Временная функция, пока не будет готов класс
             var exercises = new Exercise[9];
 
             exercises[0] = new Exercise("Бег", 0, false, "Кроссовок, один", "Ногами|234567890|234567890|234567890|234567890");
