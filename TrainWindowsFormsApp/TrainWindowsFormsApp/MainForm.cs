@@ -35,10 +35,13 @@ namespace TrainWindowsFormsApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            progress = GetProgress();
-            InitMap();
-            exercises = GetListExercise();
-            FillInTheTable();
+            var saveExerc = new SaveNewExercise();
+            saveExerc.ShowDialog();
+
+            //progress = GetProgress();
+            //InitMap();
+            //exercises = GetListExercise();
+            //FillInTheTable();
         }
         //
         // Работа с файлами
@@ -59,21 +62,21 @@ namespace TrainWindowsFormsApp
             FileProvider.Save(pathToProgressFile, data);
         }
 
-        public Exercise[] GetUserResult()
-        {
-            //var data = FileWorker.GetData(PathToResult);
-            //var deserializedData = JsonConvert.DeserializeObject<List<UserResult>>(data);
-            //return deserializedData;
-        }
+        //public Exercise[] GetUserResult()
+        //{
+        //    //var data = FileWorker.GetData(PathToResult);
+        //    //var deserializedData = JsonConvert.DeserializeObject<List<UserResult>>(data);
+        //    //return deserializedData;
+        //}
 
-        public void SaveUserResult()
-        {
-            //var userResult = new UserResult(user.Name, user.CountRightAnswer, user.Diagnose.Name);
-            //var results = GetUserResult();
-            //results.Add(userResult);
-            //var serializedData = JsonConvert.SerializeObject(results, Formatting.Indented);
-            //FileWorker.Save(PathToResult, serializedData);
-        }
+        //public void SaveUserResult()
+        //{
+        //    //var userResult = new UserResult(user.Name, user.CountRightAnswer, user.Diagnose.Name);
+        //    //var results = GetUserResult();
+        //    //results.Add(userResult);
+        //    //var serializedData = JsonConvert.SerializeObject(results, Formatting.Indented);
+        //    //FileWorker.Save(PathToResult, serializedData);
+        //}
         //
         // Создание клиентской области
         //

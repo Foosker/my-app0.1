@@ -32,9 +32,9 @@ namespace TrainWindowsFormsApp
             var exerciseTypes = TrainDay.Get(trainNumber % 6);  // Получаем массив с видами упражнений
             for (int i = 0; i < exerciseTypes.Length; i++)
             {
-                var pathExerciseFile = exerciseTypes[i].ToString() + ".json";                   // Название упражнения преобразуем в путь к файлу,
-                var data = FileProvider.GetData(pathExerciseFile);                              // получили данные из файла
-                var deserializableData = JsonConvert.DeserializeObject<List<Exercise>>(data);   // и десериализовали в список.
+                var pathExerciseFile = "ExercisesType/" + exerciseTypes[i].ToString() + ".json"; // Название упражнения преобразуем в путь к файлу,
+                var data = FileProvider.GetData(pathExerciseFile);                               // получили данные из файла
+                var deserializableData = JsonConvert.DeserializeObject<List<Exercise>>(data);    // и десериализовали в список.
 
                 var index = i; // По этому значению будет присваиваться индекс упражнения в исходный массив
                 for (int j = 0; j < 3; j++)
