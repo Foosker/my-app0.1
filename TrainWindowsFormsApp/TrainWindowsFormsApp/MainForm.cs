@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,8 @@ namespace TrainWindowsFormsApp
 {
     public partial class MainForm : Form
     {
+        string pathToProgressFile = "progress.txt";
+
         private readonly int cellHeight = 60;
         private readonly int indentBetween = 10;
         private int indentUpEdge = 60;
@@ -19,8 +22,11 @@ namespace TrainWindowsFormsApp
 
         private Label[] labelsMap;
         private Button[] executedButtons;
-
+        MyMessageBox message;
+        Exercise exercise;
         Exercise[] exercises;
+
+        int progress;
 
         public MainForm()
         {
@@ -29,11 +35,48 @@ namespace TrainWindowsFormsApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            progress = GetProgress();
             InitMap();
             exercises = GetListExercise();
             FillInTheTable();
         }
+        //
+        // Работа с файлами
+        //
+        private int GetProgress()
+        {
+            var isExistFile = FileProvider.TryGet(pathToProgressFile, out var data);
 
+            if (!isExistFile) data = "1";
+
+            return int.Parse(data);
+        }
+
+        private void SaveProgress()
+        {
+            var data = progress.ToString();
+
+            FileProvider.Save(pathToProgressFile, data);
+        }
+
+        public Exercise[] GetUserResult()
+        {
+            //var data = FileWorker.GetData(PathToResult);
+            //var deserializedData = JsonConvert.DeserializeObject<List<UserResult>>(data);
+            //return deserializedData;
+        }
+
+        public void SaveUserResult()
+        {
+            //var userResult = new UserResult(user.Name, user.CountRightAnswer, user.Diagnose.Name);
+            //var results = GetUserResult();
+            //results.Add(userResult);
+            //var serializedData = JsonConvert.SerializeObject(results, Formatting.Indented);
+            //FileWorker.Save(PathToResult, serializedData);
+        }
+        //
+        // Создание клиентской области
+        //
         private void InitMap()
         {   // Заполнение формы ячейками и кнопками
             labelsMap = new Label[mapSize];
@@ -97,21 +140,25 @@ namespace TrainWindowsFormsApp
             return label;
         }
 
-        private Exercise[] GetListExercise()
-        {   // Временная функция, пока не будет готов класс
-            var exercises = new Exercise[9];
+        //private Exercise[] GetListExercise()
+        //{   // Вреенная функция, пока не будет готов класс
+        //    var exercises = new Exercise[9];
 
-            exercises[0] = new Exercise("Бег", 0, false, "Кроссовок, один", "Ногами|234567890|234567890|234567890|234567890");
-            exercises[1] = new Exercise("Жим", 1, false, "Жми - разрешаю", "Руками");
-            exercises[2] = new Exercise("Тяга", 2, false, "Тяни, ты всё равно меня не вытянишь", "Мыслями");
-            exercises[3] = new Exercise("exerc3", 3, false, "load3", "remark3");
-            exercises[4] = new Exercise("exerc4", 4, false, "load4", "remark4");
-            exercises[5] = new Exercise("exerc5", 5, false, "load5", "remark5");
-            exercises[6] = new Exercise("exerc6", 6, false, "load6", "remark6");
-            exercises[7] = new Exercise("exerc7", 7, false, "load7", "remark7");
-            exercises[8] = new Exercise("exerc8", 8, false, "load8", "remark8");
+        //    exercises[0] = new Exercise("Бег", 0, false, "Кроссовок, один", "Ногами|234567890|234567890|234567890|234567890");
+        //    exercises[1] = new Exercise("Жим", 1, false, "Жми - разрешаю", "Руками");
+        //    exercises[2] = new Exercise("Тяга", 2, false, "Тяни, ты всё равно меня не вытянишь", "Мыслями");
+        //    exercises[3] = new Exercise("exerc3", 3, false, "load3", "remark3");
+        //    exercises[4] = new Exercise("exerc4", 4, false, "load4", "remark4");
+        //    exercises[5] = new Exercise("exerc5", 5, false, "load5", "remark5");
+        //    exercises[6] = new Exercise("exerc6", 6, false, "load6", "remark6");
+        //    exercises[7] = new Exercise("exerc7", 7, false, "load7", "remark7");
+        //    exercises[8] = new Exercise("exerc8", 8, false, "load8", "remark8");
 
-            return exercises;
+        //    return exercises;
+        //}
+        public Exercise[] GetListExercise()
+        {
+            return exercise.GetTrainDay(progress);
         }
 
         private void FillInTheTable()
@@ -123,13 +170,14 @@ namespace TrainWindowsFormsApp
                 labelsMap[i + 18].Text = exercises[i].repeat.ToString();  // повторения
             }
         }
-
+        //
+        // События
+        //
         private void ExerciseName_MouseClick(object sender, MouseEventArgs e)
         {   // Показ примечания к упражнению
-            var remark = new MyMessageBox();
-
+            message = new MyMessageBox();
             var index = Array.IndexOf(labelsMap, sender); // Получаем индекс лейбла, на который нажали
-            remark.ShowText(exercises[index].remark);     // и выводим примечание к упражнению по полученному индексу.
+            message.ShowText(exercises[index].remark);     // и выводим примечание к упражнению по полученному индексу.
             
         }
 

@@ -8,20 +8,20 @@ namespace TrainWindowsFormsApp
 {
     public enum ExercisesType
     {
-        Trapezius = 1,
-        DeltoidMid = 2,
-        DeltoidRear = 3,
-        Biceps = 4,
-        Triceps = 5,
-        Forearm = 6,
-        ChestBase = 7,
-        ChestIsol = 8,
-        LatissimusBase = 9,
-        LatissimusIsol = 10,
-        AbsDinamic = 11,
-        AbsStatic = 12,
-        ExtensorBack= 13,
-        Quadriceps = 14,
-        BicepsHip = 15
+        Trapezius = 0,
+        DeltoidMid = 1,
+        DeltoidRear = 2,
+        Biceps = 3,
+        Triceps = 4,
+        Forearm = 5,
+        ChestBase = 6,
+        ChestIsol = 7,
+        LatissimusBase = 8,
+        LatissimusIsol = 9,
+        AbsDinamic = 10,
+        AbsStatic = 11,
+        ExtensorBack= 12,
+        Quadriceps = 13,
+        BicepsHip = 14
     }
 }
