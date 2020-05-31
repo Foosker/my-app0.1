@@ -35,7 +35,7 @@ namespace TrainWindowsFormsApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            var saveExerc = new SaveNewExercise();
+            var saveExerc = new SaveNewExerciseForm();
             saveExerc.ShowDialog();
 
             //progress = GetProgress();
@@ -168,9 +168,9 @@ namespace TrainWindowsFormsApp
         {   // Заполнение ячеек
             for (int i = 0; i < mapSize / 3; i++)
             {
-                labelsMap[i].Text = exercises[i].text;                    // название упражнения
-                labelsMap[i + 9].Text = exercises[i].load;                // нагрузка
-                labelsMap[i + 18].Text = exercises[i].repeat.ToString();  // повторения
+                labelsMap[i].Text = exercises[i].Text;                    // название упражнения
+                labelsMap[i + 9].Text = exercises[i].Load;                // нагрузка
+                labelsMap[i + 18].Text = exercises[i].Repeat.ToString();  // повторения
             }
         }
         //
@@ -180,7 +180,7 @@ namespace TrainWindowsFormsApp
         {   // Показ примечания к упражнению
             message = new MyMessageBox();
             var index = Array.IndexOf(labelsMap, sender); // Получаем индекс лейбла, на который нажали
-            message.ShowText(exercises[index].remark);     // и выводим примечание к упражнению по полученному индексу.
+            message.ShowText(exercises[index].Remark);     // и выводим примечание к упражнению по полученному индексу.
             
         }
 
@@ -193,8 +193,8 @@ namespace TrainWindowsFormsApp
 
             var name = button.Name;                                          // Получаем имя, которое состоит только из цифры,
             var index = int.Parse(name);                                     // преоразуем имя в индекс,
-            exercises[index].repeat++;                                       // меняем значение числа повторов,
-            labelsMap[index + 18].Text = exercises[index].repeat.ToString(); // обновляем значение в ячейке.
+            exercises[index].Repeat++;                                       // меняем значение числа повторов,
+            labelsMap[index + 18].Text = exercises[index].Repeat.ToString(); // обновляем значение в ячейке.
         }
 
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)

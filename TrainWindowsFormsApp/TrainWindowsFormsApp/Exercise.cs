@@ -9,22 +9,22 @@ namespace TrainWindowsFormsApp
 {
     public class Exercise
     {   
-        public string text { get; }         // Название упражнения
-        public int repeat { get; set; }     // Количество повторенеий
-        public bool status { get; set; }    // Выполнены все повторения или нет
-        public string load;                 // Нагрузка
-        public string remark;               // Примечания
+        public string Text { get; set; }    // Название упражнения
+        public int Repeat { get; set; }     // Количество повторенеий
+        public string Load;                 // Нагрузка
+        public string Remark;               // Примечания
 
         static Random random = new Random();
 
-        public Exercise()
+        public Exercise(string text, int repeat, string load, string remark = null)
         {
-            string Text = text;
-            int Repeat = repeat;
-            bool Status = status;
-            string Load = load;
-            string Remark = remark;
+            Text = text;
+            Repeat = repeat;
+            Load = load;
+            Remark = remark;
         }
+
+        public Exercise() { }
 
         public Exercise[] GetTrainDay(int trainNumber)
         {

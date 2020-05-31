@@ -1,6 +1,6 @@
 ﻿namespace TrainWindowsFormsApp
 {
-    partial class SaveNewExercise
+    partial class SaveNewExerciseForm
     {
         /// <summary>
         /// Required designer variable.
@@ -31,11 +31,12 @@
             this.components = new System.ComponentModel.Container();
             this.textTextBox = new System.Windows.Forms.TextBox();
             this.repeatTextBox = new System.Windows.Forms.TextBox();
-            this.laodTextBox = new System.Windows.Forms.TextBox();
+            this.loadTextBox = new System.Windows.Forms.TextBox();
             this.remarkTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.exercisesTypeListBox = new System.Windows.Forms.ListBox();
             this.exerciseBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.saveButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.exerciseBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,14 +58,14 @@
             this.repeatTextBox.TabIndex = 0;
             this.repeatTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // laodTextBox
+            // loadTextBox
             // 
-            this.laodTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.laodTextBox.Location = new System.Drawing.Point(570, 787);
-            this.laodTextBox.Name = "laodTextBox";
-            this.laodTextBox.Size = new System.Drawing.Size(768, 53);
-            this.laodTextBox.TabIndex = 0;
-            this.laodTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.loadTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.loadTextBox.Location = new System.Drawing.Point(570, 787);
+            this.loadTextBox.Name = "loadTextBox";
+            this.loadTextBox.Size = new System.Drawing.Size(768, 53);
+            this.loadTextBox.TabIndex = 0;
+            this.loadTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // remarkTextBox
             // 
@@ -97,20 +98,33 @@
             this.exercisesTypeListBox.Name = "exercisesTypeListBox";
             this.exercisesTypeListBox.Size = new System.Drawing.Size(1800, 160);
             this.exercisesTypeListBox.TabIndex = 2;
+            this.exercisesTypeListBox.SelectedIndexChanged += new System.EventHandler(this.exercisesTypeListBox_SelectedIndexChanged);
             // 
             // exerciseBindingSource
             // 
             this.exerciseBindingSource.DataSource = typeof(TrainWindowsFormsApp.Exercise);
+            // 
+            // saveButton
+            // 
+            this.saveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.saveButton.Location = new System.Drawing.Point(868, 1070);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(136, 99);
+            this.saveButton.TabIndex = 3;
+            this.saveButton.Text = "Сохранить";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // SaveNewExercise
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1873, 1528);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.exercisesTypeListBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.remarkTextBox);
-            this.Controls.Add(this.laodTextBox);
+            this.Controls.Add(this.loadTextBox);
             this.Controls.Add(this.repeatTextBox);
             this.Controls.Add(this.textTextBox);
             this.Name = "SaveNewExercise";
@@ -126,10 +140,11 @@
 
         private System.Windows.Forms.TextBox textTextBox;
         private System.Windows.Forms.TextBox repeatTextBox;
-        private System.Windows.Forms.TextBox laodTextBox;
+        private System.Windows.Forms.TextBox loadTextBox;
         private System.Windows.Forms.TextBox remarkTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox exercisesTypeListBox;
         private System.Windows.Forms.BindingSource exerciseBindingSource;
+        private System.Windows.Forms.Button saveButton;
     }
 }
