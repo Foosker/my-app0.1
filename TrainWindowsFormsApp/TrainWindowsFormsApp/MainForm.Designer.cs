@@ -30,6 +30,7 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сохранитьНовоеУпражнениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -38,6 +39,7 @@
             this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.сохранитьНовоеУпражнениеToolStripMenuItem,
             this.выходToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -48,9 +50,16 @@
             // выходToolStripMenuItem
             // 
             this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            this.выходToolStripMenuItem.Size = new System.Drawing.Size(80, 29);
-            this.выходToolStripMenuItem.Text = "Выход";
+            this.выходToolStripMenuItem.Size = new System.Drawing.Size(212, 29);
+            this.выходToolStripMenuItem.Text = "Выход без сохранения";
             this.выходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
+            // 
+            // сохранитьНовоеУпражнениеToolStripMenuItem
+            // 
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.Name = "сохранитьНовоеУпражнениеToolStripMenuItem";
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.Size = new System.Drawing.Size(275, 29);
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.Text = "Сохранить новое упражнение";
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.Click += new System.EventHandler(this.сохранитьНовоеУпражнениеToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -75,6 +84,7 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem выходToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem сохранитьНовоеУпражнениеToolStripMenuItem;
     }
 }
 

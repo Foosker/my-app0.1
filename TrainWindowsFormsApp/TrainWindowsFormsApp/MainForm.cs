@@ -23,8 +23,8 @@ namespace TrainWindowsFormsApp
         private Label[] labelsMap;
         private Button[] executedButtons;
         MyMessageBox message;
-        Exercise exercise;
         Exercise[] exercises;
+        static Random random = new Random();
 
         int progress;
 
@@ -35,48 +35,11 @@ namespace TrainWindowsFormsApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            var saveExerc = new SaveNewExerciseForm();
-            saveExerc.ShowDialog();
-
-            //progress = GetProgress();
-            //InitMap();
-            //exercises = GetListExercise();
-            //FillInTheTable();
+            progress = GetProgress();
+            InitMap();
+            exercises = GetArrayExercises();
+            FillInTheTable();
         }
-        //
-        // Работа с файлами
-        //
-        private int GetProgress()
-        {
-            var isExistFile = FileProvider.TryGet(pathToProgressFile, out var data);
-
-            if (!isExistFile) data = "1";
-
-            return int.Parse(data);
-        }
-
-        private void SaveProgress()
-        {
-            var data = progress.ToString();
-
-            FileProvider.Save(pathToProgressFile, data);
-        }
-
-        //public Exercise[] GetUserResult()
-        //{
-        //    //var data = FileWorker.GetData(PathToResult);
-        //    //var deserializedData = JsonConvert.DeserializeObject<List<UserResult>>(data);
-        //    //return deserializedData;
-        //}
-
-        //public void SaveUserResult()
-        //{
-        //    //var userResult = new UserResult(user.Name, user.CountRightAnswer, user.Diagnose.Name);
-        //    //var results = GetUserResult();
-        //    //results.Add(userResult);
-        //    //var serializedData = JsonConvert.SerializeObject(results, Formatting.Indented);
-        //    //FileWorker.Save(PathToResult, serializedData);
-        //}
         //
         // Создание клиентской области
         //
@@ -143,27 +106,6 @@ namespace TrainWindowsFormsApp
             return label;
         }
 
-        //private Exercise[] GetListExercise()
-        //{   // Вреенная функция, пока не будет готов класс
-        //    var exercises = new Exercise[9];
-
-        //    exercises[0] = new Exercise("Бег", 0, false, "Кроссовок, один", "Ногами|234567890|234567890|234567890|234567890");
-        //    exercises[1] = new Exercise("Жим", 1, false, "Жми - разрешаю", "Руками");
-        //    exercises[2] = new Exercise("Тяга", 2, false, "Тяни, ты всё равно меня не вытянишь", "Мыслями");
-        //    exercises[3] = new Exercise("exerc3", 3, false, "load3", "remark3");
-        //    exercises[4] = new Exercise("exerc4", 4, false, "load4", "remark4");
-        //    exercises[5] = new Exercise("exerc5", 5, false, "load5", "remark5");
-        //    exercises[6] = new Exercise("exerc6", 6, false, "load6", "remark6");
-        //    exercises[7] = new Exercise("exerc7", 7, false, "load7", "remark7");
-        //    exercises[8] = new Exercise("exerc8", 8, false, "load8", "remark8");
-
-        //    return exercises;
-        //}
-        public Exercise[] GetListExercise()
-        {
-            return exercise.GetTrainDay(progress);
-        }
-
         private void FillInTheTable()
         {   // Заполнение ячеек
             for (int i = 0; i < mapSize / 3; i++)
@@ -172,6 +114,50 @@ namespace TrainWindowsFormsApp
                 labelsMap[i + 9].Text = exercises[i].Load;                // нагрузка
                 labelsMap[i + 18].Text = exercises[i].Repeat.ToString();  // повторения
             }
+        }
+        //
+        // Работа с файлами
+        //
+        private int GetProgress()
+        {
+            var isExistFile = FileProvider.TryGet(pathToProgressFile, out var data);
+
+            if (!isExistFile)
+            {
+                FileProvider.Save(pathToProgressFile, "1");
+                data = "1";
+            }
+            return int.Parse(data);
+        }
+
+        private void SaveProgress()
+        {
+            progress++;
+            var data = progress.ToString();
+
+            FileProvider.Save(pathToProgressFile, data);
+        }
+
+        public Exercise[] GetArrayExercises()
+        {
+            var exerciseList = new Exercise[9];
+            var exerciseTypes = TrainDay.Get(progress % 6);  // Получаем массив с видами упражнений
+            for (int i = 0; i < exerciseTypes.Length; i++)
+            {
+                var pathExerciseFile = "ExercisesType/" + exerciseTypes[i].ToString() + ".json"; // Название упражнения преобразуем в путь к файлу,
+                var data = FileProvider.GetData(pathExerciseFile);                               // получили данные из файла
+                var deserializableData = JsonConvert.DeserializeObject<List<Exercise>>(data);    // и десериализовали в список.
+
+                var index = i; // По этому значению будет присваиваться индекс упражнения в исходный массив
+                for (int j = 0; j < 3; j++)
+                {
+                    var randomExercise = deserializableData[random.Next(deserializableData.Count)]; // Выбираем случайное упражнение,
+                    deserializableData.Remove(randomExercise);                                      // удаляем его из списка,
+                    exerciseList[index] = randomExercise;                                           // вставляем его в исходный массив.
+                    index += 3;  // Учеличивается по принципу: индекс 0-3-6, 1-4-7, 2-5-8.
+                }
+            }
+            return exerciseList;
         }
         //
         // События
@@ -200,6 +186,12 @@ namespace TrainWindowsFormsApp
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void сохранитьНовоеУпражнениеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var saveExerc = new SaveNewExerciseForm();
+            saveExerc.ShowDialog();
         }
     }
 }

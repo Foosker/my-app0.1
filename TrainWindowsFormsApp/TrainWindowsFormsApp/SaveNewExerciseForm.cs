@@ -13,6 +13,8 @@ namespace TrainWindowsFormsApp
 {
     public partial class SaveNewExerciseForm : Form
     {
+        MyMessageBox message;
+
         string pathToExerciseFile;
 
         public SaveNewExerciseForm()
@@ -32,19 +34,22 @@ namespace TrainWindowsFormsApp
         {
             if (String.IsNullOrWhiteSpace(textTextBox.Text))
             {
-                MessageBox.Show("Введите название упражнения!");
+                message = new MyMessageBox();
+                message.ShowText("Введите название упражнения!");
                 return false;
             }
 
             if (!int.TryParse(repeatTextBox.Text, out int result))
             {
-                MessageBox.Show("Введите количество повторений!");
+                message = new MyMessageBox();
+                message.ShowText("Введите количество повторений!");
                 return false;
             }
 
             if (String.IsNullOrWhiteSpace(loadTextBox.Text))
             {
-                MessageBox.Show("Введите нагрузку!");
+                message = new MyMessageBox();
+                message.ShowText("Введите нагрузку!");
                 return false;
             }
 
@@ -60,8 +65,6 @@ namespace TrainWindowsFormsApp
         private void exercisesTypeListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             pathToExerciseFile = "ExercisesType/" + exercisesTypeListBox.SelectedItem + ".json";
-
-            exercisesTypeListBox.Enabled = false;
         }
 
         private List<Exercise> GetListExercises()
@@ -79,32 +82,53 @@ namespace TrainWindowsFormsApp
 
         }
 
-        private void SaveExercise()
+        private void SaveNewExercise()
         {
             if (IsValid())
             {
-                var exercise = new Exercise(textTextBox.Text,               // Название
+                var newExercise = new Exercise(textTextBox.Text,            // Название
                                             int.Parse(repeatTextBox.Text),  // Повторения
                                             loadTextBox.Text,               // Нагрузка
                                             AnyRemark());                   // Если введено примечание
 
                 var list = GetListExercises();
-                list.Add(exercise);
-                var serializableList = JsonConvert.SerializeObject(list, Formatting.Indented);
-                FileProvider.Save(pathToExerciseFile, serializableList);
+                if (!CheckCoincidences(list, newExercise))
+                {
+                    list.Add(newExercise);
+                    var serializableList = JsonConvert.SerializeObject(list, Formatting.Indented);
+                    FileProvider.Save(pathToExerciseFile, serializableList);
+                }
+                else
+                {
+                    message = new MyMessageBox();
+                    message.ShowText("Такое упражнение уже есть в списке!");
+                }
             }
 
-            exercisesTypeListBox.Enabled = true;
             textTextBox.Text   = null;
-            repeatTextBox.Text = null; 
+            repeatTextBox.Text = null;
             loadTextBox.Text   = null;
-            remarkTextBox.Text = null; 
+            remarkTextBox.Text = null;
 
+        }
+
+        private bool CheckCoincidences(List<Exercise> list, Exercise newExercise)
+        {   // Проверка на отсутствие такого упражнения в списке
+            foreach (var exercise in list)
+            {
+                if (exercise.Text == newExercise.Text) return true;
+            }
+            return false;
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            SaveExercise();
+            SaveNewExercise();
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
