@@ -20,7 +20,7 @@ namespace TrainWindowsFormsApp
         LatissimusIsol = 9,
         AbsDinamic = 10,
         AbsStatic = 11,
-        ExtensorBack= 12,
+        ExtensorBack = 12,
         Quadriceps = 13,
         BicepsHip = 14
     }

@@ -25,6 +25,7 @@ namespace TrainWindowsFormsApp
         MyMessageBox message;
         Exercise[] exercises;
         static Random random = new Random();
+        string[] pathsArray = new string[3];  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
 
         int progress;
 
@@ -138,26 +139,48 @@ namespace TrainWindowsFormsApp
             FileProvider.Save(pathToProgressFile, data);
         }
 
-        public Exercise[] GetArrayExercises()
+        private Exercise[] GetArrayExercises()
         {
-            var exerciseList = new Exercise[9];
+            var exerciseArray = new Exercise[9];
             var exerciseTypes = TrainDay.Get(progress % 6);  // Получаем массив с видами упражнений
             for (int i = 0; i < exerciseTypes.Length; i++)
             {
                 var pathExerciseFile = "ExercisesType/" + exerciseTypes[i].ToString() + ".json"; // Название упражнения преобразуем в путь к файлу,
                 var data = FileProvider.GetData(pathExerciseFile);                               // получили данные из файла
                 var deserializableData = JsonConvert.DeserializeObject<List<Exercise>>(data);    // и десериализовали в список.
+                pathsArray[i] = pathExerciseFile;
 
                 var index = i; // По этому значению будет присваиваться индекс упражнения в исходный массив
                 for (int j = 0; j < 3; j++)
                 {
                     var randomExercise = deserializableData[random.Next(deserializableData.Count)]; // Выбираем случайное упражнение,
                     deserializableData.Remove(randomExercise);                                      // удаляем его из списка,
-                    exerciseList[index] = randomExercise;                                           // вставляем его в исходный массив.
+                    exerciseArray[index] = randomExercise;                                          // вставляем его в исходный массив.
                     index += 3;  // Учеличивается по принципу: индекс 0-3-6, 1-4-7, 2-5-8.
                 }
             }
-            return exerciseList;
+            return exerciseArray;
+        }
+        
+        private void SaveTrainResults()
+        {
+            for (int i = 0; i < pathsArray.Length; i++)
+            {
+                var data = FileProvider.GetData(pathsArray[i]);
+                var deserializableData = JsonConvert.DeserializeObject<List<Exercise>>(data);
+                var index = i;
+                for (int j = 0; j < 3; j++)
+                {
+                    foreach (var exerc in deserializableData)
+                    {
+                        if (exerc.Text == exercises[index].Text) exerc.Repeat = exercises[index].Repeat;
+                    }
+                    var serializableData = JsonConvert.SerializeObject(deserializableData, Formatting.Indented);
+                    FileProvider.Save(pathsArray[i], serializableData);
+                    index += 3;
+                }
+            }
+            SaveProgress();
         }
         //
         // События
@@ -183,15 +206,21 @@ namespace TrainWindowsFormsApp
             labelsMap[index + 18].Text = exercises[index].Repeat.ToString(); // обновляем значение в ячейке.
         }
 
-        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void сохранитьНовоеУпражнениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var saveExerc = new SaveNewExerciseForm();
             saveExerc.ShowDialog();
+        }
+
+        private void закончитьТренировкуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveTrainResults();
+            Close();
+        }
+
+        private void выходБезСохраненияToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
