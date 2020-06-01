@@ -36,8 +36,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.exercisesTypeListBox = new System.Windows.Forms.ListBox();
             this.saveButton = new System.Windows.Forms.Button();
-            this.exerciseBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.exitButton = new System.Windows.Forms.Button();
+            this.maxRepeatTextBox = new System.Windows.Forms.TextBox();
+            this.exerciseBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.exerciseBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,7 +54,7 @@
             // repeatTextBox
             // 
             this.repeatTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.repeatTextBox.Location = new System.Drawing.Point(840, 555);
+            this.repeatTextBox.Location = new System.Drawing.Point(762, 557);
             this.repeatTextBox.Name = "repeatTextBox";
             this.repeatTextBox.Size = new System.Drawing.Size(100, 53);
             this.repeatTextBox.TabIndex = 0;
@@ -112,10 +113,6 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
-            // exerciseBindingSource
-            // 
-            this.exerciseBindingSource.DataSource = typeof(TrainWindowsFormsApp.Exercise);
-            // 
             // exitButton
             // 
             this.exitButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -126,6 +123,19 @@
             this.exitButton.Text = "Закрыть";
             this.exitButton.UseVisualStyleBackColor = true;
             this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
+            // 
+            // maxRepeatTextBox
+            // 
+            this.maxRepeatTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.maxRepeatTextBox.Location = new System.Drawing.Point(892, 557);
+            this.maxRepeatTextBox.Name = "maxRepeatTextBox";
+            this.maxRepeatTextBox.Size = new System.Drawing.Size(100, 53);
+            this.maxRepeatTextBox.TabIndex = 0;
+            this.maxRepeatTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // exerciseBindingSource
+            // 
+            this.exerciseBindingSource.DataSource = typeof(TrainWindowsFormsApp.Exercise);
             // 
             // SaveNewExerciseForm
             // 
@@ -138,8 +148,10 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.remarkTextBox);
             this.Controls.Add(this.loadTextBox);
+            this.Controls.Add(this.maxRepeatTextBox);
             this.Controls.Add(this.repeatTextBox);
             this.Controls.Add(this.textTextBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SaveNewExerciseForm";
             this.Text = "Сохранение нового вопроса";
             this.Load += new System.EventHandler(this.SaveNewExercise_Load);
@@ -160,5 +172,6 @@
         private System.Windows.Forms.BindingSource exerciseBindingSource;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button exitButton;
+        private System.Windows.Forms.TextBox maxRepeatTextBox;
     }
 }

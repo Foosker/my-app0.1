@@ -46,6 +46,13 @@ namespace TrainWindowsFormsApp
                 return false;
             }
 
+            if (!int.TryParse(maxRepeatTextBox.Text, out result))
+            {
+                message = new MyMessageBox();
+                message.ShowText("Введите максимальное количество повторений!");
+                return false;
+            }
+
             if (String.IsNullOrWhiteSpace(loadTextBox.Text))
             {
                 message = new MyMessageBox();
@@ -86,10 +93,11 @@ namespace TrainWindowsFormsApp
         {
             if (IsValid())
             {
-                var newExercise = new Exercise(textTextBox.Text,            // Название
-                                            int.Parse(repeatTextBox.Text),  // Повторения
-                                            loadTextBox.Text,               // Нагрузка
-                                            AnyRemark());                   // Если введено примечание
+                var newExercise = new Exercise(textTextBox.Text,                // Название
+                                            int.Parse(repeatTextBox.Text),      // Повторения
+                                            int.Parse(maxRepeatTextBox.Text),   // Максимум повторений
+                                            loadTextBox.Text,                   // Нагрузка
+                                            AnyRemark());                       // Если введено примечание
 
                 var list = GetListExercises();
                 if (!CheckCoincidences(list, newExercise))

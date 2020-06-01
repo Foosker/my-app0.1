@@ -164,6 +164,17 @@ namespace TrainWindowsFormsApp
         
         private void SaveTrainResults()
         {
+            foreach (var exercise in exercises)
+            {
+                if (exercise.Repeat > exercise.MaxRepeat)
+                {
+                    var form = new SetNewLoadForm(exercise);
+                    form.ShowDialog();
+                    exercise.Load = form.NewLoad;
+                    exercise.Repeat = 10;
+                }
+            }
+
             for (int i = 0; i < pathsArray.Length; i++)
             {
                 var data = FileProvider.GetData(pathsArray[i]);
