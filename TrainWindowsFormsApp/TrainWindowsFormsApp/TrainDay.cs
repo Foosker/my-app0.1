@@ -12,82 +12,76 @@ namespace TrainWindowsFormsApp
 {
     public static class TrainDay
     {
-        static ExercisesType[] trainDay;
+        public static int trainingOptions = 4;
 
-        private static ExercisesType[] First()
+        static List<ExercisesType> trainDay = new List<ExercisesType>();
 
-        {   // Грудь базовые, Бицуха бедра, Бицуха
-            trainDay = new ExercisesType[3] { ExercisesType.ChestBase,
-                                              ExercisesType.BicepsHip,
-                                              ExercisesType.Biceps };
-
-            return trainDay;
-        }
-
-        private static ExercisesType[] Second()
-        {   // Широчайшие изолированные, Пресс динамические, Дельты средние
-            trainDay = new ExercisesType[3] { ExercisesType.LatissimusIsol,
-                                              ExercisesType.AbsDinamic,
-                                              ExercisesType.DeltoidMid };
-
-
-            return trainDay;
-        }
-
-        private static ExercisesType[] Third()
-        {   // Квадры, Трапеции, Разгибатели спины
-            trainDay = new ExercisesType[3] { ExercisesType.Quadriceps,
-                                              ExercisesType.Trapezius,
-                                              ExercisesType.ExtensorBack };
-
-
-            return trainDay;
-        }
-
-        private static ExercisesType[] Fourth()
-        {   // Грудь изолированные, Бицуха бедра, Трицепс
-            trainDay = new ExercisesType[3] { ExercisesType.ChestIsol,
-                                              ExercisesType.BicepsHip,
-                                              ExercisesType.Triceps };
-
-
-            return trainDay;
-        }
-
-        private static ExercisesType[] Fifth()
-        {   // Широчайшие базовые, Пресс статические, Дельты задние
-            trainDay = new ExercisesType[3] { ExercisesType.LatissimusBase,
-                                              ExercisesType.AbsStatic,
-                                              ExercisesType.DeltoidRear };
-
-
-
-            return trainDay;
-        }
-
-        private static ExercisesType[] Sixth()
-        {   // Квадры, Пердплечья, Разгибатели спины
-            trainDay = new ExercisesType[3] { ExercisesType.Quadriceps,
-                                              ExercisesType.Forearm,
-                                              ExercisesType.ExtensorBack };
-
-
-
-            return trainDay;
-        }
-
-        public static ExercisesType[] Get(int num)
+        private static List<ExercisesType> First()
         {
-            var list = new ExercisesType[3];
+            trainDay.Add(ExercisesType.ChestBase);
+            trainDay.Add(ExercisesType.DeltoidRear);
+
+            trainDay.Add(ExercisesType.ChestBase);
+            trainDay.Add(ExercisesType.DeltoidRear);
+
+            trainDay.Add(ExercisesType.ChestIsol);
+            trainDay.Add(ExercisesType.Triceps);
+
+            return trainDay;
+        }
+
+        private static List<ExercisesType> Second()
+        {
+            trainDay.Add(ExercisesType.Quadriceps);
+            trainDay.Add(ExercisesType.ExtensorBack);
+
+            trainDay.Add(ExercisesType.Quadriceps);
+            trainDay.Add(ExercisesType.ExtensorBack);
+
+            trainDay.Add(ExercisesType.Trapezius);
+            trainDay.Add(ExercisesType.Trapezius);
+
+            return trainDay;
+        }
+
+        private static List<ExercisesType> Third()
+        {
+            trainDay.Add(ExercisesType.LatissimusBase);
+            trainDay.Add(ExercisesType.DeltoidMid);
+
+            trainDay.Add(ExercisesType.LatissimusBase);
+            trainDay.Add(ExercisesType.DeltoidMid);
+
+            trainDay.Add(ExercisesType.LatissimusIsol);
+            trainDay.Add(ExercisesType.Biceps);
+
+            return trainDay;
+        }
+
+        private static List<ExercisesType> Fourth()
+        {
+            trainDay.Add(ExercisesType.BicepsHip);
+            trainDay.Add(ExercisesType.AbsDinamic);
+
+            trainDay.Add(ExercisesType.BicepsHip);
+            trainDay.Add(ExercisesType.AbsDinamic);
+
+            trainDay.Add(ExercisesType.Forearm);
+            trainDay.Add(ExercisesType.AbsStatic);
+
+            return trainDay;
+        }
+
+        public static List<ExercisesType> Get(int num)
+        {
+            var list = new List<ExercisesType>();
 
             switch (num)
             {
-                case (0): list = First();  break;
-                case (1): list = Second(); break;
-                case (2): list = Third();  break;
-                case (3): list = Fourth(); break;
-                case (4): list = Fifth();  break;
-                case (5): list = Sixth();  break;
+                case (0): list = First();   break;
+                case (1): list = Second();  break;
+                case (2): list = Third();   break;
+                case (3): list = Fourth();  break;
             }
             return list;
         }

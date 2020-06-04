@@ -27,6 +27,7 @@ namespace TrainWindowsFormsApp
         private void SetNewLoadForm_Load(object sender, EventArgs e)
         {
             currentExerciseLabel.Text = exercise.Text;
+            oldLoadLabel.Text = exercise.Load;
         }
 
         private bool IsValid()
@@ -47,6 +48,11 @@ namespace TrainWindowsFormsApp
                 NewLoad = newLoadTextBox.Text;
                 Close();
             }
+        }
+
+        private void newLoadTextBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            newLoadTextBox.Text = null;
         }
     }
 }

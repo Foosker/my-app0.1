@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,19 +16,23 @@ namespace TrainWindowsFormsApp
     {
         string pathToProgressFile = "progress.txt";
 
+        private int numberOfExercise = 6;  // Количество упражнений за тренировку
+        private int numberOfExerciseInARow = 2;  // Количество упражнений за подход
+
         private readonly int cellHeight = 60;
         private readonly int indentBetween = 10;
         private int indentUpEdge = 60;
-        public int mapSize = 27;
+        public int mapSize = 18;  // Колчество лейблов, соотношение (numberOfExercise * разновидности лейблов)
+
 
         private Label[] labelsMap;
         private Button[] executedButtons;
         MyMessageBox message;
         Exercise[] exercises;
-        static Random random = new Random();
-        string[] pathsArray = new string[3];  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
+        List<string> pathsList = new List<string>();  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
 
-        int progress;
+        static Random random = new Random();
+        private int progress;
 
         public MainForm()
         {
@@ -51,7 +56,7 @@ namespace TrainWindowsFormsApp
 
             for (int i = 0; i < mapSize / 3; i++)
             {
-                if (i % 3 == 0) indentUpEdge += 40;  // Если индекс элемента кратен 3, то переходим на следующую строку.
+                if (i % numberOfExerciseInARow == 0) indentUpEdge += 40;  // Если индекс элемента кратен 2, то переходим на следующую строку.
                 var textLabel = CreateLabels(50, i, 650);
                 Controls.Add(textLabel);
                 labelsMap[i] = textLabel;
@@ -59,14 +64,14 @@ namespace TrainWindowsFormsApp
 
                 var loadLabel = CreateLabels(750, i, 200);
                 Controls.Add(loadLabel);
-                labelsMap[i + 9] = loadLabel;
+                labelsMap[i + numberOfExercise] = loadLabel;
 
                 var repeatLabel = CreateLabels(1000, i, 100);
                 Controls.Add(repeatLabel);
-                labelsMap[i + 18] = repeatLabel;
+                labelsMap[i + numberOfExercise * 2] = repeatLabel;
 
                 var executedButton = CreateButton(1150, i, 100);
-                // Имя кнопки состоит только из цифры от 0 до 8, для более удобного получения индекса в событии нажатия кнопки
+                // Имя кнопки состоит только из цифры от 0 до 6, для более удобного получения индекса в событии нажатия кнопки
                 executedButton.Name = i.ToString();
                 Controls.Add(executedButton);
                 executedButtons[i] = executedButton;
@@ -109,11 +114,11 @@ namespace TrainWindowsFormsApp
 
         private void FillInTheTable()
         {   // Заполнение ячеек
-            for (int i = 0; i < mapSize / 3; i++)
+            for (int i = 0; i < 6; i++)
             {
                 labelsMap[i].Text = exercises[i].Text;                    // название упражнения
-                labelsMap[i + 9].Text = exercises[i].Load;                // нагрузка
-                labelsMap[i + 18].Text = exercises[i].Repeat.ToString();  // повторения
+                labelsMap[i + numberOfExercise].Text = exercises[i].Load;                // нагрузка
+                labelsMap[i + numberOfExercise * 2].Text = exercises[i].Repeat.ToString();  // повторения
             }
         }
         //
@@ -141,23 +146,40 @@ namespace TrainWindowsFormsApp
 
         private Exercise[] GetArrayExercises()
         {
-            var exerciseArray = new Exercise[9];
-            var exerciseTypes = TrainDay.Get(progress % 6);  // Получаем массив с видами упражнений
-            for (int i = 0; i < exerciseTypes.Length; i++)
+            var exerciseTypes = TrainDay.Get(progress % TrainDay.trainingOptions);  // Получаем список с видами упражнений
+            
+            var exerciseArray = new Exercise[exerciseTypes.Count];
+
+            for (int i = 0; i < exerciseTypes.Count; i++)
             {
                 var pathExerciseFile = "ExercisesType/" + exerciseTypes[i].ToString() + ".json"; // Название упражнения преобразуем в путь к файлу,
-                var data = FileProvider.GetData(pathExerciseFile);                               // получили данные из файла
-                var deserializableData = JsonConvert.DeserializeObject<List<Exercise>>(data);    // и десериализовали в список.
-                pathsArray[i] = pathExerciseFile;
 
-                var index = i; // По этому значению будет присваиваться индекс упражнения в исходный массив
-                for (int j = 0; j < 3; j++)
+                if (!pathsList.Contains(pathExerciseFile))
                 {
-                    var randomExercise = deserializableData[random.Next(deserializableData.Count)]; // Выбираем случайное упражнение,
-                    deserializableData.Remove(randomExercise);                                      // удаляем его из списка,
-                    exerciseArray[index] = randomExercise;                                          // вставляем его в исходный массив.
-                    index += 3;  // Учеличивается по принципу: индекс 0-3-6, 1-4-7, 2-5-8.
+                    pathsList.Add(pathExerciseFile);
+
+                    var dataExercises = FileProvider.GetData(pathExerciseFile);                               // получили данные из файла
+                    var deserializableDataExercises = JsonConvert.DeserializeObject<List<Exercise>>(dataExercises);    // и десериализовали в список.
+
+                    for(int j = i; j < exerciseTypes.Count; j++)
+                    {
+                        if (exerciseTypes[i] == exerciseTypes[j])
+                        {
+                            var randomExercise = deserializableDataExercises[random.Next(deserializableDataExercises.Count)]; // Выбираем случайное упражнение,
+                            deserializableDataExercises.Remove(randomExercise);                                      // удаляем его из списка,
+                            exerciseArray[j] = randomExercise;
+                        }
+                    }
+                    
                 }
+                //var index = i; // По этому значению будет присваиваться индекс упражнения в исходный массив
+                //for (int j = 0; j < numberOfExerciseInARow; j++)
+                //{
+                //    
+                //    
+                //    exerciseList[index] = randomExercise;                                          // вставляем его в исходный массив.
+                //    index += numberOfExerciseInARow;
+                //}
             }
             return exerciseArray;
         }
@@ -170,25 +192,29 @@ namespace TrainWindowsFormsApp
                 {
                     var form = new SetNewLoadForm(exercise);
                     form.ShowDialog();
-                    exercise.Load = form.NewLoad;
                     exercise.Repeat = 10;
+                    exercise.Load = form.NewLoad;
                 }
             }
 
-            for (int i = 0; i < pathsArray.Length; i++)
+            for (int i = 0; i < pathsList.Count; i++)
             {
-                var data = FileProvider.GetData(pathsArray[i]);
+                var data = FileProvider.GetData(pathsList[i]);
                 var deserializableData = JsonConvert.DeserializeObject<List<Exercise>>(data);
                 var index = i;
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < numberOfExerciseInARow; j++)
                 {
                     foreach (var exerc in deserializableData)
                     {
-                        if (exerc.Text == exercises[index].Text) exerc.Repeat = exercises[index].Repeat;
+                        if (exerc.Text == exercises[index].Text)
+                        {
+                            exerc.Repeat = exercises[index].Repeat;
+                            exerc.Load = exercises[index].Load;
+                        }
                     }
                     var serializableData = JsonConvert.SerializeObject(deserializableData, Formatting.Indented);
-                    FileProvider.Save(pathsArray[i], serializableData);
-                    index += 3;
+                    FileProvider.Save(pathsList[i], serializableData);
+                    index += numberOfExerciseInARow;
                 }
             }
             SaveProgress();
@@ -213,8 +239,11 @@ namespace TrainWindowsFormsApp
 
             var name = button.Name;                                          // Получаем имя, которое состоит только из цифры,
             var index = int.Parse(name);                                     // преоразуем имя в индекс,
-            exercises[index].Repeat++;                                       // меняем значение числа повторов,
-            labelsMap[index + 18].Text = exercises[index].Repeat.ToString(); // обновляем значение в ячейке.
+            exercises[index].Repeat++;                                       // меняем значение числа повторов.
+            // Если количество изменённых повторов стало больше максимально допустимого пишем "МАХ",
+            if (exercises[index].Repeat > exercises[index].MaxRepeat) labelsMap[index + numberOfExercise * 2].Text = "MAX";
+            // если нет - то меняем на новое значение.
+            else labelsMap[index + numberOfExercise * 2].Text = exercises[index].Repeat.ToString();
         }
 
         private void сохранитьНовоеУпражнениеToolStripMenuItem_Click(object sender, EventArgs e)
