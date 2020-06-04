@@ -121,6 +121,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="SaveNewExerciseForm.resx">
       <DependentUpon>SaveNewExerciseForm.cs</DependentUpon>
@@ -145,6 +146,27 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3-9_-_Dethzazz.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Background\Chevelle.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Background\CyberPunk1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Background\Delorian.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Background\god-of-war-x-star-wars-baby-yoda-arriva-nell-esclusiva-ps4-fan-art-v3-414575.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Background\Mustang.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Background\oboi7.com-58309.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

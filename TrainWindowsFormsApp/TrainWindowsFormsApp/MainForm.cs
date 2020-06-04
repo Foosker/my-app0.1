@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TrainWindowsFormsApp.Properties;
 
 namespace TrainWindowsFormsApp
 {
@@ -37,10 +38,13 @@ namespace TrainWindowsFormsApp
         public MainForm()
         {
             InitializeComponent();
+
+            BackgroundImage = SetImage();
+            BackgroundImageLayout = ImageLayout.Stretch;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
-        {
+        {   
             progress = GetProgress();
             InitMap();
             exercises = GetArrayExercises();
@@ -49,6 +53,17 @@ namespace TrainWindowsFormsApp
         //
         // Создание клиентской области
         //
+        private Image SetImage()
+        {
+            var imageList = new Image[7] { Resources.Chevelle, Resources.CyberPunk1, Resources.Delorian,
+                Resources.god_of_war_x_star_wars_baby_yoda_arriva_nell_esclusiva_ps4_fan_art_v3_414575,
+                Resources.Mustang, Resources.oboi7_com_58309, Resources._3_9___Dethzazz };
+
+            var randomImage = imageList[random.Next(imageList.Length - 1)];
+
+            return randomImage;
+        }
+
         private void InitMap()
         {   // Заполнение формы ячейками и кнопками
             labelsMap = new Label[mapSize];
@@ -116,8 +131,8 @@ namespace TrainWindowsFormsApp
         {   // Заполнение ячеек
             for (int i = 0; i < 6; i++)
             {
-                labelsMap[i].Text = exercises[i].Text;                    // название упражнения
-                labelsMap[i + numberOfExercise].Text = exercises[i].Load;                // нагрузка
+                labelsMap[i].Text = exercises[i].Text;                                      // название упражнения
+                labelsMap[i + numberOfExercise].Text = exercises[i].Load;                   // нагрузка
                 labelsMap[i + numberOfExercise * 2].Text = exercises[i].Repeat.ToString();  // повторения
             }
         }
