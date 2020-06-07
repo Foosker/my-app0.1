@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,13 +7,23 @@ using System.Threading.Tasks;
 
 namespace TrainWindowsFormsApp
 {
-    class Exercise
+    public class Exercise
     {
-        public string text;
-        public int repeat;
-        public bool status;           // Выполнены все повторения или нет
-        public string load;
-        public string remark;
-        public string specification;  // Какая группа мышц и спецификация упражнения
+        public string Text;              // Название упражнения
+        public int Repeat;               // Количество повторенеий
+        public int MaxRepeat;            // Максимально количество повторений, при достижении которого следует указать новую нагрузку
+        public string Load;              // Нагрузка
+        public string Remark;            // Примечания
+
+        public Exercise(string text, int repeat, int maxRepeat, string load, string remark = null)
+        {
+            Text = text;
+            Repeat = repeat;
+            MaxRepeat = maxRepeat;
+            Load = load;
+            Remark = remark;
+        }
+
+        public Exercise() { }
     }
 }
