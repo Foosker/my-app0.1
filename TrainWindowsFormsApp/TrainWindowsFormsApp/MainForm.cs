@@ -1,13 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using TrainWindowsFormsApp.Properties;
 
@@ -17,8 +11,7 @@ namespace TrainWindowsFormsApp
     {
         string pathToProgressFile = "progress.txt";
 
-        private int numberOfExercise = 6;  // Количество упражнений за тренировку
-        private int numberOfExerciseInARow = 2;  // Количество упражнений за подход
+        private int numberOfExercise = 6;  // Количество упражнений за тренировкуprivate int numberOfExerciseInARow = 2;  // Количество упражнений за подход
 
         private readonly int cellHeight = 60;
         private readonly int indentBetween = 10;
@@ -71,7 +64,7 @@ namespace TrainWindowsFormsApp
 
             for (int i = 0; i < mapSize / 3; i++)
             {
-                if (i % numberOfExerciseInARow == 0) indentUpEdge += 40;  // Если индекс элемента кратен 2, то переходим на следующую строку.
+                //if (i % numberOfExerciseInARow == 0) indentUpEdge += 40;  // Если индекс элемента кратен 2, то переходим на следующую строку.
                 var textLabel = CreateLabels(50, i, 650);
                 Controls.Add(textLabel);
                 labelsMap[i] = textLabel;
@@ -161,40 +154,35 @@ namespace TrainWindowsFormsApp
 
         private Exercise[] GetArrayExercises()
         {
-            var exerciseTypes = TrainDay.Get(progress % TrainDay.trainingOptions);  // Получаем список с видами упражнений
+            var trainDay = progress % TrainDay.trainingOptions;
+
+            var exerciseTypes = TrainDay.Get(trainDay);  // Получаем список тренируемых мышц
             
-            var exerciseArray = new Exercise[exerciseTypes.Count];
+            var exerciseArray = new Exercise[exerciseTypes.Count];  // Создание массива, куда будут добавляться упражнения
 
             for (int i = 0; i < exerciseTypes.Count; i++)
             {
                 var pathExerciseFile = "ExercisesType/" + exerciseTypes[i].ToString() + ".json"; // Название упражнения преобразуем в путь к файлу,
 
-                if (!pathsList.Contains(pathExerciseFile))
+                if (!pathsList.Contains(pathExerciseFile))  // Если в списке путей к файлам с упражнениями нет нынешнего,
                 {
-                    pathsList.Add(pathExerciseFile);
+                    pathsList.Add(pathExerciseFile);        // то он добавляется
 
-                    var dataExercises = FileProvider.GetData(pathExerciseFile);                               // получили данные из файла
-                    var deserializableDataExercises = JsonConvert.DeserializeObject<List<Exercise>>(dataExercises);    // и десериализовали в список.
+                    var dataExercises = FileProvider.GetData(pathExerciseFile);                                        // Получение данных из файла
+                    var deserializableDataExercises = JsonConvert.DeserializeObject<List<Exercise>>(dataExercises);    // и десериализация в список.
 
                     for(int j = i; j < exerciseTypes.Count; j++)
                     {
                         if (exerciseTypes[i] == exerciseTypes[j])
                         {
-                            var randomExercise = deserializableDataExercises[random.Next(deserializableDataExercises.Count)]; // Выбираем случайное упражнение,
-                            deserializableDataExercises.Remove(randomExercise);                                      // удаляем его из списка,
-                            exerciseArray[j] = randomExercise;
+                            var exerciseIndex = progress / (TrainDay.trainingOptions - trainDay) % deserializableDataExercises.Count;  // Индекс упражнения
+
+                            var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
+                            exerciseArray[j] = exercise;                                // добавление его в основной массив,
+                            deserializableDataExercises.Remove(exercise);               // удаление из списка из файла.
                         }
-                    }
-                    
+                    }                    
                 }
-                //var index = i; // По этому значению будет присваиваться индекс упражнения в исходный массив
-                //for (int j = 0; j < numberOfExerciseInARow; j++)
-                //{
-                //    
-                //    
-                //    exerciseList[index] = randomExercise;                                          // вставляем его в исходный массив.
-                //    index += numberOfExerciseInARow;
-                //}
             }
             return exerciseArray;
         }
@@ -216,21 +204,19 @@ namespace TrainWindowsFormsApp
             {
                 var data = FileProvider.GetData(pathsList[i]);
                 var deserializableData = JsonConvert.DeserializeObject<List<Exercise>>(data);
-                var index = i;
-                for (int j = 0; j < numberOfExerciseInARow; j++)
+                for (int j = 0; j < exercises.Length; j++)
                 {
                     foreach (var exerc in deserializableData)
                     {
-                        if (exerc.Text == exercises[index].Text)
+                        if (exerc.Text == exercises[j].Text)
                         {
-                            exerc.Repeat = exercises[index].Repeat;
-                            exerc.Load = exercises[index].Load;
+                            exerc.Repeat = exercises[j].Repeat;
+                            exerc.Load = exercises[j].Load;
                         }
                     }
-                    var serializableData = JsonConvert.SerializeObject(deserializableData, Formatting.Indented);
-                    FileProvider.Save(pathsList[i], serializableData);
-                    index += numberOfExerciseInARow;
                 }
+                var serializableData = JsonConvert.SerializeObject(deserializableData, Formatting.Indented);
+                FileProvider.Save(pathsList[i], serializableData);
             }
             SaveProgress();
         }

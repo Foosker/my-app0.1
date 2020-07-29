@@ -1,73 +1,69 @@
-﻿using Aspose.Cells.Drawing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json;
-using System.Json;
-using System.Security.Cryptography;
+﻿using System.Collections.Generic;
 
 namespace TrainWindowsFormsApp
 {
     public static class TrainDay
     {
-        public static int trainingOptions = 4;
+        public static int trainingOptions = 7;  // Количество дней тренировок
 
         static List<ExercisesType> trainDay = new List<ExercisesType>();
 
-        private static List<ExercisesType> First()
+        private static List<ExercisesType> Shoulders()
         {
-            trainDay.Add(ExercisesType.ChestBase);
             trainDay.Add(ExercisesType.DeltoidRear);
+            trainDay.Add(ExercisesType.DeltoidMid);
+            trainDay.Add(ExercisesType.DeltoidMid);
+            trainDay.Add(ExercisesType.DeltoidFront);
+            trainDay.Add(ExercisesType.Trapezius);
+            trainDay.Add(ExercisesType.Trapezius);
 
-            trainDay.Add(ExercisesType.ChestBase);
-            trainDay.Add(ExercisesType.DeltoidRear);
+            return trainDay;
+        }
 
+        private static List<ExercisesType> ChestAndBiceps()
+        {
             trainDay.Add(ExercisesType.ChestIsol);
-            trainDay.Add(ExercisesType.Triceps);
-
-            return trainDay;
-        }
-
-        private static List<ExercisesType> Second()
-        {
-            trainDay.Add(ExercisesType.Quadriceps);
-            trainDay.Add(ExercisesType.ExtensorBack);
-
-            trainDay.Add(ExercisesType.Quadriceps);
-            trainDay.Add(ExercisesType.ExtensorBack);
-
-            trainDay.Add(ExercisesType.Trapezius);
-            trainDay.Add(ExercisesType.Trapezius);
-
-            return trainDay;
-        }
-
-        private static List<ExercisesType> Third()
-        {
-            trainDay.Add(ExercisesType.LatissimusBase);
-            trainDay.Add(ExercisesType.DeltoidMid);
-
-            trainDay.Add(ExercisesType.LatissimusBase);
-            trainDay.Add(ExercisesType.DeltoidMid);
-
-            trainDay.Add(ExercisesType.LatissimusIsol);
+            trainDay.Add(ExercisesType.ChestBase);
+            trainDay.Add(ExercisesType.ChestIsol);
+            trainDay.Add(ExercisesType.ChestBase);
+            trainDay.Add(ExercisesType.Biceps);
             trainDay.Add(ExercisesType.Biceps);
 
             return trainDay;
         }
 
-        private static List<ExercisesType> Fourth()
+        private static List<ExercisesType> BackAndTriceps()
         {
-            trainDay.Add(ExercisesType.BicepsHip);
-            trainDay.Add(ExercisesType.AbsDinamic);
+            trainDay.Add(ExercisesType.LatissimusIsol);
+            trainDay.Add(ExercisesType.LatissimusBase);
+            trainDay.Add(ExercisesType.LatissimusIsol);
+            trainDay.Add(ExercisesType.LatissimusBase);
+            trainDay.Add(ExercisesType.Triceps);
+            trainDay.Add(ExercisesType.Triceps);
 
-            trainDay.Add(ExercisesType.BicepsHip);
-            trainDay.Add(ExercisesType.AbsDinamic);
+            return trainDay;
+        }
 
-            trainDay.Add(ExercisesType.Forearm);
+        private static List<ExercisesType> Legs()
+        {
+            trainDay.Add(ExercisesType.Quadriceps);
+            trainDay.Add(ExercisesType.Quadriceps);
+            trainDay.Add(ExercisesType.BicepsHip);
+            trainDay.Add(ExercisesType.BicepsHip);
+            trainDay.Add(ExercisesType.Calf);
+            trainDay.Add(ExercisesType.Calf);
+
+            return trainDay;
+        }
+
+        private static List<ExercisesType> Cortex()
+        {
+            trainDay.Add(ExercisesType.AbsDinamic);
+            trainDay.Add(ExercisesType.AbsDinamic);
             trainDay.Add(ExercisesType.AbsStatic);
+            trainDay.Add(ExercisesType.AbsStatic);
+            trainDay.Add(ExercisesType.ExtensorBack);
+            trainDay.Add(ExercisesType.ExtensorBack);
 
             return trainDay;
         }
@@ -78,10 +74,13 @@ namespace TrainWindowsFormsApp
 
             switch (num)
             {
-                case (0): list = First();   break;
-                case (1): list = Second();  break;
-                case (2): list = Third();   break;
-                case (3): list = Fourth();  break;
+                case 1: list = BackAndTriceps();    break;
+                case 2: list =      Legs();         break;
+                case 3: list =     Cortex();        break;
+                case 4: list = ChestAndBiceps();    break;
+                case 5: list =      Legs();         break;
+                case 6: list =    Shoulders();      break;
+                case 0: list =     Cortex();        break;
             }
             return list;
         }
