@@ -22,10 +22,10 @@ namespace TrainWindowsFormsApp
 
         private static List<ExercisesType> ChestAndBiceps()
         {
-            trainDay.Add(ExercisesType.ChestIsol);
             trainDay.Add(ExercisesType.ChestBase);
             trainDay.Add(ExercisesType.ChestIsol);
             trainDay.Add(ExercisesType.ChestBase);
+            trainDay.Add(ExercisesType.ChestIsol);
             trainDay.Add(ExercisesType.Biceps);
             trainDay.Add(ExercisesType.Biceps);
 
@@ -34,10 +34,10 @@ namespace TrainWindowsFormsApp
 
         private static List<ExercisesType> BackAndTriceps()
         {
-            trainDay.Add(ExercisesType.LatissimusIsol);
             trainDay.Add(ExercisesType.LatissimusBase);
             trainDay.Add(ExercisesType.LatissimusIsol);
             trainDay.Add(ExercisesType.LatissimusBase);
+            trainDay.Add(ExercisesType.LatissimusIsol);
             trainDay.Add(ExercisesType.Triceps);
             trainDay.Add(ExercisesType.Triceps);
 

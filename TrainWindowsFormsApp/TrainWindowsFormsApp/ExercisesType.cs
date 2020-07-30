@@ -17,6 +17,8 @@
         ExtensorBack,
         Quadriceps,
         BicepsHip,
-        Calf
+        Calf,
+        CombatArms,
+        CombatLegs
     }
 }
