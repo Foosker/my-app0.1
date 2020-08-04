@@ -12,6 +12,7 @@ namespace TrainWindowsFormsApp
 {
     public partial class StartForm : Form
     {
+
         public StartForm()
         {
             InitializeComponent();

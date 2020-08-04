@@ -9,20 +9,21 @@ namespace TrainWindowsFormsApp
 {
     public partial class MainForm : Form
     {
-        string pathToProgressFile = "progress.txt";
+        public string pathToProgressFile = "progress.txt";
 
-        private int numberOfExercise = 6;  // Количество упражнений за тренировкуprivate int numberOfExerciseInARow = 2;  // Количество упражнений за подход
+        private static int numberOfExercise = 6;  // Количество упражнений за тренировку
 
         private readonly int cellHeight = 60;
         private readonly int indentBetween = 10;
         private int indentUpEdge = 60;
-        public int mapSize = 18;  // Колчество лейблов, соотношение (numberOfExercise * разновидности лейблов)
+        public int mapSize = numberOfExercise * 3;  // Колчество лейблов, соотношение (numberOfExercise * разновидности лейблов)
 
 
         private Label[] labelsMap;
         private Button[] executedButtons;
         MyMessageBox message;
         Exercise[] exercises;
+        List<ExercisesType> exerciseTypes;
         List<string> pathsList = new List<string>();  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
 
         static Random random = new Random();
@@ -39,8 +40,8 @@ namespace TrainWindowsFormsApp
         private void MainForm_Load(object sender, EventArgs e)
         {   
             progress = GetProgress();
-            InitMap();
             exercises = GetArrayExercises();
+            InitMap();
             FillInTheTable();
         }
         //
@@ -64,7 +65,13 @@ namespace TrainWindowsFormsApp
 
             for (int i = 0; i < mapSize / 3; i++)
             {
-                //if (i % numberOfExerciseInARow == 0) indentUpEdge += 40;  // Если индекс элемента кратен 2, то переходим на следующую строку.
+                if (i > 0 &&
+                    (exerciseTypes[i] > ExercisesType.ExtensorBack ||   // Если это упражнение или
+                    exerciseTypes[i - 1] > ExercisesType.ExtensorBack)) // следующее односторонее
+                {
+                    indentUpEdge += 40;
+                }
+
                 var textLabel = CreateLabels(50, i, 650);
                 Controls.Add(textLabel);
                 labelsMap[i] = textLabel;
@@ -84,6 +91,7 @@ namespace TrainWindowsFormsApp
                 Controls.Add(executedButton);
                 executedButtons[i] = executedButton;
                 executedButton.Click += Button_Click;  // Событие нажатия на кнопку
+
             }
         }
 
@@ -156,7 +164,7 @@ namespace TrainWindowsFormsApp
         {
             var trainDay = progress % TrainDay.trainingOptions;
 
-            var exerciseTypes = TrainDay.Get(trainDay);  // Получаем список тренируемых мышц
+            exerciseTypes = TrainDay.Get(trainDay);  // Получаем список тренируемых мышц
             
             var exerciseArray = new Exercise[exerciseTypes.Count];  // Создание массива, куда будут добавляться упражнения
 
