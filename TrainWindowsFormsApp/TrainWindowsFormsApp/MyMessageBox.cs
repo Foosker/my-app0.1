@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace TrainWindowsFormsApp
@@ -33,10 +35,33 @@ namespace TrainWindowsFormsApp
                 AutoSize = true,
 
                 BackColor = Color.Ivory,
-                Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(204))),
+                Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold, GraphicsUnit.Point, (byte)204),
                 Text = message,
                 TextAlign = ContentAlignment.TopLeft
             };
+            Controls.Add(label);
+            ShowDialog();
+        }
+
+        public void ShowList(List<string> list)
+        {
+
+            var label = new Label()
+            {
+                Location = new Point(0, 0),
+                Size = new Size(Height, Width),  // Размер лейбла во всю форму
+                AutoSize = true,
+
+                BackColor = Color.Ivory,
+                Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold, GraphicsUnit.Point, (byte)204),
+                TextAlign = ContentAlignment.TopLeft
+            };
+
+            foreach (var str in list)
+            {
+                label.Text += str + "\n";
+            }
+
             Controls.Add(label);
             ShowDialog();
         }

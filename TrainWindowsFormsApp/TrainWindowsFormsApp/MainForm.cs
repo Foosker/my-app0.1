@@ -67,8 +67,8 @@ namespace TrainWindowsFormsApp
             {
                 if (i > 0 &&
                     (exerciseTypes[i] > ExercisesType.ExtensorBack ||   // Если это упражнение или
-                    exerciseTypes[i - 1] > ExercisesType.ExtensorBack)) // следующее односторонее
-                {
+                    exerciseTypes[i - 1] > ExercisesType.ExtensorBack)) // следующее - односторонее,
+                {                                                       // то надо увеличить вертикальный отступ
                     indentUpEdge += 40;
                 }
 
@@ -103,7 +103,7 @@ namespace TrainWindowsFormsApp
             var button = new Button
             {
                 BackColor = Color.IndianRed,
-                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(204))),
+                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, (byte)204),
                 Text = "NOK",
                 Size = new Size(width, 60),
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -120,7 +120,7 @@ namespace TrainWindowsFormsApp
             var label = new Label
             {
                 BackColor = Color.LightBlue,
-                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(204))),
+                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, (byte)204),
                 Size = new Size(width, 60),
                 TextAlign = ContentAlignment.MiddleCenter,
                 Location = new Point(x, y)

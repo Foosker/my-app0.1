@@ -104,6 +104,18 @@ namespace TrainWindowsFormsApp
             return trainDay;
         }
 
+        public static List<ExercisesType> GetWarmUpList()
+        {
+            trainDay.Add(ExercisesType.CombatArms);
+            trainDay.Add(ExercisesType.CombatArms);
+            trainDay.Add(ExercisesType.CombatLegs);
+            trainDay.Add(ExercisesType.CombatArms);
+            trainDay.Add(ExercisesType.CombatArms);
+            trainDay.Add(ExercisesType.CombatLegs);
+
+            return trainDay;
+        }
+
         public static List<ExercisesType> Get(int num)
         {
             var list = new List<ExercisesType>();
