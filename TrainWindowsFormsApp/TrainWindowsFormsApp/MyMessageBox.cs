@@ -18,12 +18,15 @@ namespace TrainWindowsFormsApp
             FormBorderStyle = FormBorderStyle.None;  // None - yбирает шапку формы
             ShowIcon = false;
 
-            KeyPress += MyMessageBox_KeyPress;            
+            KeyPress += MyMessageBox_KeyPress;
         }
 
         private void MyMessageBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            Close();
+            if (e.KeyChar == 27)  // Если нажатая клавиша Escape
+            {
+                Close();
+            }
         }
 
         public void ShowText(string message)
@@ -39,29 +42,6 @@ namespace TrainWindowsFormsApp
                 Text = message,
                 TextAlign = ContentAlignment.TopLeft
             };
-            Controls.Add(label);
-            ShowDialog();
-        }
-
-        public void ShowList(List<string> list)
-        {
-
-            var label = new Label()
-            {
-                Location = new Point(0, 0),
-                Size = new Size(Height, Width),  // Размер лейбла во всю форму
-                AutoSize = true,
-
-                BackColor = Color.Ivory,
-                Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold, GraphicsUnit.Point, (byte)204),
-                TextAlign = ContentAlignment.TopLeft
-            };
-
-            foreach (var str in list)
-            {
-                label.Text += str + "\n";
-            }
-
             Controls.Add(label);
             ShowDialog();
         }

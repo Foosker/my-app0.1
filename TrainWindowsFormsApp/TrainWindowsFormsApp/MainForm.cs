@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using TrainWindowsFormsApp.Properties;
 
@@ -9,22 +10,19 @@ namespace TrainWindowsFormsApp
 {
     public partial class MainForm : Form
     {
-        public string pathToProgressFile = "progress.txt";
-
-        private static int numberOfExercise = 6;  // Количество упражнений за тренировку
+        private readonly string pathToProgressFile = "progress.txt";
 
         private readonly int cellHeight = 60;
         private readonly int indentBetween = 10;
         private int indentUpEdge = 60;
-        public int mapSize = numberOfExercise * 3;  // Колчество лейблов, соотношение (numberOfExercise * разновидности лейблов)
-
 
         private Label[] labelsMap;
         private Button[] executedButtons;
-        MyMessageBox message;
-        Exercise[] exercises;
-        List<ExercisesType> exerciseTypes;
-        List<string> pathsList = new List<string>();  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
+        private MyMessageBox message;
+        private Exercise[] exercises;
+        private List<ExercisesType> exerciseTypes;
+        private int numberOfExercises;
+        private List<string> pathsList = new List<string>();  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
 
         static Random random = new Random();
         private int progress;
@@ -38,7 +36,7 @@ namespace TrainWindowsFormsApp
         }
 
         private void MainForm_Load(object sender, EventArgs e)
-        {   
+        {
             progress = GetProgress();
             exercises = GetArrayExercises();
             InitMap();
@@ -60,10 +58,10 @@ namespace TrainWindowsFormsApp
 
         private void InitMap()
         {   // Заполнение формы ячейками и кнопками
-            labelsMap = new Label[mapSize];
-            executedButtons = new Button[mapSize / 3];
+            labelsMap = new Label[numberOfExercises * 3];   // Количество упражнений умноженное на количество лейблов
+            executedButtons = new Button[numberOfExercises];
 
-            for (int i = 0; i < mapSize / 3; i++)
+            for (int i = 0; i < numberOfExercises; i++)
             {
                 if (i > 0 &&
                     (exerciseTypes[i] > ExercisesType.ExtensorBack ||   // Если это упражнение или
@@ -79,11 +77,11 @@ namespace TrainWindowsFormsApp
 
                 var loadLabel = CreateLabels(750, i, 200);
                 Controls.Add(loadLabel);
-                labelsMap[i + numberOfExercise] = loadLabel;
+                labelsMap[i + numberOfExercises] = loadLabel;
 
                 var repeatLabel = CreateLabels(1000, i, 100);
                 Controls.Add(repeatLabel);
-                labelsMap[i + numberOfExercise * 2] = repeatLabel;
+                labelsMap[i + numberOfExercises * 2] = repeatLabel;
 
                 var executedButton = CreateButton(1150, i, 100);
                 // Имя кнопки состоит только из цифры от 0 до 6, для более удобного получения индекса в событии нажатия кнопки
@@ -133,8 +131,8 @@ namespace TrainWindowsFormsApp
             for (int i = 0; i < 6; i++)
             {
                 labelsMap[i].Text = exercises[i].Text;                                      // название упражнения
-                labelsMap[i + numberOfExercise].Text = exercises[i].Load;                   // нагрузка
-                labelsMap[i + numberOfExercise * 2].Text = exercises[i].Repeat.ToString();  // повторения
+                labelsMap[i + numberOfExercises].Text = exercises[i].Load;                   // нагрузка
+                labelsMap[i + numberOfExercises * 2].Text = exercises[i].Repeat.ToString();  // повторения
             }
         }
         //
@@ -165,36 +163,72 @@ namespace TrainWindowsFormsApp
             var trainDay = progress % TrainDay.trainingOptions;
 
             exerciseTypes = TrainDay.Get(trainDay);  // Получаем список тренируемых мышц
-            
-            var exerciseArray = new Exercise[exerciseTypes.Count];  // Создание массива, куда будут добавляться упражнения
+            numberOfExercises = exerciseTypes.Count;
 
-            for (int i = 0; i < exerciseTypes.Count; i++)
+            var differentExecriseTypes = exerciseTypes.Distinct().ToList<ExercisesType>();
+            var numberDifferentExercises = differentExecriseTypes.Count();
+
+            var exerciseArray = new Exercise[numberOfExercises];  // Создание массива, куда будут добавляться упражнения
+
+            for (int i = 0; i < numberDifferentExercises; i++)
             {
-                var pathExerciseFile = "ExercisesType/" + exerciseTypes[i].ToString() + ".json"; // Название упражнения преобразуем в путь к файлу,
+                var pathExerciseFile = "ExercisesType/" + differentExecriseTypes[i].ToString() + ".json";   // Название упражнения преобразуем в путь к файлу
+                pathsList.Add(pathExerciseFile);                                                            // и добавляем в список всех путей.
+                
+                var dataExercises = FileProvider.GetData(pathExerciseFile);                                        // Получение данных из файла
+                var deserializableDataExercises = JsonConvert.DeserializeObject<List<Exercise>>(dataExercises);    // и десериализация в список.
 
-                if (!pathsList.Contains(pathExerciseFile))  // Если в списке путей к файлам с упражнениями нет нынешнего,
+                for(int j = i; j < numberOfExercises; j++)
                 {
-                    pathsList.Add(pathExerciseFile);        // то он добавляется
-
-                    var dataExercises = FileProvider.GetData(pathExerciseFile);                                        // Получение данных из файла
-                    var deserializableDataExercises = JsonConvert.DeserializeObject<List<Exercise>>(dataExercises);    // и десериализация в список.
-
-                    for(int j = i; j < exerciseTypes.Count; j++)
+                    if (differentExecriseTypes[i] == exerciseTypes[j])
                     {
-                        if (exerciseTypes[i] == exerciseTypes[j])
-                        {
-                            var exerciseIndex = progress / (TrainDay.trainingOptions - trainDay) % deserializableDataExercises.Count;  // Индекс упражнения
+                        var exerciseIndex = progress / (TrainDay.trainingOptions - trainDay) % deserializableDataExercises.Count;  // Индекс упражнения
 
-                            var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
-                            exerciseArray[j] = exercise;                                // добавление его в основной массив,
-                            deserializableDataExercises.Remove(exercise);               // удаление из списка из файла.
-                        }
-                    }                    
-                }
+                        var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
+                        exerciseArray[j] = exercise;                                // добавление его в основной массив,
+                        deserializableDataExercises.Remove(exercise);               // удаление из списка файла.
+                    }
+                }                    
+                
             }
             return exerciseArray;
         }
-        
+
+        private Exercise[] GetArrayWarmUp()
+        {
+            var random = new Random();
+
+            var warmUpTypes = new List<ExercisesType>();
+
+            warmUpTypes = TrainDay.GetWarmUpList();
+            var numberOfWarmUp = warmUpTypes.Count;
+
+            var differentWarmUp = warmUpTypes.Distinct().ToList<ExercisesType>();
+            var numberDifferentWarmUp = differentWarmUp.Count();
+
+            var warmUpArray = new Exercise[numberOfWarmUp];  // Создание массива, куда будут добавляться упражнения
+
+            for (int i = 0; i < numberDifferentWarmUp; i++)
+            {
+                var pathWarmUpFile = "ExercisesType/" + differentWarmUp[i].ToString() + ".json"; // Название упражнения преобразуем в путь к файлу,
+
+                var dataWarmUp = FileProvider.GetData(pathWarmUpFile);                                    // Получение данных из файла
+                var deserializableDataWarmUp = JsonConvert.DeserializeObject<List<Exercise>>(dataWarmUp); // и десериализация в список.
+
+                for (int j = i; j < numberOfWarmUp; j++)
+                {
+                    if (differentWarmUp[i] == warmUpTypes[j])
+                    {
+                        var warmUpIndex = random.Next(deserializableDataWarmUp.Count);  // Индекс упражнения
+
+                        var warmUp = deserializableDataWarmUp[warmUpIndex]; // Выбор упражнения по индексу,
+                        warmUpArray[j] = warmUp;                            // добавление его в основной массив,
+                    }
+                }
+            }
+            return warmUpArray;
+        }
+
         private void SaveTrainResults()
         {
             foreach (var exercise in exercises)
@@ -250,15 +284,27 @@ namespace TrainWindowsFormsApp
             var index = int.Parse(name);                                     // преоразуем имя в индекс,
             exercises[index].Repeat++;                                       // меняем значение числа повторов.
             // Если количество изменённых повторов стало больше максимально допустимого пишем "МАХ",
-            if (exercises[index].Repeat > exercises[index].MaxRepeat) labelsMap[index + numberOfExercise * 2].Text = "MAX";
+            if (exercises[index].Repeat > exercises[index].MaxRepeat) labelsMap[index + numberOfExercises * 2].Text = "MAX";
             // если нет - то меняем на новое значение.
-            else labelsMap[index + numberOfExercise * 2].Text = exercises[index].Repeat.ToString();
+            else labelsMap[index + numberOfExercises * 2].Text = exercises[index].Repeat.ToString();
         }
 
         private void сохранитьНовоеУпражнениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var saveExerc = new SaveNewExerciseForm();
             saveExerc.ShowDialog();
+        }
+
+        private void сформироватьРазминкуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Exercise[] warmUp = GetArrayWarmUp();
+            var warmUpShow = new MyMessageBox();
+            var text = "";
+            foreach (var warm in warmUp)
+            {
+                text += warm.Text + "\n";
+            }
+            warmUpShow.ShowText(text);
         }
 
         private void закончитьТренировкуToolStripMenuItem_Click(object sender, EventArgs e)
