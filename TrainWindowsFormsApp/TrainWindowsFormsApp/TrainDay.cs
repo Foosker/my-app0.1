@@ -17,9 +17,9 @@ namespace TrainWindowsFormsApp
 
             trainDay.Add(ExercisesType.O_LatissimusBase);
 
-            trainDay.Add(ExercisesType.Calf);
-
             trainDay.Add(ExercisesType.O_LatissimusBase);
+
+            trainDay.Add(ExercisesType.Calf);
 
             trainDay.Add(ExercisesType.Calf);
 

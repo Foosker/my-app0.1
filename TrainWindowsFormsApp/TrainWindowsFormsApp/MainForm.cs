@@ -189,7 +189,7 @@ namespace TrainWindowsFormsApp
                 {
                     if (differentExecriseTypes[i] == exerciseTypes[j])
                     {
-                        var exerciseIndex = progress / (TrainDay.trainingOptions - trainDay) % deserializableDataExercises.Count;  // Индекс упражнения
+                        var exerciseIndex = progress % deserializableDataExercises.Count;  // Индекс упражнения
 
                         var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
                         exerciseArray[j] = exercise;                                // добавление его в основной массив,
