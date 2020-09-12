@@ -4,102 +4,70 @@ namespace TrainWindowsFormsApp
 {
     public static class TrainDay
     {
-        public static int trainingOptions = 6;  // Количество дней тренировок
+        public static int trainingOptions = 4;  // Количество дней тренировок
         public static List<bool> isBasicExercise = new List<bool>();
 
         private static List<ExercisesType> trainDay = new List<ExercisesType>();
         private static List<ExercisesType> warmUp = new List<ExercisesType>();
 
-        private static List<ExercisesType> BackAndTriceps()
+        private static List<ExercisesType> Back()
         {
+            trainDay.Add(ExercisesType.AbsDinamic);
             trainDay.Add(ExercisesType.D_LatissimusBase);
-            trainDay.Add(ExercisesType.D_LatissimusIsol);
 
             trainDay.Add(ExercisesType.O_LatissimusBase);
 
-            trainDay.Add(ExercisesType.O_LatissimusIsol);
+            trainDay.Add(ExercisesType.Calf);
 
-            trainDay.Add(ExercisesType.DeltoidFront);
+            trainDay.Add(ExercisesType.O_LatissimusBase);
 
-            trainDay.Add(ExercisesType.Triceps);
+            trainDay.Add(ExercisesType.Calf);
 
             return trainDay;
         }
 
-        private static List<ExercisesType> Legs1()
+        private static List<ExercisesType> Chest()
         {
-            trainDay.Add(ExercisesType.O_Quadriceps);
-
-            trainDay.Add(ExercisesType.D_Quadriceps);
-            trainDay.Add(ExercisesType.D_BicepsHip);
-
             trainDay.Add(ExercisesType.O_BicepsHip);
 
-            trainDay.Add(ExercisesType.Calf);
-
-            trainDay.Add(ExercisesType.Calf);
-
-            return trainDay;
-        }
-
-        private static List<ExercisesType> CortexAndShoulders1()
-        {
-            trainDay.Add(ExercisesType.D_DeltoidRear);
-            trainDay.Add(ExercisesType.ExtensorBack);
-
-            trainDay.Add(ExercisesType.O_DeltoidRear);
-
-            trainDay.Add(ExercisesType.D_Trapezius);
-            trainDay.Add(ExercisesType.ExtensorBack);
-
-            trainDay.Add(ExercisesType.O_Trapezius);
-
-            return trainDay;
-        }
-
-        private static List<ExercisesType> ChestAndBiceps()
-        {
+            trainDay.Add(ExercisesType.D_BicepsHip);
             trainDay.Add(ExercisesType.D_ChestBase);
-            trainDay.Add(ExercisesType.D_ChestIsol);
+
+            trainDay.Add(ExercisesType.ExtensorBack);
+            trainDay.Add(ExercisesType.D_ChestBase);
 
             trainDay.Add(ExercisesType.O_ChestBase);
 
-            trainDay.Add(ExercisesType.O_ChestIsol);
+            return trainDay;
+        }
 
-            trainDay.Add(ExercisesType.Biceps);
+        private static List<ExercisesType> RearShoulders()
+        {
+            trainDay.Add(ExercisesType.AbsStatic);
+            trainDay.Add(ExercisesType.D_DeltoidRear);
 
-            trainDay.Add(ExercisesType.Biceps);
+            trainDay.Add(ExercisesType.O_DeltoidRear);
+
+            trainDay.Add(ExercisesType.O_DeltoidRear);
+
+            trainDay.Add(ExercisesType.Calf);
+
+            trainDay.Add(ExercisesType.Calf);
 
             return trainDay;
         }
 
-        private static List<ExercisesType> Legs2()
+        private static List<ExercisesType> MiddleShoulders()
         {
-            trainDay.Add(ExercisesType.O_BicepsHip);
-
-            trainDay.Add(ExercisesType.D_BicepsHip);
-            trainDay.Add(ExercisesType.D_Quadriceps);
-
             trainDay.Add(ExercisesType.O_Quadriceps);
 
-            trainDay.Add(ExercisesType.Calf);
-
-            trainDay.Add(ExercisesType.Calf);
-
-            return trainDay;
-        }
-
-        private static List<ExercisesType> CortexAndShoulders2()
-        {
+            trainDay.Add(ExercisesType.D_Quadriceps);
             trainDay.Add(ExercisesType.D_DeltoidMid);
-            trainDay.Add(ExercisesType.AbsDinamic);
+
+            trainDay.Add(ExercisesType.ExtensorBack);
+            trainDay.Add(ExercisesType.D_DeltoidMid);
 
             trainDay.Add(ExercisesType.O_DeltoidMid);
-
-            trainDay.Add(ExercisesType.D_Trapezius);
-            trainDay.Add(ExercisesType.AbsStatic);
-
-            trainDay.Add(ExercisesType.O_Trapezius);
 
             return trainDay;
         }
@@ -122,12 +90,10 @@ namespace TrainWindowsFormsApp
 
             switch (num)
             {
-                case 1: list =   BackAndTriceps();    break;
-                case 2: list =       Legs1();         break;
-                case 3: list = CortexAndShoulders1(); break;
-                case 4: list =   ChestAndBiceps();    break;
-                case 5: list =       Legs2();         break;
-                case 0: list = CortexAndShoulders2(); break;
+                case 1: list =        Back();     break;
+                case 2: list =       Chest();     break;
+                case 3: list =  RearShoulders();  break;
+                case 0: list = MiddleShoulders(); break;
             }
             return list;
         }

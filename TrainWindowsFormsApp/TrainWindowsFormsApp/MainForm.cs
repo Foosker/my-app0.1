@@ -63,10 +63,17 @@ namespace TrainWindowsFormsApp
 
             for (int i = 0; i < numberOfExercises; i++)
             {
-                if (i > 0 &&
-                    (exerciseTypes[i] > ExercisesType.ExtensorBack ||   // Если это упражнение или
-                    exerciseTypes[i - 1] > ExercisesType.ExtensorBack)) // следующее - односторонее,
-                {                                                       // то надо увеличить вертикальный отступ
+                if (// Если это упражнение
+                    (i > 0 &&
+                    (exerciseTypes[i] > ExercisesType.ExtensorBack ||
+                    // или следующее - односторонее,
+                    exerciseTypes[i - 1] > ExercisesType.ExtensorBack)) || 
+                    // либо прошлые два - двустороние,
+                    (i > 2 &&
+                    exerciseTypes[i - 1] <= ExercisesType.ExtensorBack && 
+                    exerciseTypes[i - 2] <= ExercisesType.ExtensorBack) &&
+                    exerciseTypes[i - 3] > ExercisesType.ExtensorBack)
+                {   // то надо увеличить вертикальный отступ
                     indentUpEdge += 40;
                 }
 
@@ -198,9 +205,7 @@ namespace TrainWindowsFormsApp
         {
             var random = new Random();
 
-            var warmUpTypes = new List<ExercisesType>();
-
-            warmUpTypes = TrainDay.GetWarmUpList();
+            var warmUpTypes = TrainDay.GetWarmUpList();
             var numberOfWarmUp = warmUpTypes.Count;
 
             var differentWarmUp = warmUpTypes.Distinct().ToList<ExercisesType>();
