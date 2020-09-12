@@ -18,6 +18,7 @@ namespace TrainWindowsFormsApp
 
         private Label[] labelsMap;
         private Button[] executedButtons;
+        private Button[] megaPlusButtons;
         private MyMessageBox message;
         private Exercise[] exercises;
         private List<ExercisesType> exerciseTypes;
@@ -60,6 +61,7 @@ namespace TrainWindowsFormsApp
         {   // Заполнение формы ячейками и кнопками
             labelsMap = new Label[numberOfExercises * 3];   // Количество упражнений умноженное на количество лейблов
             executedButtons = new Button[numberOfExercises];
+            megaPlusButtons = new Button[numberOfExercises];
 
             for (int i = 0; i < numberOfExercises; i++)
             {
@@ -96,6 +98,13 @@ namespace TrainWindowsFormsApp
                 Controls.Add(executedButton);
                 executedButtons[i] = executedButton;
                 executedButton.Click += Button_Click;  // Событие нажатия на кнопку
+
+                var megaPlusButton = CreateButton(1300, i, 100);
+                // Имя кнопки состоит только из цифры от 10 до 16, для более удобного получения индекса в событии нажатия кнопки
+                megaPlusButton.Name = (10 + i).ToString();
+                Controls.Add(megaPlusButton);
+                megaPlusButtons[i] = megaPlusButton;
+                megaPlusButton.Click += MegaPlusButton_Click;
 
             }
         }
@@ -288,6 +297,36 @@ namespace TrainWindowsFormsApp
             var name = button.Name;                                          // Получаем имя, которое состоит только из цифры,
             var index = int.Parse(name);                                     // преоразуем имя в индекс,
             exercises[index].Repeat++;                                       // меняем значение числа повторов.
+
+            var megaButton = megaPlusButtons[index];
+            megaButton.BackColor = Color.Gray;
+            megaButton.Text = "N U";      
+            megaButton.Enabled = false;
+
+            // Если количество изменённых повторов стало больше максимально допустимого пишем "МАХ",
+            if (exercises[index].Repeat > exercises[index].MaxRepeat) labelsMap[index + numberOfExercises * 2].Text = "MAX";
+            // если нет - то меняем на новое значение.
+            else labelsMap[index + numberOfExercises * 2].Text = exercises[index].Repeat.ToString();
+        }
+
+        private void MegaPlusButton_Click(object sender, EventArgs e)
+        {
+            // Нажатие на кнопки
+            var megaButton = (sender as Button);    // Обращается к кнопке,
+            megaButton.BackColor = Color.Gold; // меняет окраску кнопки
+            megaButton.Text = "Yeah";               // и текст на ней.
+            megaButton.Enabled = false;  // Отключение кнопки после нажатия.
+
+            var name = megaButton.Name;                             // Получаем имя, которое состоит только из цифры,
+            var index = int.Parse(name) - 10;                       // преоразуем имя в индекс минус 10,
+            var megaRepeat = exercises[index].MaxRepeat / 10 + 1;   // получаем большее число чем 1,
+            exercises[index].Repeat += megaRepeat;                  // и меняем значение числа повторов.
+            // Отключение обычных кнопок
+            var button = executedButtons[index];
+            button.BackColor = Color.ForestGreen;
+            button.Text = "OK";
+            button.Enabled = false;
+
             // Если количество изменённых повторов стало больше максимально допустимого пишем "МАХ",
             if (exercises[index].Repeat > exercises[index].MaxRepeat) labelsMap[index + numberOfExercises * 2].Text = "MAX";
             // если нет - то меняем на новое значение.
