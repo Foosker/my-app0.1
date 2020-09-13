@@ -26,7 +26,7 @@
         O_DeltoidMid,
         O_DeltoidRear,
         O_ChestBase,
-        O_ChestIsol,
+        O_ChestIsol, 
         O_LatissimusBase,
         O_LatissimusIsol,
         O_Quadriceps,

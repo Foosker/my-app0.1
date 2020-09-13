@@ -39,7 +39,7 @@ namespace TrainWindowsFormsApp
         private void MainForm_Load(object sender, EventArgs e)
         {
             progress = GetProgress();
-            exercises = GetArrayExercises();
+            exercises = GetAll();
             InitMap();
             FillInTheTable();
         }
@@ -59,6 +59,8 @@ namespace TrainWindowsFormsApp
 
         private void InitMap()
         {   // Заполнение формы ячейками и кнопками
+            numberOfExercises = exercises.Count();
+
             labelsMap = new Label[numberOfExercises * 3];   // Количество упражнений умноженное на количество лейблов
             executedButtons = new Button[numberOfExercises];
             megaPlusButtons = new Button[numberOfExercises];
@@ -174,73 +176,62 @@ namespace TrainWindowsFormsApp
             FileProvider.Save(pathToProgressFile, data);
         }
 
-        private Exercise[] GetArrayExercises()
+        private Exercise[] GetAll(string option = "train")
         {
+            var random = new Random();
+
             var trainDay = progress % TrainDay.trainingOptions;
 
-            exerciseTypes = TrainDay.Get(trainDay);  // Получаем список тренируемых мышц
-            numberOfExercises = exerciseTypes.Count;
+            // Получаем список тренируемых мышц
+            List<ExercisesType> exercisesList;
 
-            var differentExecriseTypes = exerciseTypes.Distinct().ToList<ExercisesType>();
+            if (option == "train")
+            {
+                exercisesList = TrainDay.Get(trainDay);
+                exerciseTypes = exercisesList;
+            }
+            else if (option == "additional")
+            {
+                exerciseTypes.Clear();
+                exercisesList = TrainDay.GetAdditional(trainDay);
+                exerciseTypes = exercisesList;
+            }
+            else exercisesList = TrainDay.GetWarmUpList();
+
+            var exercisesCount = exercisesList.Count();
+
+            var differentExecriseTypes = exercisesList.Distinct().ToList<ExercisesType>();
             var numberDifferentExercises = differentExecriseTypes.Count();
 
-            var exerciseArray = new Exercise[numberOfExercises];  // Создание массива, куда будут добавляться упражнения
+            var exerciseArray = new Exercise[exercisesCount];  // Создание массива, куда будут добавляться упражнения
 
             for (int i = 0; i < numberDifferentExercises; i++)
-            {
-                var pathExerciseFile = "ExercisesType/" + differentExecriseTypes[i].ToString() + ".json";   // Название упражнения преобразуем в путь к файлу
-                pathsList.Add(pathExerciseFile);                                                            // и добавляем в список всех путей.
-                
-                var dataExercises = FileProvider.GetData(pathExerciseFile);                                        // Получение данных из файла
-                var deserializableDataExercises = JsonConvert.DeserializeObject<List<Exercise>>(dataExercises);    // и десериализация в список.
+            {// Название упражнения преобразуем в путь к файлу
+                var pathExerciseFile = "ExercisesType/" + differentExecriseTypes[i].ToString() + ".json";   
+                // и добавляем в список всех путей, если это тренировка или дополнение к ней
+                if (option != "warmUp") pathsList.Add(pathExerciseFile);
 
-                for(int j = i; j < numberOfExercises; j++)
+                // Получение данных из файла
+                var dataExercises = FileProvider.GetData(pathExerciseFile);
+                // и десериализация в список.
+                var deserializableDataExercises = JsonConvert.DeserializeObject<List<Exercise>>(dataExercises);
+
+                for (int j = i; j < exercisesCount; j++)
                 {
-                    if (differentExecriseTypes[i] == exerciseTypes[j])
+                    if (differentExecriseTypes[i] == exercisesList[j])
                     {
-                        var exerciseIndex = progress % deserializableDataExercises.Count;  // Индекс упражнения
+                        int exerciseIndex;  // Индекс упражнения
+                        if (option == "warmUp") exerciseIndex = random.Next(deserializableDataExercises.Count);
+                        else exerciseIndex = progress % deserializableDataExercises.Count;
 
                         var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
                         exerciseArray[j] = exercise;                                // добавление его в основной массив,
                         deserializableDataExercises.Remove(exercise);               // удаление из списка файла.
                     }
-                }                    
-                
+                }
+
             }
             return exerciseArray;
-        }
-
-        private Exercise[] GetArrayWarmUp()
-        {
-            var random = new Random();
-
-            var warmUpTypes = TrainDay.GetWarmUpList();
-            var numberOfWarmUp = warmUpTypes.Count;
-
-            var differentWarmUp = warmUpTypes.Distinct().ToList<ExercisesType>();
-            var numberDifferentWarmUp = differentWarmUp.Count();
-
-            var warmUpArray = new Exercise[numberOfWarmUp];  // Создание массива, куда будут добавляться упражнения
-
-            for (int i = 0; i < numberDifferentWarmUp; i++)
-            {
-                var pathWarmUpFile = "ExercisesType/" + differentWarmUp[i].ToString() + ".json"; // Название упражнения преобразуем в путь к файлу,
-
-                var dataWarmUp = FileProvider.GetData(pathWarmUpFile);                                    // Получение данных из файла
-                var deserializableDataWarmUp = JsonConvert.DeserializeObject<List<Exercise>>(dataWarmUp); // и десериализация в список.
-
-                for (int j = i; j < numberOfWarmUp; j++)
-                {
-                    if (differentWarmUp[i] == warmUpTypes[j])
-                    {
-                        var warmUpIndex = random.Next(deserializableDataWarmUp.Count);  // Индекс упражнения
-
-                        var warmUp = deserializableDataWarmUp[warmUpIndex]; // Выбор упражнения по индексу,
-                        warmUpArray[j] = warmUp;                            // добавление его в основной массив,
-                    }
-                }
-            }
-            return warmUpArray;
         }
 
         private void SaveTrainResults()
@@ -274,7 +265,6 @@ namespace TrainWindowsFormsApp
                 var serializableData = JsonConvert.SerializeObject(deserializableData, Formatting.Indented);
                 FileProvider.Save(pathsList[i], serializableData);
             }
-            SaveProgress();
         }
         //
         // События
@@ -341,7 +331,7 @@ namespace TrainWindowsFormsApp
 
         private void сформироватьРазминкуToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Exercise[] warmUp = GetArrayWarmUp();
+            Exercise[] warmUp = GetAll("warmUp");
             var warmUpShow = new MyMessageBox();
             var text = "";
             foreach (var warm in warmUp)
@@ -351,8 +341,21 @@ namespace TrainWindowsFormsApp
             warmUpShow.ShowText(text);
         }
 
+        private void мнеНехерДелатьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveTrainResults();
+            Array.Clear(exercises, 0, 6);
+            indentUpEdge = 60;
+            progress = GetProgress();
+            exercises = GetAll("additional");
+            for (var i = 30; i > 0; i--) Controls.RemoveAt(i);
+            InitMap();
+            FillInTheTable();
+        }
+
         private void закончитьТренировкуToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            SaveProgress();
             SaveTrainResults();
             Close();
         }
