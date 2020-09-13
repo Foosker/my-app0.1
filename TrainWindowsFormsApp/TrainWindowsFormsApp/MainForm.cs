@@ -39,12 +39,12 @@ namespace TrainWindowsFormsApp
         private void MainForm_Load(object sender, EventArgs e)
         {
             progress = GetProgress();
-            exercises = GetAll();
+            exercises = Get();
             InitMap();
             FillInTheTable();
         }
         //
-        // Создание клиентской области
+        // Клиентская область
         //
         private Image SetImage()
         {
@@ -65,6 +65,8 @@ namespace TrainWindowsFormsApp
             executedButtons = new Button[numberOfExercises];
             megaPlusButtons = new Button[numberOfExercises];
 
+            indentUpEdge = 60;
+
             for (int i = 0; i < numberOfExercises; i++)
             {
                 if (// Если это упражнение
@@ -81,30 +83,25 @@ namespace TrainWindowsFormsApp
                     indentUpEdge += 40;
                 }
 
-                var textLabel = CreateLabels(50, i, 650);
-                Controls.Add(textLabel);
+                var textLabel = CreateLabel(50, i, 650);
                 labelsMap[i] = textLabel;
                 textLabel.MouseClick += ExerciseName_MouseClick;   // Событие нажатия на текст с названием упражнения
 
-                var loadLabel = CreateLabels(750, i, 200);
-                Controls.Add(loadLabel);
+                var loadLabel = CreateLabel(750, i, 200);
                 labelsMap[i + numberOfExercises] = loadLabel;
 
-                var repeatLabel = CreateLabels(1000, i, 100);
-                Controls.Add(repeatLabel);
+                var repeatLabel = CreateLabel(1000, i, 100);
                 labelsMap[i + numberOfExercises * 2] = repeatLabel;
 
                 var executedButton = CreateButton(1150, i, 100);
                 // Имя кнопки состоит только из цифры от 0 до 6, для более удобного получения индекса в событии нажатия кнопки
                 executedButton.Name = i.ToString();
-                Controls.Add(executedButton);
                 executedButtons[i] = executedButton;
                 executedButton.Click += Button_Click;  // Событие нажатия на кнопку
 
                 var megaPlusButton = CreateButton(1300, i, 100);
                 // Имя кнопки состоит только из цифры от 10 до 16, для более удобного получения индекса в событии нажатия кнопки
                 megaPlusButton.Name = (10 + i).ToString();
-                Controls.Add(megaPlusButton);
                 megaPlusButtons[i] = megaPlusButton;
                 megaPlusButton.Click += MegaPlusButton_Click;
 
@@ -125,10 +122,11 @@ namespace TrainWindowsFormsApp
                 TextAlign = ContentAlignment.MiddleCenter,
                 Location = new Point(x, y)
             };
+            Controls.Add(button);
             return button;
         }
 
-        private Label CreateLabels(int indentLeftEdge, int indexRow, int width)
+        private Label CreateLabel(int indentLeftEdge, int indexRow, int width)
         {   // Создание ячеек
             int x = indentLeftEdge;
             int y = indentUpEdge + indexRow * (indentBetween + cellHeight); // Формула расчёта координат эллемента по ординате
@@ -141,6 +139,7 @@ namespace TrainWindowsFormsApp
                 TextAlign = ContentAlignment.MiddleCenter,
                 Location = new Point(x, y)
             };
+            Controls.Add(label);
             return label;
         }
 
@@ -152,6 +151,12 @@ namespace TrainWindowsFormsApp
                 labelsMap[i + numberOfExercises].Text = exercises[i].Load;                   // нагрузка
                 labelsMap[i + numberOfExercises * 2].Text = exercises[i].Repeat.ToString();  // повторения
             }
+        }
+
+        private void ClearField()
+        {
+            Array.Clear(exercises, 0, 6);
+            for (var i = 30; i > 0; i--) Controls.RemoveAt(i);
         }
         //
         // Работа с файлами
@@ -176,7 +181,7 @@ namespace TrainWindowsFormsApp
             FileProvider.Save(pathToProgressFile, data);
         }
 
-        private Exercise[] GetAll(string option = "train")
+        private Exercise[] Get(string option = "train")
         {
             var random = new Random();
 
@@ -222,6 +227,7 @@ namespace TrainWindowsFormsApp
                     {
                         int exerciseIndex;  // Индекс упражнения
                         if (option == "warmUp") exerciseIndex = random.Next(deserializableDataExercises.Count);
+                        else if (option == "additional") exerciseIndex = (progress + 1) % deserializableDataExercises.Count;
                         else exerciseIndex = progress % deserializableDataExercises.Count;
 
                         var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
@@ -331,7 +337,7 @@ namespace TrainWindowsFormsApp
 
         private void сформироватьРазминкуToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Exercise[] warmUp = GetAll("warmUp");
+            Exercise[] warmUp = Get("warmUp");
             var warmUpShow = new MyMessageBox();
             var text = "";
             foreach (var warm in warmUp)
@@ -344,11 +350,8 @@ namespace TrainWindowsFormsApp
         private void мнеНехерДелатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveTrainResults();
-            Array.Clear(exercises, 0, 6);
-            indentUpEdge = 60;
-            progress = GetProgress();
-            exercises = GetAll("additional");
-            for (var i = 30; i > 0; i--) Controls.RemoveAt(i);
+            ClearField();
+            exercises = Get("additional");
             InitMap();
             FillInTheTable();
         }
