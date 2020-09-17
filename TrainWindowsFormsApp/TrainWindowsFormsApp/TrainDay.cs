@@ -8,7 +8,7 @@ namespace TrainWindowsFormsApp
         public static List<bool> isBasicExercise = new List<bool>();
 
         private static List<ExercisesType> trainDay = new List<ExercisesType>();
-        private static List<ExercisesType> warmUp = new List<ExercisesType>();
+        private static List<ExercisesType> warmUp;
 
         private static List<ExercisesType> Back()
         {
@@ -136,6 +136,8 @@ namespace TrainWindowsFormsApp
 
         public static List<ExercisesType> GetWarmUpList()
         {
+            warmUp = new List<ExercisesType>();
+
             warmUp.Add(ExercisesType.CombatArms);
             warmUp.Add(ExercisesType.CombatArms);
             warmUp.Add(ExercisesType.CombatLegs);

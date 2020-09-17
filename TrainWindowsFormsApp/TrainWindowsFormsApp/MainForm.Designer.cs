@@ -28,24 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.сохранитьНовоеУпражнениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выходБезСохраненияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.закончитьТренировкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.мнеНехерДелатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сформироватьРазминкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backgroundPictureBox = new System.Windows.Forms.PictureBox();
+            this.mainTimer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.backgroundPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.Color.Black;
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.сохранитьНовоеУпражнениеToolStripMenuItem,
             this.выходБезСохраненияToolStripMenuItem,
             this.закончитьТренировкуToolStripMenuItem,
             this.мнеНехерДелатьToolStripMenuItem,
-            this.сформироватьРазминкуToolStripMenuItem});
+            this.сформироватьРазминкуToolStripMenuItem,
+            this.сохранитьНовоеУпражнениеToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1920, 33);
@@ -54,6 +61,7 @@
             // 
             // сохранитьНовоеУпражнениеToolStripMenuItem
             // 
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.сохранитьНовоеУпражнениеToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.сохранитьНовоеУпражнениеToolStripMenuItem.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.сохранитьНовоеУпражнениеToolStripMenuItem.Name = "сохранитьНовоеУпражнениеToolStripMenuItem";
@@ -97,13 +105,31 @@
             this.сформироватьРазминкуToolStripMenuItem.Text = "Сформировать разминку";
             this.сформироватьРазминкуToolStripMenuItem.Click += new System.EventHandler(this.сформироватьРазминкуToolStripMenuItem_Click);
             // 
+            // backgroundPictureBox
+            // 
+            this.backgroundPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.backgroundPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.backgroundPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("backgroundPictureBox.Image")));
+            this.backgroundPictureBox.Location = new System.Drawing.Point(0, 0);
+            this.backgroundPictureBox.Name = "backgroundPictureBox";
+            this.backgroundPictureBox.Size = new System.Drawing.Size(1920, 1080);
+            this.backgroundPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.backgroundPictureBox.TabIndex = 1;
+            this.backgroundPictureBox.TabStop = false;
+            // 
+            // mainTimer
+            // 
+            this.mainTimer.Tick += new System.EventHandler(this.mainTimer_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1920, 1080);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.backgroundPictureBox);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Location = new System.Drawing.Point(20, 0);
@@ -114,6 +140,7 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.backgroundPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -127,6 +154,8 @@
         private System.Windows.Forms.ToolStripMenuItem закончитьТренировкуToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem сформироватьРазминкуToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem мнеНехерДелатьToolStripMenuItem;
+        private System.Windows.Forms.PictureBox backgroundPictureBox;
+        private System.Windows.Forms.Timer mainTimer;
     }
 }
 

@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Versioning;
+using System.Threading;
 using System.Windows.Forms;
 using TrainWindowsFormsApp.Properties;
 
@@ -14,7 +16,7 @@ namespace TrainWindowsFormsApp
 
         private readonly int cellHeight = 60;
         private readonly int indentBetween = 10;
-        private int indentUpEdge = 60;
+        private int indentUpEdge;
 
         private Label[] labelsMap;
         private Button[] executedButtons;
@@ -25,38 +27,26 @@ namespace TrainWindowsFormsApp
         private int numberOfExercises;
         private List<string> pathsList = new List<string>();  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
 
-        static Random random = new Random();
+        private static Random random = new Random();
         private int progress;
+
+        private int timerCounter;
 
         public MainForm()
         {
             InitializeComponent();
-
-            BackgroundImage = SetImage();
-            BackgroundImageLayout = ImageLayout.Stretch;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             progress = GetProgress();
-            exercises = Get();
+            exercises = GetExercises();
             InitMap();
             FillInTheTable();
         }
         //
         // Клиентская область
         //
-        private Image SetImage()
-        {
-            var imageList = new Image[7] { Resources.Chevelle, Resources.CyberPunk1, Resources.Delorian,
-                Resources.god_of_war_x_star_wars_baby_yoda_arriva_nell_esclusiva_ps4_fan_art_v3_414575,
-                Resources.Mustang, Resources.oboi7_com_58309, Resources._3_9___Dethzazz };
-
-            var randomImage = imageList[random.Next(imageList.Length - 1)];
-
-            return randomImage;
-        }
-
         private void InitMap()
         {   // Заполнение формы ячейками и кнопками
             numberOfExercises = exercises.Count();
@@ -123,6 +113,7 @@ namespace TrainWindowsFormsApp
                 Location = new Point(x, y)
             };
             Controls.Add(button);
+            button.BringToFront();
             return button;
         }
 
@@ -140,6 +131,7 @@ namespace TrainWindowsFormsApp
                 Location = new Point(x, y)
             };
             Controls.Add(label);
+            label.BringToFront();
             return label;
         }
 
@@ -181,14 +173,12 @@ namespace TrainWindowsFormsApp
             FileProvider.Save(pathToProgressFile, data);
         }
 
-        private Exercise[] Get(string option = "train")
+        private Exercise[] GetExercises(string option = "train")
         {
-            var random = new Random();
-
             var trainDay = progress % TrainDay.trainingOptions;
 
             // Получаем список тренируемых мышц
-            List<ExercisesType> exercisesList;
+            List<ExercisesType> exercisesList = new List<ExercisesType>();
 
             if (option == "train")
             {
@@ -201,7 +191,10 @@ namespace TrainWindowsFormsApp
                 exercisesList = TrainDay.GetAdditional(trainDay);
                 exerciseTypes = exercisesList;
             }
-            else exercisesList = TrainDay.GetWarmUpList();
+            else
+            { 
+                exercisesList = TrainDay.GetWarmUpList(); 
+            }
 
             var exercisesCount = exercisesList.Count();
 
@@ -275,6 +268,26 @@ namespace TrainWindowsFormsApp
         //
         // События
         //
+        private void mainTimer_Tick(object sender, EventArgs e)
+        {
+            timerCounter++;
+            LaunchAddon();
+        }
+
+        private void LaunchAddon()
+        {
+            if (timerCounter > 2)
+            {
+                ClearField();
+                exercises = GetExercises("additional");
+                InitMap();
+                FillInTheTable();
+
+                mainTimer.Stop();
+                timerCounter = 0;
+            }
+        }
+
         private void ExerciseName_MouseClick(object sender, MouseEventArgs e)
         {   // Показ примечания к упражнению
             message = new MyMessageBox();
@@ -337,7 +350,7 @@ namespace TrainWindowsFormsApp
 
         private void сформироватьРазминкуToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Exercise[] warmUp = Get("warmUp");
+            Exercise[] warmUp = GetExercises("warmUp");
             var warmUpShow = new MyMessageBox();
             var text = "";
             foreach (var warm in warmUp)
@@ -349,11 +362,9 @@ namespace TrainWindowsFormsApp
 
         private void мнеНехерДелатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            backgroundPictureBox.BringToFront();
+            mainTimer.Start();
             SaveTrainResults();
-            ClearField();
-            exercises = Get("additional");
-            InitMap();
-            FillInTheTable();
         }
 
         private void закончитьТренировкуToolStripMenuItem_Click(object sender, EventArgs e)
