@@ -14,13 +14,13 @@ namespace TrainWindowsFormsApp
         {
             trainDay.Add(ExercisesType.Calf);
 
-            trainDay.Add(ExercisesType.AbsDinamic);
-            trainDay.Add(ExercisesType.D_LatissimusBase);
+            trainDay.Add(ExercisesType.Abs);
+            trainDay.Add(ExercisesType.D_Latissimus);
 
-            trainDay.Add(ExercisesType.AbsStatic);
-            trainDay.Add(ExercisesType.D_LatissimusBase);
+            trainDay.Add(ExercisesType.Abs);
+            trainDay.Add(ExercisesType.D_Latissimus);
 
-            trainDay.Add(ExercisesType.O_LatissimusBase);
+            trainDay.Add(ExercisesType.O_Latissimus);
 
             return trainDay;
         }
@@ -29,10 +29,10 @@ namespace TrainWindowsFormsApp
         {
             trainDay.Add(ExercisesType.Calf);
 
-            trainDay.Add(ExercisesType.AbsDinamic);
-            trainDay.Add(ExercisesType.D_LatissimusIsol);
+            trainDay.Add(ExercisesType.Abs);
+            trainDay.Add(ExercisesType.D_Latissimus);
 
-            trainDay.Add(ExercisesType.O_LatissimusIsol);
+            trainDay.Add(ExercisesType.O_Latissimus);
 
             trainDay.Add(ExercisesType.Biceps);
 
@@ -46,22 +46,22 @@ namespace TrainWindowsFormsApp
             trainDay.Add(ExercisesType.O_BicepsHip);
 
             trainDay.Add(ExercisesType.D_BicepsHip);
-            trainDay.Add(ExercisesType.D_ChestBase);
+            trainDay.Add(ExercisesType.D_Chest);
 
             trainDay.Add(ExercisesType.ExtensorBack);
-            trainDay.Add(ExercisesType.D_ChestBase);
+            trainDay.Add(ExercisesType.D_Chest);
 
-            trainDay.Add(ExercisesType.O_ChestBase);
+            trainDay.Add(ExercisesType.O_Chest);
 
             return trainDay;
         }
 
         private static List<ExercisesType> AdditionalC()
         {
-            trainDay.Add(ExercisesType.O_ChestIsol);
-
             trainDay.Add(ExercisesType.ExtensorBack);
-            trainDay.Add(ExercisesType.D_ChestIsol);
+            trainDay.Add(ExercisesType.D_Chest);
+
+            trainDay.Add(ExercisesType.O_Chest);
 
             trainDay.Add(ExercisesType.O_BicepsHip);
 
@@ -76,10 +76,10 @@ namespace TrainWindowsFormsApp
         {
             trainDay.Add(ExercisesType.Calf);
 
-            trainDay.Add(ExercisesType.AbsDinamic);
+            trainDay.Add(ExercisesType.Abs);
             trainDay.Add(ExercisesType.D_DeltoidRear);
 
-            trainDay.Add(ExercisesType.AbsStatic);
+            trainDay.Add(ExercisesType.Abs);
             trainDay.Add(ExercisesType.D_DeltoidRear);
 
             trainDay.Add(ExercisesType.O_DeltoidRear);
@@ -91,7 +91,7 @@ namespace TrainWindowsFormsApp
         {
             trainDay.Add(ExercisesType.Calf);
 
-            trainDay.Add(ExercisesType.AbsDinamic);
+            trainDay.Add(ExercisesType.Abs);
             trainDay.Add(ExercisesType.D_DeltoidRear);
 
             trainDay.Add(ExercisesType.Calf);
@@ -108,7 +108,7 @@ namespace TrainWindowsFormsApp
             trainDay.Add(ExercisesType.O_Quadriceps);
 
             trainDay.Add(ExercisesType.D_Quadriceps);
-            trainDay.Add(ExercisesType.D_DeltoidMid);
+            trainDay.Add(ExercisesType.Trapezius);
 
             trainDay.Add(ExercisesType.ExtensorBack);
             trainDay.Add(ExercisesType.D_DeltoidMid);
@@ -122,10 +122,10 @@ namespace TrainWindowsFormsApp
         {
             trainDay.Add(ExercisesType.O_Quadriceps);
 
-            trainDay.Add(ExercisesType.ExtensorBack);
-            trainDay.Add(ExercisesType.D_Trapezius);
+            trainDay.Add(ExercisesType.O_DeltoidMid);
 
-            trainDay.Add(ExercisesType.O_Trapezius);
+            trainDay.Add(ExercisesType.ExtensorBack);
+            trainDay.Add(ExercisesType.Trapezius);
 
             trainDay.Add(ExercisesType.DeltoidFront);
 

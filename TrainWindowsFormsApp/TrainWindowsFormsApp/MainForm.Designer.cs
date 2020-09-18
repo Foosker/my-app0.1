@@ -31,13 +31,14 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.сохранитьНовоеУпражнениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выходБезСохраненияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.закончитьТренировкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.мнеНехерДелатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.дополнительныйРежимToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сформироватьРазминкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.backgroundPictureBox = new System.Windows.Forms.PictureBox();
+            this.сохранитьНовоеУпражнениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainTimer = new System.Windows.Forms.Timer(this.components);
+            this.backgroundPictureBox = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.backgroundPictureBox)).BeginInit();
             this.SuspendLayout();
@@ -45,12 +46,12 @@
             // menuStrip1
             // 
             this.menuStrip1.BackColor = System.Drawing.Color.Black;
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.выходБезСохраненияToolStripMenuItem,
             this.закончитьТренировкуToolStripMenuItem,
             this.мнеНехерДелатьToolStripMenuItem,
+            this.дополнительныйРежимToolStripMenuItem,
             this.сформироватьРазминкуToolStripMenuItem,
             this.сохранитьНовоеУпражнениеToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -58,16 +59,6 @@
             this.menuStrip1.Size = new System.Drawing.Size(1920, 33);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // сохранитьНовоеУпражнениеToolStripMenuItem
-            // 
-            this.сохранитьНовоеУпражнениеToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.сохранитьНовоеУпражнениеToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.сохранитьНовоеУпражнениеToolStripMenuItem.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.сохранитьНовоеУпражнениеToolStripMenuItem.Name = "сохранитьНовоеУпражнениеToolStripMenuItem";
-            this.сохранитьНовоеУпражнениеToolStripMenuItem.Size = new System.Drawing.Size(275, 29);
-            this.сохранитьНовоеУпражнениеToolStripMenuItem.Text = "Сохранить новое упражнение";
-            this.сохранитьНовоеУпражнениеToolStripMenuItem.Click += new System.EventHandler(this.сохранитьНовоеУпражнениеToolStripMenuItem_Click);
             // 
             // выходБезСохраненияToolStripMenuItem
             // 
@@ -97,13 +88,36 @@
             this.мнеНехерДелатьToolStripMenuItem.Text = "Мне нехер делать";
             this.мнеНехерДелатьToolStripMenuItem.Click += new System.EventHandler(this.мнеНехерДелатьToolStripMenuItem_Click);
             // 
+            // дополнительныйРежимToolStripMenuItem
+            // 
+            this.дополнительныйРежимToolStripMenuItem.BackColor = System.Drawing.Color.Yellow;
+            this.дополнительныйРежимToolStripMenuItem.Name = "дополнительныйРежимToolStripMenuItem";
+            this.дополнительныйРежимToolStripMenuItem.Size = new System.Drawing.Size(229, 29);
+            this.дополнительныйРежимToolStripMenuItem.Text = "Дополнительный режим";
+            this.дополнительныйРежимToolStripMenuItem.Click += new System.EventHandler(this.дополнительныйРежимToolStripMenuItem_Click);
+            // 
             // сформироватьРазминкуToolStripMenuItem
             // 
             this.сформироватьРазминкуToolStripMenuItem.BackColor = System.Drawing.Color.DarkGoldenrod;
+            this.сформироватьРазминкуToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.сформироватьРазминкуToolStripMenuItem.Name = "сформироватьРазминкуToolStripMenuItem";
             this.сформироватьРазминкуToolStripMenuItem.Size = new System.Drawing.Size(237, 29);
             this.сформироватьРазминкуToolStripMenuItem.Text = "Сформировать разминку";
             this.сформироватьРазминкуToolStripMenuItem.Click += new System.EventHandler(this.сформироватьРазминкуToolStripMenuItem_Click);
+            // 
+            // сохранитьНовоеУпражнениеToolStripMenuItem
+            // 
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.Name = "сохранитьНовоеУпражнениеToolStripMenuItem";
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.Size = new System.Drawing.Size(275, 29);
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.Text = "Сохранить новое упражнение";
+            this.сохранитьНовоеУпражнениеToolStripMenuItem.Click += new System.EventHandler(this.сохранитьНовоеУпражнениеToolStripMenuItem_Click);
+            // 
+            // mainTimer
+            // 
+            this.mainTimer.Tick += new System.EventHandler(this.mainTimer_Tick);
             // 
             // backgroundPictureBox
             // 
@@ -116,10 +130,6 @@
             this.backgroundPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.backgroundPictureBox.TabIndex = 1;
             this.backgroundPictureBox.TabStop = false;
-            // 
-            // mainTimer
-            // 
-            this.mainTimer.Tick += new System.EventHandler(this.mainTimer_Tick);
             // 
             // MainForm
             // 
@@ -154,8 +164,9 @@
         private System.Windows.Forms.ToolStripMenuItem закончитьТренировкуToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem сформироватьРазминкуToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem мнеНехерДелатьToolStripMenuItem;
-        private System.Windows.Forms.PictureBox backgroundPictureBox;
         private System.Windows.Forms.Timer mainTimer;
+        private System.Windows.Forms.ToolStripMenuItem дополнительныйРежимToolStripMenuItem;
+        private System.Windows.Forms.PictureBox backgroundPictureBox;
     }
 }
 

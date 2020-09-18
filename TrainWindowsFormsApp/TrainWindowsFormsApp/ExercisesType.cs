@@ -7,28 +7,22 @@
         CombatLegs,
 
         // Это двустороние упражнения
-        D_Trapezius,
+        Trapezius,
         D_DeltoidMid,
         D_DeltoidRear,
-        D_ChestBase,
-        D_ChestIsol,
-        D_LatissimusBase,
-        D_LatissimusIsol,
+        D_Chest,
+        D_Latissimus,
         D_Quadriceps,
         D_BicepsHip,
 
-        AbsDinamic,
-        AbsStatic,
+        Abs,
         ExtensorBack,
 
         // Одностороние
-        O_Trapezius,
         O_DeltoidMid,
         O_DeltoidRear,
-        O_ChestBase,
-        O_ChestIsol, 
-        O_LatissimusBase,
-        O_LatissimusIsol,
+        O_Chest, 
+        O_Latissimus,
         O_Quadriceps,
         O_BicepsHip,
 

@@ -38,7 +38,7 @@ namespace TrainWindowsFormsApp
                 AutoSize = true,
 
                 BackColor = Color.Ivory,
-                Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold, GraphicsUnit.Point, (byte)204),
+                Font = new Font("Microsoft Sans Serif", 25F, FontStyle.Bold, GraphicsUnit.Point, (byte)204),
                 Text = message,
                 TextAlign = ContentAlignment.TopLeft
             };

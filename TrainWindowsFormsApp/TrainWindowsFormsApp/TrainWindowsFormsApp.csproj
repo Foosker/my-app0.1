@@ -153,5 +153,11 @@
   <ItemGroup>
     <None Include="bin\Debug\Background\TrainHard.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Background\Fire.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Background\Fire1.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

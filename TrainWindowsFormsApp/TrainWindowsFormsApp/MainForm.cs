@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Threading;
 using System.Windows.Forms;
@@ -98,6 +100,16 @@ namespace TrainWindowsFormsApp
             }
         }
 
+        private void FillInTheTable()
+        {   // Заполнение ячеек
+            for (int i = 0; i < 6; i++)
+            {
+                labelsMap[i].Text = exercises[i].Text;                                      // название упражнения
+                labelsMap[i + numberOfExercises].Text = exercises[i].Load;                   // нагрузка
+                labelsMap[i + numberOfExercises * 2].Text = exercises[i].Repeat.ToString();  // повторения
+            }
+        }
+
         private Button CreateButton(int indentLeftEdge, int indexRow, int width)
         {   // Создание кнопок 
             int x = indentLeftEdge;
@@ -106,7 +118,7 @@ namespace TrainWindowsFormsApp
             var button = new Button
             {
                 BackColor = Color.IndianRed,
-                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, (byte)204),
+                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, 204),
                 Text = "NOK",
                 Size = new Size(width, 60),
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -125,7 +137,7 @@ namespace TrainWindowsFormsApp
             var label = new Label
             {
                 BackColor = Color.LightBlue,
-                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, (byte)204),
+                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, 204),
                 Size = new Size(width, 60),
                 TextAlign = ContentAlignment.MiddleCenter,
                 Location = new Point(x, y)
@@ -135,20 +147,34 @@ namespace TrainWindowsFormsApp
             return label;
         }
 
-        private void FillInTheTable()
-        {   // Заполнение ячеек
-            for (int i = 0; i < 6; i++)
-            {
-                labelsMap[i].Text = exercises[i].Text;                                      // название упражнения
-                labelsMap[i + numberOfExercises].Text = exercises[i].Load;                   // нагрузка
-                labelsMap[i + numberOfExercises * 2].Text = exercises[i].Repeat.ToString();  // повторения
-            }
-        }
-
         private void ClearField()
         {
             Array.Clear(exercises, 0, 6);
-            for (var i = 30; i > 0; i--) Controls.RemoveAt(i);
+
+            while (Controls.Count > 2)
+            {// Два члена Controls - верхняя панель и фоновая картинка
+                Controls.RemoveAt(Controls.Count-2);
+            }
+        }
+
+        private void GetMode()
+        {
+            var modes = new List<string>()
+            {
+                "Статическое удержание в пике",
+                "1,5 повторения",
+                "\"На смерть\" в каждом подходе",
+                "Частичные повторения"
+            };
+
+            var selectedMode = modes[random.Next(modes.Count())];
+
+            var modeLabel = CreateLabel(350, 6, 600);
+            modeLabel.Font = new Font("Tahoma", 25F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            modeLabel.ForeColor = Color.DarkOrange;
+            modeLabel.Height = 200;
+            modeLabel.Image = Resources.Fire;
+            modeLabel.Text = selectedMode;
         }
         //
         // Работа с файлами
@@ -220,7 +246,7 @@ namespace TrainWindowsFormsApp
                     {
                         int exerciseIndex;  // Индекс упражнения
                         if (option == "warmUp") exerciseIndex = random.Next(deserializableDataExercises.Count);
-                        else if (option == "additional") exerciseIndex = (progress + 1) % deserializableDataExercises.Count;
+                        else if (option == "additional") exerciseIndex = (progress - 1) % deserializableDataExercises.Count;
                         else exerciseIndex = progress % deserializableDataExercises.Count;
 
                         var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
@@ -362,9 +388,17 @@ namespace TrainWindowsFormsApp
 
         private void мнеНехерДелатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            мнеНехерДелатьToolStripMenuItem.Enabled = false;
+            дополнительныйРежимToolStripMenuItem.Enabled = true;
             backgroundPictureBox.BringToFront();
             mainTimer.Start();
-            SaveTrainResults();
+            //SaveTrainResults();
+        }
+
+        private void дополнительныйРежимToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            дополнительныйРежимToolStripMenuItem.Enabled = false;
+            GetMode();
         }
 
         private void закончитьТренировкуToolStripMenuItem_Click(object sender, EventArgs e)
