@@ -1,179 +1,119 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace TrainWindowsFormsApp
 {
     public static class TrainDay
     {
-        public static int trainingOptions = 4;  // Количество дней тренировок
-        public static List<bool> isBasicExercise = new List<bool>();
+        private static int progress;
 
-        private static List<ExercisesType> trainDay = new List<ExercisesType>();
-        private static List<ExercisesType> warmUp;
-
-        private static List<ExercisesType> Back()
+        private static List<ExercisesType> upperBody = new List<ExercisesType>()
         {
-            trainDay.Add(ExercisesType.Calf);
+            ExercisesType.D_Latissimus,
+            ExercisesType.D_Chest,
+            ExercisesType.D_DeltoidRear,
+            ExercisesType.D_DeltoidMid,
+            
+            ExercisesType.O_Latissimus,
+            ExercisesType.O_Chest,
+            ExercisesType.O_DeltoidRear,
+            ExercisesType.O_DeltoidMid
+        };
 
-            trainDay.Add(ExercisesType.Abs);
-            trainDay.Add(ExercisesType.D_Latissimus);
+        private static List<ExercisesType> lowerBody = new List<ExercisesType>()
+        {
+            ExercisesType.D_Quadriceps,
+            ExercisesType.D_BicepsHip,
+            ExercisesType.D_Calf,
 
-            trainDay.Add(ExercisesType.Abs);
-            trainDay.Add(ExercisesType.D_Latissimus);
+            ExercisesType.O_Quadriceps,
+            ExercisesType.O_BicepsHip,
+            ExercisesType.O_Calf
+        };
 
-            trainDay.Add(ExercisesType.O_Latissimus);
+        private static List<ExercisesType> abs = new List<ExercisesType>()
+        {
+            ExercisesType.D_Abs,
+            ExercisesType.D_ExtensorBack,
 
-            return trainDay;
+            ExercisesType.O_Abs,
+            ExercisesType.O_ExtensorBack
+        };
+
+        private static List<ExercisesType> extraMuscles = new List<ExercisesType>()
+        {
+            ExercisesType.Trapezius,
+            ExercisesType.DeltoidFront,
+
+            ExercisesType.Biceps,
+            ExercisesType.Triceps
+        };
+
+        private static int ChooseIndexMuscles(int count)
+        {
+            var num = progress % count;
+            return num;
         }
 
-        private static List<ExercisesType> AdditionalB()
+        public static List<ExercisesType> GetTrain(int _progress)
         {
-            trainDay.Add(ExercisesType.Calf);
+            progress = _progress;
 
-            trainDay.Add(ExercisesType.Abs);
-            trainDay.Add(ExercisesType.D_Latissimus);
+            var regularTrain = new List<ExercisesType>();
 
-            trainDay.Add(ExercisesType.O_Latissimus);
 
-            trainDay.Add(ExercisesType.Biceps);
+            var count = abs.Count() / 2;
+            var index = ChooseIndexMuscles(count);
+            regularTrain.Add(abs[index]);
 
-            trainDay.Add(ExercisesType.Biceps);
+            count = lowerBody.Count() / 2;
+            index = ChooseIndexMuscles(count);
+            regularTrain.Add(lowerBody[index]);
+            regularTrain.Add(lowerBody[index]);
 
-            return trainDay;
+            count = upperBody.Count() / 2;
+            index = ChooseIndexMuscles(count);
+            regularTrain.Insert(0, upperBody[index]);
+            regularTrain.Insert(3, upperBody[index]);
+            regularTrain.Insert(5, upperBody[index + count]);
+            return regularTrain;
         }
 
-        private static List<ExercisesType> Chest()
+        public static List<ExercisesType> GetAdditional(int progress)
         {
-            trainDay.Add(ExercisesType.O_BicepsHip);
+            var additionalTrain = new List<ExercisesType>();
 
-            trainDay.Add(ExercisesType.D_BicepsHip);
-            trainDay.Add(ExercisesType.D_Chest);
+            var count = abs.Count() / 2;
+            var index = ChooseIndexMuscles(count);
+            additionalTrain.Add(abs[index + count]);
 
-            trainDay.Add(ExercisesType.ExtensorBack);
-            trainDay.Add(ExercisesType.D_Chest);
+            count = lowerBody.Count() / 2;
+            index = ChooseIndexMuscles(count);
+            additionalTrain.Add(lowerBody[index + count]);
 
-            trainDay.Add(ExercisesType.O_Chest);
+            count = extraMuscles.Count() / 2;
+            index = ChooseIndexMuscles(count);
+            additionalTrain.Add(extraMuscles[index]);
+            additionalTrain.Add(extraMuscles[index]);
+            additionalTrain.Add(extraMuscles[index + count]);
+            additionalTrain.Add(extraMuscles[index + count]);
 
-            return trainDay;
-        }
-
-        private static List<ExercisesType> AdditionalC()
-        {
-            trainDay.Add(ExercisesType.ExtensorBack);
-            trainDay.Add(ExercisesType.D_Chest);
-
-            trainDay.Add(ExercisesType.O_Chest);
-
-            trainDay.Add(ExercisesType.O_BicepsHip);
-
-            trainDay.Add(ExercisesType.Triceps);
-
-            trainDay.Add(ExercisesType.Triceps);
-
-            return trainDay;
-        }
-
-        private static List<ExercisesType> RearShoulders()
-        {
-            trainDay.Add(ExercisesType.Calf);
-
-            trainDay.Add(ExercisesType.Abs);
-            trainDay.Add(ExercisesType.D_DeltoidRear);
-
-            trainDay.Add(ExercisesType.Abs);
-            trainDay.Add(ExercisesType.D_DeltoidRear);
-
-            trainDay.Add(ExercisesType.O_DeltoidRear);
-
-            return trainDay;
-        }
-
-        private static List<ExercisesType> AdditionalRS()
-        {
-            trainDay.Add(ExercisesType.Calf);
-
-            trainDay.Add(ExercisesType.Abs);
-            trainDay.Add(ExercisesType.D_DeltoidRear);
-
-            trainDay.Add(ExercisesType.Calf);
-
-            trainDay.Add(ExercisesType.Biceps);
-
-            trainDay.Add(ExercisesType.Biceps);
-
-            return trainDay;
-        }
-
-        private static List<ExercisesType> MiddleShoulders()
-        {
-            trainDay.Add(ExercisesType.O_Quadriceps);
-
-            trainDay.Add(ExercisesType.D_Quadriceps);
-            trainDay.Add(ExercisesType.Trapezius);
-
-            trainDay.Add(ExercisesType.ExtensorBack);
-            trainDay.Add(ExercisesType.D_DeltoidMid);
-
-            trainDay.Add(ExercisesType.O_DeltoidMid);
-
-            return trainDay;
-        }
-
-        private static List<ExercisesType> AdditionalMS()
-        {
-            trainDay.Add(ExercisesType.O_Quadriceps);
-
-            trainDay.Add(ExercisesType.O_DeltoidMid);
-
-            trainDay.Add(ExercisesType.ExtensorBack);
-            trainDay.Add(ExercisesType.Trapezius);
-
-            trainDay.Add(ExercisesType.DeltoidFront);
-
-            trainDay.Add(ExercisesType.DeltoidFront);
-
-            return trainDay;
+            return additionalTrain;
         }
 
         public static List<ExercisesType> GetWarmUpList()
         {
-            warmUp = new List<ExercisesType>();
-
-            warmUp.Add(ExercisesType.CombatArms);
-            warmUp.Add(ExercisesType.CombatArms);
-            warmUp.Add(ExercisesType.CombatLegs);
-            warmUp.Add(ExercisesType.CombatArms);
-            warmUp.Add(ExercisesType.CombatArms);
-            warmUp.Add(ExercisesType.CombatLegs);
-
+            var warmUp = new List<ExercisesType>()
+            {
+                ExercisesType.CombatArms,
+                ExercisesType.CombatArms,
+                ExercisesType.CombatLegs,
+                ExercisesType.CombatArms,
+                ExercisesType.CombatArms,
+                ExercisesType.CombatLegs
+            };
             return warmUp;
-        }
-
-        public static List<ExercisesType> Get(int num)
-        {
-            var list = new List<ExercisesType>();
-
-            switch (num)
-            {
-                case 1: list =        Back();     break;
-                case 2: list =       Chest();     break;
-                case 3: list =  RearShoulders();  break;
-                case 0: list = MiddleShoulders(); break;
-            }
-            return list;
-        }
-
-        public  static List<ExercisesType> GetAdditional(int num)
-        {
-            var list = new List<ExercisesType>();
-
-            switch (num)
-            {
-                case 1: list =  AdditionalB(); break;
-                case 2: list =  AdditionalC(); break;
-                case 3: list = AdditionalRS(); break;
-                case 0: list = AdditionalMS(); break;
-            }
-            return list;
         }
     }
 }

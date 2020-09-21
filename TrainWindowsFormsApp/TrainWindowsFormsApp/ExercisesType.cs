@@ -8,15 +8,16 @@
 
         // Это двустороние упражнения
         Trapezius,
+        DeltoidFront,
         D_DeltoidMid,
         D_DeltoidRear,
         D_Chest,
         D_Latissimus,
         D_Quadriceps,
         D_BicepsHip,
-
-        Abs,
-        ExtensorBack,
+        D_Calf,
+        D_Abs,
+        D_ExtensorBack,
 
         // Одностороние
         O_DeltoidMid,
@@ -25,12 +26,11 @@
         O_Latissimus,
         O_Quadriceps,
         O_BicepsHip,
-
-        DeltoidFront,
+        O_Calf,
+        O_Abs,
+        O_ExtensorBack,
 
         Biceps,
-        Triceps,
-
-        Calf
+        Triceps
     }
 }

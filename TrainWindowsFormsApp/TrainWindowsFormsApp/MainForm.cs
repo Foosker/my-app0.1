@@ -3,10 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.Versioning;
-using System.Threading;
 using System.Windows.Forms;
 using TrainWindowsFormsApp.Properties;
 
@@ -59,20 +55,23 @@ namespace TrainWindowsFormsApp
 
             indentUpEdge = 60;
 
+            var counter = 0; // Счётчик двустороних упражнений
+
             for (int i = 0; i < numberOfExercises; i++)
             {
-                if (// Если это упражнение
+                if (// Если это упражнение или предыдущее односторонее
                     (i > 0 &&
-                    (exerciseTypes[i] > ExercisesType.ExtensorBack ||
-                    // или следующее - односторонее,
-                    exerciseTypes[i - 1] > ExercisesType.ExtensorBack)) || 
-                    // либо прошлые два - двустороние,
-                    (i > 2 &&
-                    exerciseTypes[i - 1] <= ExercisesType.ExtensorBack && 
-                    exerciseTypes[i - 2] <= ExercisesType.ExtensorBack) &&
-                    exerciseTypes[i - 3] > ExercisesType.ExtensorBack)
+                    (exerciseTypes[i] > ExercisesType.D_ExtensorBack ||
+                    exerciseTypes[i - 1] > ExercisesType.D_ExtensorBack)) ||
+                    // или счётчик насчитал 3 упражнения,
+                    counter == 3)
                 {   // то надо увеличить вертикальный отступ
                     indentUpEdge += 40;
+                    counter = 0;
+                }
+                else
+                {
+                    counter++;
                 }
 
                 var textLabel = CreateLabel(50, i, 650);
@@ -201,20 +200,18 @@ namespace TrainWindowsFormsApp
 
         private Exercise[] GetExercises(string option = "train")
         {
-            var trainDay = progress % TrainDay.trainingOptions;
-
             // Получаем список тренируемых мышц
-            List<ExercisesType> exercisesList = new List<ExercisesType>();
+            List<ExercisesType> exercisesList;
 
             if (option == "train")
             {
-                exercisesList = TrainDay.Get(trainDay);
+                exercisesList = TrainDay.GetTrain(progress);
                 exerciseTypes = exercisesList;
             }
             else if (option == "additional")
             {
                 exerciseTypes.Clear();
-                exercisesList = TrainDay.GetAdditional(trainDay);
+                exercisesList = TrainDay.GetAdditional(progress);
                 exerciseTypes = exercisesList;
             }
             else
@@ -246,7 +243,6 @@ namespace TrainWindowsFormsApp
                     {
                         int exerciseIndex;  // Индекс упражнения
                         if (option == "warmUp") exerciseIndex = random.Next(deserializableDataExercises.Count);
-                        else if (option == "additional") exerciseIndex = (progress - 1) % deserializableDataExercises.Count;
                         else exerciseIndex = progress % deserializableDataExercises.Count;
 
                         var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
@@ -297,22 +293,23 @@ namespace TrainWindowsFormsApp
         private void mainTimer_Tick(object sender, EventArgs e)
         {
             timerCounter++;
-            LaunchAddon();
+            if (timerCounter > 2)
+            {
+                LaunchAddon();
+
+            }
         }
 
         private void LaunchAddon()
-        {
-            if (timerCounter > 2)
-            {
-                ClearField();
-                exercises = GetExercises("additional");
-                InitMap();
-                FillInTheTable();
+        {   
+            ClearField();
+            exercises = GetExercises("additional");
+            InitMap();
+            FillInTheTable();
 
-                mainTimer.Stop();
-                timerCounter = 0;
-            }
-        }
+            mainTimer.Stop();
+            timerCounter = 0;
+        }   
 
         private void ExerciseName_MouseClick(object sender, MouseEventArgs e)
         {   // Показ примечания к упражнению
