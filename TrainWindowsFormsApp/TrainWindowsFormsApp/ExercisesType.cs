@@ -13,22 +13,18 @@
         D_DeltoidRear,
         D_Chest,
         D_Latissimus,
-        D_Quadriceps,
-        D_BicepsHip,
+        D_Legs,
         D_Calf,
-        D_Abs,
-        D_ExtensorBack,
+        D_Core,
 
         // Одностороние
         O_DeltoidMid,
         O_DeltoidRear,
         O_Chest, 
         O_Latissimus,
-        O_Quadriceps,
-        O_BicepsHip,
+        O_Legs,
         O_Calf,
-        O_Abs,
-        O_ExtensorBack,
+        O_Core,
 
         Biceps,
         Triceps

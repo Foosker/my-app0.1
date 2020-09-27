@@ -61,10 +61,10 @@ namespace TrainWindowsFormsApp
             {
                 if (// Если это упражнение или предыдущее односторонее
                     (i > 0 &&
-                    (exerciseTypes[i] > ExercisesType.D_ExtensorBack ||
-                    exerciseTypes[i - 1] > ExercisesType.D_ExtensorBack)) ||
+                    (exerciseTypes[i] > ExercisesType.D_Core ||
+                    exerciseTypes[i - 1] > ExercisesType.D_Core)) ||
                     // или счётчик насчитал 3 упражнения,
-                    counter == 3)
+                    counter >= 3)
                 {   // то надо увеличить вертикальный отступ
                     indentUpEdge += 40;
                     counter = 0;
@@ -101,7 +101,7 @@ namespace TrainWindowsFormsApp
 
         private void FillInTheTable()
         {   // Заполнение ячеек
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < numberOfExercises; i++)
             {
                 labelsMap[i].Text = exercises[i].Text;                                      // название упражнения
                 labelsMap[i + numberOfExercises].Text = exercises[i].Load;                   // нагрузка
@@ -156,6 +156,17 @@ namespace TrainWindowsFormsApp
             }
         }
 
+        private void LaunchAddon()
+        {
+            ClearField();
+            exercises = GetExercises("additional");
+            InitMap();
+            FillInTheTable();
+
+            mainTimer.Stop();
+            timerCounter = 0;
+        }
+
         private void GetMode()
         {
             var modes = new List<string>()
@@ -168,7 +179,7 @@ namespace TrainWindowsFormsApp
 
             var selectedMode = modes[random.Next(modes.Count())];
 
-            var modeLabel = CreateLabel(350, 6, 600);
+            var modeLabel = CreateLabel(350, 7, 600);
             modeLabel.Font = new Font("Tahoma", 25F, FontStyle.Bold, GraphicsUnit.Point, 204);
             modeLabel.ForeColor = Color.DarkOrange;
             modeLabel.Height = 200;
@@ -211,7 +222,7 @@ namespace TrainWindowsFormsApp
             else if (option == "additional")
             {
                 exerciseTypes.Clear();
-                exercisesList = TrainDay.GetAdditional(progress);
+                exercisesList = TrainDay.GetAdditional();
                 exerciseTypes = exercisesList;
             }
             else
@@ -243,6 +254,7 @@ namespace TrainWindowsFormsApp
                     {
                         int exerciseIndex;  // Индекс упражнения
                         if (option == "warmUp") exerciseIndex = random.Next(deserializableDataExercises.Count);
+                        else if (option == "additional") exerciseIndex = (progress + 1) % deserializableDataExercises.Count;
                         else exerciseIndex = progress % deserializableDataExercises.Count;
 
                         var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
@@ -299,17 +311,6 @@ namespace TrainWindowsFormsApp
 
             }
         }
-
-        private void LaunchAddon()
-        {   
-            ClearField();
-            exercises = GetExercises("additional");
-            InitMap();
-            FillInTheTable();
-
-            mainTimer.Stop();
-            timerCounter = 0;
-        }   
 
         private void ExerciseName_MouseClick(object sender, MouseEventArgs e)
         {   // Показ примечания к упражнению
@@ -401,7 +402,7 @@ namespace TrainWindowsFormsApp
         private void закончитьТренировкуToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveProgress();
-            SaveTrainResults();
+            //SaveTrainResults();
             Close();
         }
 
