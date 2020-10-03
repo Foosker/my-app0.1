@@ -7,8 +7,8 @@
         CombatLegs,
 
         // Это двустороние упражнения
-        Trapezius,
-        DeltoidFront,
+        D_Trapezius,
+        D_DeltoidFront,
         D_DeltoidMid,
         D_DeltoidRear,
         D_Chest,
@@ -18,6 +18,8 @@
         D_Core,
 
         // Одностороние
+        O_Trapezius,
+        O_DeltoidFront,
         O_DeltoidMid,
         O_DeltoidRear,
         O_Chest, 
