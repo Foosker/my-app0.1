@@ -37,6 +37,8 @@ namespace TrainWindowsFormsApp
         private List<Exercise> exerciseChangeList;
         private int indexInCurExL;
         private int indexInExChL;
+        private Button nextExerciseButton;
+        private Button closeExChButton;
 
         public MainForm()
         {
@@ -325,7 +327,19 @@ namespace TrainWindowsFormsApp
         }
 
         private void ExerciseChangeButton_Click(object sender, EventArgs e)
-        {   // Нажати кнопки смены упражнения
+        {
+            if (Controls.Contains(nextExerciseButton) || Controls.Contains(closeExChButton))
+            {
+                Controls.Remove(nextExerciseButton);
+                Controls.Remove(closeExChButton);
+                foreach (var butt in exercisesChangeButtons)
+                {
+                    butt.Enabled = true;
+                    butt.Visible = true;
+                } 
+            }
+
+            // Нажати кнопки смены упражнения
             var button = (sender as Button);
             button.Enabled = false;
             button.Visible = false;
@@ -351,15 +365,15 @@ namespace TrainWindowsFormsApp
                 if (found) break;
             }
 
-            var nextExerciseButton = CreateButton(0, 0, button.Bounds.Width, ">");
+            nextExerciseButton = CreateButton(0, 0, button.Bounds.Width, ">");
             nextExerciseButton.Location = button.Location;
             nextExerciseButton.Height = button.Bounds.Height / 2;
             nextExerciseButton.Click += NextExerciseButton_Click;
 
-            var closeModeButton = CreateButton(0, 0, button.Bounds.Width, "X");
-            closeModeButton.Location = new Point(button.Bounds.X, button.Bounds.Y + 30);
-            closeModeButton.Height = button.Bounds.Height / 2;
-            closeModeButton.Click += CloseModeChangeExercise_Click;
+            closeExChButton = CreateButton(0, 0, button.Bounds.Width, "X");
+            closeExChButton.Location = new Point(button.Bounds.X, button.Bounds.Y + 30);
+            closeExChButton.Height = button.Bounds.Height / 2;
+            closeExChButton.Click += CloseModeChangeExercise_Click;
 
         }
 
@@ -370,6 +384,7 @@ namespace TrainWindowsFormsApp
             {
                 indexInExChL = 0;
             }
+
             labelsMap[indexInCurExL].Text = exerciseChangeList[indexInExChL].Text;
             labelsMap[indexInCurExL + numberOfExercises].Text = exerciseChangeList[indexInExChL].Load.ToString();
             labelsMap[indexInCurExL + numberOfExercises * 2].Text = exerciseChangeList[indexInExChL].Repeat.ToString();
@@ -377,7 +392,13 @@ namespace TrainWindowsFormsApp
 
         private void CloseModeChangeExercise_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            exercises[indexInCurExL] = exerciseChangeList[indexInExChL];
+
+            Controls.Remove(nextExerciseButton);
+            Controls.Remove(closeExChButton);
+
+            exercisesChangeButtons[indexInCurExL].Visible = true;
+            exercisesChangeButtons[indexInCurExL].Enabled = true;
         }
 
         private void DoneButton_Click(object sender, EventArgs e)
