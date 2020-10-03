@@ -20,16 +20,23 @@ namespace TrainWindowsFormsApp
         private Button[] exercisesChangeButtons;
         private Button[] executedButtons;
         private Button[] megaPlusButtons;
+
         private MyMessageBox message;
+
         private Exercise[] exercises;
         private List<ExercisesType> exerciseTypes;
         private int numberOfExercises;
-        private List<string> pathsList = new List<string>();  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
 
-        private static Random random = new Random();
+        private List<string> pathsList = new List<string>();  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
         private int progress;
 
+        private static Random random = new Random();
+
         private int timerCounter;
+
+        private List<Exercise> exerciseChangeList;
+        private int indexInCurExL;
+        private int indexInExChL;
 
         public MainForm()
         {
@@ -324,26 +331,32 @@ namespace TrainWindowsFormsApp
             button.Visible = false;
 
             var name = button.Name;
-            var index = int.Parse(name) - 20;
+            indexInCurExL = int.Parse(name) - 20;
             // По следующей строке будем искать в файлах упражнение
-            var currentExercise = exercises[index];
+            var currentExercise = exercises[indexInCurExL];
 
-            //foreach (var path in pathsList)
-            //{
-            //    var data = GetDeserializedData(path);
-            //    var indexOfCurrentExercise = data.IndexOf(currentExercise);
-            //    if (indexOfCurrentExercise != -1)
-            //    {
-            //        break;
-            //    }
-            //}
+            foreach (var path in pathsList)
+            {
+                var found = false;
+
+                exerciseChangeList = GetDeserializedData(path);                
+                for (indexInExChL = 0; indexInExChL < exerciseChangeList.Count(); indexInExChL++)
+                {
+                    if (exerciseChangeList[indexInExChL].Text == currentExercise.Text)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
 
             var nextExerciseButton = CreateButton(0, 0, button.Bounds.Width, ">");
             nextExerciseButton.Location = button.Location;
             nextExerciseButton.Height = button.Bounds.Height / 2;
             nextExerciseButton.Click += NextExerciseButton_Click;
 
-            var closeModeButton = CreateButton(0, 0, button.Bounds.Width, "x");
+            var closeModeButton = CreateButton(0, 0, button.Bounds.Width, "X");
             closeModeButton.Location = new Point(button.Bounds.X, button.Bounds.Y + 30);
             closeModeButton.Height = button.Bounds.Height / 2;
             closeModeButton.Click += CloseModeChangeExercise_Click;
@@ -352,7 +365,14 @@ namespace TrainWindowsFormsApp
 
         private void NextExerciseButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            indexInExChL++;
+            if (indexInExChL >= exerciseChangeList.Count())
+            {
+                indexInExChL = 0;
+            }
+            labelsMap[indexInCurExL].Text = exerciseChangeList[indexInExChL].Text;
+            labelsMap[indexInCurExL + numberOfExercises].Text = exerciseChangeList[indexInExChL].Load.ToString();
+            labelsMap[indexInCurExL + numberOfExercises * 2].Text = exerciseChangeList[indexInExChL].Repeat.ToString();
         }
 
         private void CloseModeChangeExercise_Click(object sender, EventArgs e)
