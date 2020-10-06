@@ -72,8 +72,6 @@ namespace TrainWindowsFormsApp
                 if (i == 1 || i == 4 || i == 7) indentUpEdge += 40;
 
                 var exerciseChangeButton = CreateButton(10, i, 30, "⭯");
-                // Имя состоит из цифры с от 0 до 6 с плюс 20
-                exerciseChangeButton.Name = (20 + i).ToString();
                 exercisesChangeButtons[i] = exerciseChangeButton;
                 exerciseChangeButton.Click += ExerciseChangeButton_Click;
 
@@ -88,14 +86,10 @@ namespace TrainWindowsFormsApp
                 labelsMap[i + numberOfExercises * 2] = repeatLabel;
 
                 var executedButton = CreateButton(1075, i, 100, "NOK");
-                // Имя кнопки состоит только из цифры от 0 до 6, для более удобного получения индекса в событии нажатия кнопки
-                executedButton.Name = i.ToString();
                 executedButtons[i] = executedButton;
                 executedButton.Click += DoneButton_Click;  // Событие нажатия на кнопку
 
                 var megaPlusButton = CreateButton(1200, i, 100, "⮝⮝");
-                // Имя кнопки состоит только из цифры от 10 до 16, для более удобного получения индекса в событии нажатия кнопки
-                megaPlusButton.Name = (10 + i).ToString();
                 megaPlusButtons[i] = megaPlusButton;
                 megaPlusButton.Click += MegaPlusButton_Click;
 
@@ -344,8 +338,7 @@ namespace TrainWindowsFormsApp
             button.Enabled = false;
             button.Visible = false;
 
-            var name = button.Name;
-            indexInCurExL = int.Parse(name) - 20;
+            indexInCurExL = Array.IndexOf(exercisesChangeButtons, button);
             // По следующей строке будем искать в файлах упражнение
             var currentExercise = exercises[indexInCurExL];
 
@@ -403,13 +396,12 @@ namespace TrainWindowsFormsApp
 
         private void DoneButton_Click(object sender, EventArgs e)
         {   // Нажатие на кнопку выполнения упражнения
-            var button = (sender as Button);        // Обращается к кнопке,
-            button.BackColor = Color.ForestGreen;   // меняет окраску кнопки
-            button.Text = "OK";                     // и текст на ней.
-            button.Enabled = false;  // Отключение кнопки после нажатия.
-
-            var name = button.Name;                                          // Получаем имя, которое состоит только из цифры,
-            var index = int.Parse(name);                                     // преоразуем имя в индекс,
+            var doneButton = (sender as Button);        // Обращается к кнопке,
+            doneButton.BackColor = Color.ForestGreen;   // меняет окраску кнопки
+            doneButton.Text = "OK";                     // и текст на ней.
+            doneButton.Enabled = false;                 // Отключение кнопки после нажатия.
+                                      
+            var index = Array.IndexOf(executedButtons, doneButton);              // Получаем индекс кнопки в её специальном массиве,
             exercises[index].Repeat++;                                       // меняем значение числа повторов.
 
             var megaButton = megaPlusButtons[index];
@@ -430,15 +422,15 @@ namespace TrainWindowsFormsApp
             megaButton.Text = "Yeah";               // и текст на ней.
             megaButton.Enabled = false;             // Отключение кнопки после нажатия.
 
-            var name = megaButton.Name;                             // Получаем имя, которое состоит только из цифры,
-            var index = int.Parse(name) - 10;                       // преоразуем имя в индекс минус 10,
+            var index = Array.IndexOf(megaPlusButtons, megaButton); // Получаем индекс кнопки в её специальном массиве,
             var megaRepeat = exercises[index].MaxRepeat / 10 + 1;   // получаем большее число чем 1,
             exercises[index].Repeat += megaRepeat;                  // и меняем значение числа повторов.
+
             // Отключение обычных кнопок
-            var button = executedButtons[index];
-            button.BackColor = Color.ForestGreen;
-            button.Text = "OK";
-            button.Enabled = false;
+            var doneButton = executedButtons[index];
+            doneButton.BackColor = Color.ForestGreen;
+            doneButton.Text = "OK";
+            doneButton.Enabled = false;
 
             // Если количество изменённых повторов стало больше максимально допустимого пишем "МАХ",
             if (exercises[index].Repeat > exercises[index].MaxRepeat) labelsMap[index + numberOfExercises * 2].Text = "MAX";
