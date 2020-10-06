@@ -6,6 +6,7 @@ namespace TrainWindowsFormsApp
     public static class TrainDay
     {
         private static int progress;
+        public static List<int> indentBetweenExercises;
 
         private static List<ExercisesType>  mainMuscles = new List<ExercisesType>()
         {
@@ -57,6 +58,8 @@ namespace TrainWindowsFormsApp
 
         public static List<ExercisesType> GetTrain(int _progress)
         {
+            indentBetweenExercises = new List<int>() { 1, 4, 7 };
+
             progress = _progress;
 
             var regularTrain = new List<ExercisesType>();
@@ -82,6 +85,8 @@ namespace TrainWindowsFormsApp
 
         public static List<ExercisesType> GetAdditional()
         {
+            indentBetweenExercises = new List<int>() { 1, 2, 3, 4 };
+
             var additionalTrain = new List<ExercisesType>();
 
             var count = extraMuscles.Count() / 3;

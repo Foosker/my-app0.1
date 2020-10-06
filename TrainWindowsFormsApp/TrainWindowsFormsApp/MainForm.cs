@@ -15,6 +15,7 @@ namespace TrainWindowsFormsApp
         private readonly int cellHeight = 60;
         private readonly int indentBetween = 10;
         private int indentUpEdge;
+        private List<int> increaseIndentUpEdge;
 
         private Label[] labelsMap;
         private Button[] exercisesChangeButtons;
@@ -69,7 +70,7 @@ namespace TrainWindowsFormsApp
             for (int i = 0; i < numberOfExercises; i++)
             {   // Отступ между сетами упражнений
                 // Надо будет потом доработать
-                if (i == 1 || i == 4 || i == 7) indentUpEdge += 40;
+                if (increaseIndentUpEdge.Contains(i)) indentUpEdge += 40;
 
                 var exerciseChangeButton = CreateButton(10, i, 30, "⭯");
                 exercisesChangeButtons[i] = exerciseChangeButton;
@@ -244,12 +245,14 @@ namespace TrainWindowsFormsApp
             {
                 exercisesList = TrainDay.GetTrain(progress);
                 exerciseTypes = exercisesList;
+                increaseIndentUpEdge = TrainDay.indentBetweenExercises;
             }
             else if (option == "additional")
             {
                 exerciseTypes.Clear();
                 exercisesList = TrainDay.GetAdditional();
                 exerciseTypes = exercisesList;
+                increaseIndentUpEdge = TrainDay.indentBetweenExercises;
             }
             else
             { 
