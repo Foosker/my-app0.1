@@ -118,25 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="3-9_-_Dethzazz" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\3-9_-_Dethzazz.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TrainHard2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Background\TrainHard.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Chevelle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Background\Chevelle.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Fire" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Background\Fire.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CyberPunk1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Background\CyberPunk1.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TrainHard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Background\TrainHard.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Delorian" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Background\Delorian.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="god-of-war-x-star-wars-baby-yoda-arriva-nell-esclusiva-ps4-fan-art-v3-414575" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Background\god-of-war-x-star-wars-baby-yoda-arriva-nell-esclusiva-ps4-fan-art-v3-414575.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Mustang" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Background\Mustang.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="oboi7.com-58309" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Background\oboi7.com-58309.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TrainHard1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Background\TrainHard.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

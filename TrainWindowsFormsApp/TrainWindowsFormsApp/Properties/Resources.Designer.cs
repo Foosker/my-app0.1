@@ -63,9 +63,9 @@ namespace TrainWindowsFormsApp.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _3_9___Dethzazz {
+        internal static System.Drawing.Bitmap Fire {
             get {
-                object obj = ResourceManager.GetObject("3-9_-_Dethzazz", resourceCulture);
+                object obj = ResourceManager.GetObject("Fire", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace TrainWindowsFormsApp.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Chevelle {
+        internal static System.Drawing.Bitmap TrainHard {
             get {
-                object obj = ResourceManager.GetObject("Chevelle", resourceCulture);
+                object obj = ResourceManager.GetObject("TrainHard", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace TrainWindowsFormsApp.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap CyberPunk1 {
+        internal static System.Drawing.Bitmap TrainHard1 {
             get {
-                object obj = ResourceManager.GetObject("CyberPunk1", resourceCulture);
+                object obj = ResourceManager.GetObject("TrainHard1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,39 +93,9 @@ namespace TrainWindowsFormsApp.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Delorian {
+        internal static System.Drawing.Bitmap TrainHard2 {
             get {
-                object obj = ResourceManager.GetObject("Delorian", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap god_of_war_x_star_wars_baby_yoda_arriva_nell_esclusiva_ps4_fan_art_v3_414575 {
-            get {
-                object obj = ResourceManager.GetObject("god-of-war-x-star-wars-baby-yoda-arriva-nell-esclusiva-ps4-fan-art-v3-414575", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Mustang {
-            get {
-                object obj = ResourceManager.GetObject("Mustang", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap oboi7_com_58309 {
-            get {
-                object obj = ResourceManager.GetObject("oboi7.com-58309", resourceCulture);
+                object obj = ResourceManager.GetObject("TrainHard2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace TrainWindowsFormsApp
@@ -16,12 +18,15 @@ namespace TrainWindowsFormsApp
             FormBorderStyle = FormBorderStyle.None;  // None - yбирает шапку формы
             ShowIcon = false;
 
-            KeyPress += MyMessageBox_KeyPress;            
+            KeyPress += MyMessageBox_KeyPress;
         }
 
         private void MyMessageBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            Close();
+            if (e.KeyChar == 27)  // Если нажатая клавиша Escape
+            {
+                Close();
+            }
         }
 
         public void ShowText(string message)
@@ -33,7 +38,7 @@ namespace TrainWindowsFormsApp
                 AutoSize = true,
 
                 BackColor = Color.Ivory,
-                Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(204))),
+                Font = new Font("Microsoft Sans Serif", 25F, FontStyle.Bold, GraphicsUnit.Point, (byte)204),
                 Text = message,
                 TextAlign = ContentAlignment.TopLeft
             };

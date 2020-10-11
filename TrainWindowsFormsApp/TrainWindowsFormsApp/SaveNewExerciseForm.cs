@@ -18,9 +18,9 @@ namespace TrainWindowsFormsApp
 
         private void SaveNewExercise_Load(object sender, EventArgs e)
         {
-            for (int i = 0; i < 16; i++)
+            foreach (var exercise in Enum.GetValues(typeof(ExercisesType)))
             {
-                exercisesTypeListBox.Items.Add((ExercisesType)i);
+                exercisesTypeListBox.Items.Add(exercise);
             }
         }
 

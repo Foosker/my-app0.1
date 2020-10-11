@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using TrainWindowsFormsApp.Properties;
 
@@ -9,85 +10,104 @@ namespace TrainWindowsFormsApp
 {
     public partial class MainForm : Form
     {
-        string pathToProgressFile = "progress.txt";
-
-        private int numberOfExercise = 6;  // Количество упражнений за тренировкуprivate int numberOfExerciseInARow = 2;  // Количество упражнений за подход
+        private readonly string pathToProgressFile = "progress.txt";
 
         private readonly int cellHeight = 60;
         private readonly int indentBetween = 10;
-        private int indentUpEdge = 60;
-        public int mapSize = 18;  // Колчество лейблов, соотношение (numberOfExercise * разновидности лейблов)
-
+        private int indentUpEdge;
+        private List<int> increaseIndentUpEdge;
 
         private Label[] labelsMap;
+        private Button[] exercisesChangeButtons;
         private Button[] executedButtons;
-        MyMessageBox message;
-        Exercise[] exercises;
-        List<string> pathsList = new List<string>();  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
+        private Button[] megaPlusButtons;
 
-        static Random random = new Random();
+        private MyMessageBox message;
+
+        private Exercise[] exercises;
+        private List<ExercisesType> exerciseTypes;
+        private int numberOfExercises;
+
+        private List<string> pathsList = new List<string>();  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
         private int progress;
+
+        private static Random random = new Random();
+
+        private int timerCounter;
+
+        private List<Exercise> exerciseChangeList;
+        private int indexInCurExL;
+        private int indexInExChL;
+        private Button nextExerciseButton;
+        private Button closeExChButton;
 
         public MainForm()
         {
             InitializeComponent();
-
-            BackgroundImage = SetImage();
-            BackgroundImageLayout = ImageLayout.Stretch;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
-        {   
+        {
             progress = GetProgress();
+            exercises = GetExercises();
             InitMap();
-            exercises = GetArrayExercises();
             FillInTheTable();
         }
         //
-        // Создание клиентской области
+        // Клиентская область
         //
-        private Image SetImage()
-        {
-            var imageList = new Image[7] { Resources.Chevelle, Resources.CyberPunk1, Resources.Delorian,
-                Resources.god_of_war_x_star_wars_baby_yoda_arriva_nell_esclusiva_ps4_fan_art_v3_414575,
-                Resources.Mustang, Resources.oboi7_com_58309, Resources._3_9___Dethzazz };
-
-            var randomImage = imageList[random.Next(imageList.Length - 1)];
-
-            return randomImage;
-        }
-
         private void InitMap()
         {   // Заполнение формы ячейками и кнопками
-            labelsMap = new Label[mapSize];
-            executedButtons = new Button[mapSize / 3];
+            numberOfExercises = exercises.Count();
 
-            for (int i = 0; i < mapSize / 3; i++)
-            {
-                //if (i % numberOfExerciseInARow == 0) indentUpEdge += 40;  // Если индекс элемента кратен 2, то переходим на следующую строку.
-                var textLabel = CreateLabels(50, i, 650);
-                Controls.Add(textLabel);
+            labelsMap = new Label[numberOfExercises * 3];   // Количество упражнений умноженное на количество лейблов
+            exercisesChangeButtons = new Button[numberOfExercises];
+            executedButtons = new Button[numberOfExercises];
+            megaPlusButtons = new Button[numberOfExercises];
+
+            indentUpEdge = 60;
+
+            for (int i = 0; i < numberOfExercises; i++)
+            {   // Отступ между сетами упражнений
+                // Надо будет потом доработать
+                if (increaseIndentUpEdge.Contains(i)) indentUpEdge += 40;
+
+                var exerciseChangeButton = CreateButton(10, i, 30, "⭯");
+                exercisesChangeButtons[i] = exerciseChangeButton;
+                exerciseChangeButton.Click += ExerciseChangeButton_Click;
+
+                var textLabel = CreateLabel(50, i, 650);
                 labelsMap[i] = textLabel;
                 textLabel.MouseClick += ExerciseName_MouseClick;   // Событие нажатия на текст с названием упражнения
 
-                var loadLabel = CreateLabels(750, i, 200);
-                Controls.Add(loadLabel);
-                labelsMap[i + numberOfExercise] = loadLabel;
+                var loadLabel = CreateLabel(725, i, 200);
+                labelsMap[i + numberOfExercises] = loadLabel;
 
-                var repeatLabel = CreateLabels(1000, i, 100);
-                Controls.Add(repeatLabel);
-                labelsMap[i + numberOfExercise * 2] = repeatLabel;
+                var repeatLabel = CreateLabel(950, i, 100);
+                labelsMap[i + numberOfExercises * 2] = repeatLabel;
 
-                var executedButton = CreateButton(1150, i, 100);
-                // Имя кнопки состоит только из цифры от 0 до 6, для более удобного получения индекса в событии нажатия кнопки
-                executedButton.Name = i.ToString();
-                Controls.Add(executedButton);
+                var executedButton = CreateButton(1075, i, 100, "NOK");
                 executedButtons[i] = executedButton;
-                executedButton.Click += Button_Click;  // Событие нажатия на кнопку
+                executedButton.Click += DoneButton_Click;  // Событие нажатия на кнопку
+
+                var megaPlusButton = CreateButton(1200, i, 100, "⮝⮝");
+                megaPlusButtons[i] = megaPlusButton;
+                megaPlusButton.Click += MegaPlusButton_Click;
+
             }
         }
 
-        private Button CreateButton(int indentLeftEdge, int indexRow, int width)
+        private void FillInTheTable()
+        {   // Заполнение ячеек
+            for (int i = 0; i < numberOfExercises; i++)
+            {
+                labelsMap[i].Text = exercises[i].Text;                                      // название упражнения
+                labelsMap[i + numberOfExercises].Text = exercises[i].Load;                  // нагрузка
+                labelsMap[i + numberOfExercises * 2].Text = exercises[i].Repeat.ToString(); // повторения
+            }
+        }
+
+        private Button CreateButton(int indentLeftEdge, int indexRow, int width, string initialText = "")
         {   // Создание кнопок 
             int x = indentLeftEdge;
             int y = indentUpEdge + indexRow * (indentBetween + cellHeight);  // Формула расчёта координат эллемента по ординате
@@ -95,16 +115,18 @@ namespace TrainWindowsFormsApp
             var button = new Button
             {
                 BackColor = Color.IndianRed,
-                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(204))),
-                Text = "NOK",
+                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, 204),
+                Text = initialText,
                 Size = new Size(width, 60),
                 TextAlign = ContentAlignment.MiddleCenter,
                 Location = new Point(x, y)
             };
+            Controls.Add(button);
+            button.BringToFront();
             return button;
         }
 
-        private Label CreateLabels(int indentLeftEdge, int indexRow, int width)
+        private Label CreateLabel(int indentLeftEdge, int indexRow, int width)
         {   // Создание ячеек
             int x = indentLeftEdge;
             int y = indentUpEdge + indexRow * (indentBetween + cellHeight); // Формула расчёта координат эллемента по ординате
@@ -112,22 +134,55 @@ namespace TrainWindowsFormsApp
             var label = new Label
             {
                 BackColor = Color.LightBlue,
-                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(204))),
+                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, 204),
                 Size = new Size(width, 60),
                 TextAlign = ContentAlignment.MiddleCenter,
                 Location = new Point(x, y)
             };
+            Controls.Add(label);
+            label.BringToFront();
             return label;
         }
 
-        private void FillInTheTable()
-        {   // Заполнение ячеек
-            for (int i = 0; i < 6; i++)
-            {
-                labelsMap[i].Text = exercises[i].Text;                                      // название упражнения
-                labelsMap[i + numberOfExercise].Text = exercises[i].Load;                   // нагрузка
-                labelsMap[i + numberOfExercise * 2].Text = exercises[i].Repeat.ToString();  // повторения
+        private void ClearField()
+        {
+            Array.Clear(exercises, 0, 6);
+
+            while (Controls.Count > 2)
+            {// Два члена Controls - верхняя панель и фоновая картинка
+                Controls.RemoveAt(Controls.Count-2);
             }
+        }
+
+        private void LaunchAddon()
+        {
+            ClearField();
+            exercises = GetExercises("additional");
+            InitMap();
+            FillInTheTable();
+
+            mainTimer.Stop();
+            timerCounter = 0;
+        }
+
+        private void GetMode()
+        {
+            var modes = new List<string>()
+            {
+                "Статическое удержание в пике",
+                "1,5 повторения",
+                "\"На смерть\" в каждом подходе",
+                "Частичные повторения"
+            };
+
+            var selectedMode = modes[random.Next(modes.Count())];
+
+            var modeLabel = CreateLabel(350, numberOfExercises + 1, 600);
+            modeLabel.Font = new Font("Tahoma", 25F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            modeLabel.ForeColor = Color.DarkOrange;
+            modeLabel.Height = 200;
+            modeLabel.Image = Resources.Fire;
+            modeLabel.Text = selectedMode;
         }
         //
         // Работа с файлами
@@ -152,60 +207,22 @@ namespace TrainWindowsFormsApp
             FileProvider.Save(pathToProgressFile, data);
         }
 
-        private Exercise[] GetArrayExercises()
-        {
-            var trainDay = progress % TrainDay.trainingOptions;
-
-            var exerciseTypes = TrainDay.Get(trainDay);  // Получаем список тренируемых мышц
-            
-            var exerciseArray = new Exercise[exerciseTypes.Count];  // Создание массива, куда будут добавляться упражнения
-
-            for (int i = 0; i < exerciseTypes.Count; i++)
-            {
-                var pathExerciseFile = "ExercisesType/" + exerciseTypes[i].ToString() + ".json"; // Название упражнения преобразуем в путь к файлу,
-
-                if (!pathsList.Contains(pathExerciseFile))  // Если в списке путей к файлам с упражнениями нет нынешнего,
-                {
-                    pathsList.Add(pathExerciseFile);        // то он добавляется
-
-                    var dataExercises = FileProvider.GetData(pathExerciseFile);                                        // Получение данных из файла
-                    var deserializableDataExercises = JsonConvert.DeserializeObject<List<Exercise>>(dataExercises);    // и десериализация в список.
-
-                    for(int j = i; j < exerciseTypes.Count; j++)
-                    {
-                        if (exerciseTypes[i] == exerciseTypes[j])
-                        {
-                            var exerciseIndex = progress / (TrainDay.trainingOptions - trainDay) % deserializableDataExercises.Count;  // Индекс упражнения
-
-                            var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
-                            exerciseArray[j] = exercise;                                // добавление его в основной массив,
-                            deserializableDataExercises.Remove(exercise);               // удаление из списка из файла.
-                        }
-                    }                    
-                }
-            }
-            return exerciseArray;
-        }
-        
         private void SaveTrainResults()
         {
-            foreach (var exercise in exercises)
-            {
-                if (exercise.Repeat > exercise.MaxRepeat)
-                {
-                    var form = new SetNewLoadForm(exercise);
-                    form.ShowDialog();
-                    exercise.Repeat = 10;
-                    exercise.Load = form.NewLoad;
-                }
-            }
-
             for (int i = 0; i < pathsList.Count; i++)
             {
-                var data = FileProvider.GetData(pathsList[i]);
-                var deserializableData = JsonConvert.DeserializeObject<List<Exercise>>(data);
+                var deserializableData = GetDeserializedData(pathsList[i]);
+
                 for (int j = 0; j < exercises.Length; j++)
-                {
+                {   // Здесь сравнение количества повторов с максимальным количеством
+                    if (exercises[j].Repeat > exercises[j].MaxRepeat)
+                    {
+                        var form = new SetNewLoadForm(exercises[j]);
+                        form.ShowDialog();
+                        exercises[j].Repeat = 10;
+                        exercises[j].Load = form.NewLoad;
+                    }
+
                     foreach (var exerc in deserializableData)
                     {
                         if (exerc.Text == exercises[j].Text)
@@ -218,11 +235,86 @@ namespace TrainWindowsFormsApp
                 var serializableData = JsonConvert.SerializeObject(deserializableData, Formatting.Indented);
                 FileProvider.Save(pathsList[i], serializableData);
             }
-            SaveProgress();
+        }
+
+        private Exercise[] GetExercises(string option = "train")
+        {   // Получаем список тренируемых мышц
+            List<ExercisesType> exercisesList;
+
+            if (option == "train")
+            {
+                exercisesList = TrainDay.GetTrain(progress);
+                exerciseTypes = exercisesList;
+                increaseIndentUpEdge = TrainDay.indentBetweenExercises;
+            }
+            else if (option == "additional")
+            {
+                exerciseTypes.Clear();
+                exercisesList = TrainDay.GetAdditional();
+                exerciseTypes = exercisesList;
+                increaseIndentUpEdge = TrainDay.indentBetweenExercises;
+            }
+            else
+            { 
+                exercisesList = TrainDay.GetWarmUpList(); 
+            }
+
+            var exercisesCount = exercisesList.Count();
+
+            var differentExecriseTypes = exercisesList.Distinct().ToList<ExercisesType>();
+            var numberDifferentExercises = differentExecriseTypes.Count();
+
+            var exerciseArray = new Exercise[exercisesCount];  // Создание массива, куда будут добавляться упражнения
+
+            for (int i = 0; i < numberDifferentExercises; i++)
+            {   // Название упражнения преобразуем в путь к файлу
+                var pathExerciseFile = "ExercisesType/" + differentExecriseTypes[i].ToString() + ".json";   
+                // и добавляем в список всех путей, если это тренировка или дополнение к ней
+                if (option != "warmUp") pathsList.Add(pathExerciseFile);
+
+
+                var deserializableDataExercises = GetDeserializedData(pathExerciseFile);
+
+                for (int j = i; j < exercisesCount; j++)
+                {
+                    if (differentExecriseTypes[i] == exercisesList[j])
+                    {
+                        int exerciseIndex;  // Индекс упражнения
+                        if (option == "warmUp") exerciseIndex = random.Next(deserializableDataExercises.Count);
+                        else if (option == "additional") exerciseIndex = (progress + 1) % deserializableDataExercises.Count;
+                        else exerciseIndex = progress % deserializableDataExercises.Count;
+
+                        var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
+                        exerciseArray[j] = exercise;                                // добавление его в основной массив,
+                        deserializableDataExercises.Remove(exercise);               // удаление из списка файла.
+                    }
+                }
+
+            }
+            return exerciseArray;
+        }
+
+        private List<Exercise> GetDeserializedData(string path)
+        {   // Получение данных из файла
+            var dataExercises = FileProvider.GetData(path);
+            // и десериализация в список.
+            var deserializableDataExercises = JsonConvert.DeserializeObject<List<Exercise>>(dataExercises);
+
+            return deserializableDataExercises;
         }
         //
         // События
         //
+        private void mainTimer_Tick(object sender, EventArgs e)
+        {
+            timerCounter++;
+            if (timerCounter > 2)
+            {
+                LaunchAddon();
+
+            }
+        }
+
         private void ExerciseName_MouseClick(object sender, MouseEventArgs e)
         {   // Показ примечания к упражнению
             message = new MyMessageBox();
@@ -231,20 +323,122 @@ namespace TrainWindowsFormsApp
             
         }
 
-        private void Button_Click(object sender, EventArgs e)
-        {   // Нажатие на кнопки
-            var button = (sender as Button);        // Обращается к кнопке,
-            button.BackColor = Color.ForestGreen;   // меняет окраску кнопки
-            button.Text = "OK";                     // и текст на ней.
-            button.Enabled = false;  // Отключение кнопки после нажатия.
+        private void ExerciseChangeButton_Click(object sender, EventArgs e)
+        {
+            if (Controls.Contains(nextExerciseButton) || Controls.Contains(closeExChButton))
+            {
+                Controls.Remove(nextExerciseButton);
+                Controls.Remove(closeExChButton);
+                foreach (var butt in exercisesChangeButtons)
+                {
+                    butt.Enabled = true;
+                    butt.Visible = true;
+                } 
+            }
 
-            var name = button.Name;                                          // Получаем имя, которое состоит только из цифры,
-            var index = int.Parse(name);                                     // преоразуем имя в индекс,
+            // Нажати кнопки смены упражнения
+            var button = (sender as Button);
+            button.Enabled = false;
+            button.Visible = false;
+
+            indexInCurExL = Array.IndexOf(exercisesChangeButtons, button);
+            // По следующей строке будем искать в файлах упражнение
+            var currentExercise = exercises[indexInCurExL];
+
+            foreach (var path in pathsList)
+            {
+                var found = false;
+
+                exerciseChangeList = GetDeserializedData(path);                
+                for (indexInExChL = 0; indexInExChL < exerciseChangeList.Count(); indexInExChL++)
+                {
+                    if (exerciseChangeList[indexInExChL].Text == currentExercise.Text)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+
+            nextExerciseButton = CreateButton(0, 0, button.Bounds.Width, ">");
+            nextExerciseButton.Location = button.Location;
+            nextExerciseButton.Height = button.Bounds.Height / 2;
+            nextExerciseButton.Click += NextExerciseButton_Click;
+
+            closeExChButton = CreateButton(0, 0, button.Bounds.Width, "X");
+            closeExChButton.Location = new Point(button.Bounds.X, button.Bounds.Y + 30);
+            closeExChButton.Height = button.Bounds.Height / 2;
+            closeExChButton.Click += CloseModeChangeExercise_Click;
+
+        }
+
+        private void NextExerciseButton_Click(object sender, EventArgs e)
+        {
+            indexInExChL++;
+            if (indexInExChL >= exerciseChangeList.Count())
+            {
+                indexInExChL = 0;
+            }
+
+            labelsMap[indexInCurExL].Text = exerciseChangeList[indexInExChL].Text;
+            labelsMap[indexInCurExL + numberOfExercises].Text = exerciseChangeList[indexInExChL].Load.ToString();
+            labelsMap[indexInCurExL + numberOfExercises * 2].Text = exerciseChangeList[indexInExChL].Repeat.ToString();
+        }
+
+        private void CloseModeChangeExercise_Click(object sender, EventArgs e)
+        {
+            exercises[indexInCurExL] = exerciseChangeList[indexInExChL];
+
+            Controls.Remove(nextExerciseButton);
+            Controls.Remove(closeExChButton);
+
+            exercisesChangeButtons[indexInCurExL].Visible = true;
+            exercisesChangeButtons[indexInCurExL].Enabled = true;
+        }
+
+        private void DoneButton_Click(object sender, EventArgs e)
+        {   // Нажатие на кнопку выполнения упражнения
+            var doneButton = (sender as Button);        // Обращается к кнопке,
+            doneButton.BackColor = Color.ForestGreen;   // меняет окраску кнопки
+            doneButton.Text = "OK";                     // и текст на ней.
+            doneButton.Enabled = false;                 // Отключение кнопки после нажатия.
+                                      
+            var index = Array.IndexOf(executedButtons, doneButton);              // Получаем индекс кнопки в её специальном массиве,
             exercises[index].Repeat++;                                       // меняем значение числа повторов.
+
+            var megaButton = megaPlusButtons[index];
+            megaButton.BackColor = Color.Gray;
+            megaButton.Text = "N U";      
+            megaButton.Enabled = false;
+
             // Если количество изменённых повторов стало больше максимально допустимого пишем "МАХ",
-            if (exercises[index].Repeat > exercises[index].MaxRepeat) labelsMap[index + numberOfExercise * 2].Text = "MAX";
+            if (exercises[index].Repeat > exercises[index].MaxRepeat) labelsMap[index + numberOfExercises * 2].Text = "MAX";
             // если нет - то меняем на новое значение.
-            else labelsMap[index + numberOfExercise * 2].Text = exercises[index].Repeat.ToString();
+            else labelsMap[index + numberOfExercises * 2].Text = exercises[index].Repeat.ToString();
+        }
+
+        private void MegaPlusButton_Click(object sender, EventArgs e)
+        {   // Нажатие на кнопку 
+            var megaButton = (sender as Button);    // Обращается к кнопке,
+            megaButton.BackColor = Color.Gold;      // меняет окраску кнопки
+            megaButton.Text = "Yeah";               // и текст на ней.
+            megaButton.Enabled = false;             // Отключение кнопки после нажатия.
+
+            var index = Array.IndexOf(megaPlusButtons, megaButton); // Получаем индекс кнопки в её специальном массиве,
+            var megaRepeat = exercises[index].MaxRepeat / 10 + 1;   // получаем большее число чем 1,
+            exercises[index].Repeat += megaRepeat;                  // и меняем значение числа повторов.
+
+            // Отключение обычных кнопок
+            var doneButton = executedButtons[index];
+            doneButton.BackColor = Color.ForestGreen;
+            doneButton.Text = "OK";
+            doneButton.Enabled = false;
+
+            // Если количество изменённых повторов стало больше максимально допустимого пишем "МАХ",
+            if (exercises[index].Repeat > exercises[index].MaxRepeat) labelsMap[index + numberOfExercises * 2].Text = "MAX";
+            // если нет - то меняем на новое значение.
+            else labelsMap[index + numberOfExercises * 2].Text = exercises[index].Repeat.ToString();
         }
 
         private void сохранитьНовоеУпражнениеToolStripMenuItem_Click(object sender, EventArgs e)
@@ -253,8 +447,36 @@ namespace TrainWindowsFormsApp
             saveExerc.ShowDialog();
         }
 
+        private void сформироватьРазминкуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Exercise[] warmUp = GetExercises("warmUp");
+            var warmUpShow = new MyMessageBox();
+            var text = "";
+            foreach (var warm in warmUp)
+            {
+                text += warm.Text + "\n";
+            }
+            warmUpShow.ShowText(text);
+        }
+
+        private void мнеНехерДелатьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            мнеНехерДелатьToolStripMenuItem.Enabled = false;
+            дополнительныйРежимToolStripMenuItem.Enabled = true;
+            backgroundPictureBox.BringToFront();
+            mainTimer.Start();
+            SaveTrainResults();
+        }
+
+        private void дополнительныйРежимToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            дополнительныйРежимToolStripMenuItem.Enabled = false;
+            GetMode();
+        }
+
         private void закончитьТренировкуToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            SaveProgress();
             SaveTrainResults();
             Close();
         }

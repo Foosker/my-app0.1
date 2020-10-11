@@ -97,6 +97,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SaveNewExerciseForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,14 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="SaveNewExerciseForm.resx">
       <DependentUpon>SaveNewExerciseForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -148,25 +148,16 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\3-9_-_Dethzazz.jpg" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\Background\Chevelle.jpg" />
+    <None Include="bin\Debug\Background\TrainHard.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\Background\CyberPunk1.jpg" />
+    <None Include="bin\Debug\Background\Fire.gif" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\Background\Delorian.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\Background\god-of-war-x-star-wars-baby-yoda-arriva-nell-esclusiva-ps4-fan-art-v3-414575.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\Background\Mustang.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\Background\oboi7.com-58309.jpg" />
+    <None Include="bin\Debug\Background\Fire1.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
