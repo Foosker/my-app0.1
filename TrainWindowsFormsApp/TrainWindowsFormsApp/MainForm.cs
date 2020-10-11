@@ -11,22 +11,21 @@ namespace TrainWindowsFormsApp
     public partial class MainForm : Form
     {
         private readonly string pathToProgressFile = "progress.txt";
-
+        
         private readonly int cellHeight = 60;
         private readonly int indentBetween = 10;
         private int indentUpEdge;
         private List<int> increaseIndentUpEdge;
-
-        private Label[] labelsMap;
-        private Button[] exercisesChangeButtons;
-        private Button[] executedButtons;
-        private Button[] megaPlusButtons;
+        // Списки лейблов/кнопок
+        private Label[] labelsMap;                  // Все лейблы
+        private Button[] exercisesChangeButtons;    // Кнопки для смены упражнений
+        private Button[] plusButtons;               // Кнопки выполнения упражнений и увеличения количества повторов на 1
+        private Button[] megaPlusButtons;           // То же, только увеличение больше
 
         private MyMessageBox message;
 
-        private Exercise[] exercises;
-        private List<ExercisesType> exerciseTypes;
-        private int numberOfExercises;
+        private Exercise[] exercises;   // Массив, содержащий все упражнения тренировки
+        private int numberOfExercises;  // и их количество
 
         private List<string> pathsList = new List<string>();  // Массив для хранения всех путей к файлам нужен для сохранения результатов в конце тренировки
         private int progress;
@@ -34,12 +33,12 @@ namespace TrainWindowsFormsApp
         private static Random random = new Random();
 
         private int timerCounter;
-
-        private List<Exercise> exerciseChangeList;
-        private int indexInCurExL;
-        private int indexInExChL;
-        private Button nextExerciseButton;
-        private Button closeExChButton;
+        // Для смены упражнения
+        private List<Exercise> exerciseChangeList;  // Список упражнений из конкретного файла для смены упражнения
+        private int indexInCurExL;  // Индекс упражнения в списке упражнений на тренировке
+        private int indexInExChL;   // Индекс того же упражнения в файле
+        private Button nextExerciseButton;  // Кнопка для перехода к следующему упражнению
+        private Button closeExChButton;     // Кнопка закрытия режима смены упражнения
 
         public MainForm()
         {
@@ -62,7 +61,7 @@ namespace TrainWindowsFormsApp
 
             labelsMap = new Label[numberOfExercises * 3];   // Количество упражнений умноженное на количество лейблов
             exercisesChangeButtons = new Button[numberOfExercises];
-            executedButtons = new Button[numberOfExercises];
+            plusButtons = new Button[numberOfExercises];
             megaPlusButtons = new Button[numberOfExercises];
 
             indentUpEdge = 60;
@@ -71,7 +70,7 @@ namespace TrainWindowsFormsApp
             {   // Отступ между сетами упражнений
                 // Надо будет потом доработать
                 if (increaseIndentUpEdge.Contains(i)) indentUpEdge += 40;
-
+                // Кнопка начала режима смены упражнения
                 var exerciseChangeButton = CreateButton(10, i, 30, "⭯");
                 exercisesChangeButtons[i] = exerciseChangeButton;
                 exerciseChangeButton.Click += ExerciseChangeButton_Click;
@@ -87,7 +86,7 @@ namespace TrainWindowsFormsApp
                 labelsMap[i + numberOfExercises * 2] = repeatLabel;
 
                 var executedButton = CreateButton(1075, i, 100, "NOK");
-                executedButtons[i] = executedButton;
+                plusButtons[i] = executedButton;
                 executedButton.Click += DoneButton_Click;  // Событие нажатия на кнопку
 
                 var megaPlusButton = CreateButton(1200, i, 100, "⮝⮝");
@@ -244,14 +243,11 @@ namespace TrainWindowsFormsApp
             if (option == "train")
             {
                 exercisesList = TrainDay.GetTrain(progress);
-                exerciseTypes = exercisesList;
                 increaseIndentUpEdge = TrainDay.indentBetweenExercises;
             }
             else if (option == "additional")
             {
-                exerciseTypes.Clear();
                 exercisesList = TrainDay.GetAdditional();
-                exerciseTypes = exercisesList;
                 increaseIndentUpEdge = TrainDay.indentBetweenExercises;
             }
             else
@@ -404,7 +400,7 @@ namespace TrainWindowsFormsApp
             doneButton.Text = "OK";                     // и текст на ней.
             doneButton.Enabled = false;                 // Отключение кнопки после нажатия.
                                       
-            var index = Array.IndexOf(executedButtons, doneButton);              // Получаем индекс кнопки в её специальном массиве,
+            var index = Array.IndexOf(plusButtons, doneButton);              // Получаем индекс кнопки в её специальном массиве,
             exercises[index].Repeat++;                                       // меняем значение числа повторов.
 
             var megaButton = megaPlusButtons[index];
@@ -430,7 +426,7 @@ namespace TrainWindowsFormsApp
             exercises[index].Repeat += megaRepeat;                  // и меняем значение числа повторов.
 
             // Отключение обычных кнопок
-            var doneButton = executedButtons[index];
+            var doneButton = plusButtons[index];
             doneButton.BackColor = Color.ForestGreen;
             doneButton.Text = "OK";
             doneButton.Enabled = false;
