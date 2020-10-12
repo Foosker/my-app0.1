@@ -8,13 +8,13 @@ using TrainWindowsFormsApp.Properties;
 
 namespace TrainWindowsFormsApp
 {
-    public partial class MainForm : Form
+    public partial class trainMainForm : Form
     {
         private readonly string pathToProgressFile = "progress.txt";
-        
-        private readonly int cellHeight = 60;
-        private readonly int indentBetween = 10;
-        private int indentUpEdge;
+        // Свойства элементов управления
+        private readonly int height = 60;       // Высота ЭУ
+        private readonly int indentBetween = 10;    // Расстояние между ЭУ по горизонтали,
+        private int indentUpEdge;                   // то же по вертикали.
         private List<int> increaseIndentUpEdge;
         // Списки лейблов/кнопок
         private Label[] labelsMap;                  // Все лейблы
@@ -40,7 +40,7 @@ namespace TrainWindowsFormsApp
         private Button nextExerciseButton;  // Кнопка для перехода к следующему упражнению
         private Button closeExChButton;     // Кнопка закрытия режима смены упражнения
 
-        public MainForm()
+        public trainMainForm()
         {
             InitializeComponent();
         }
@@ -109,14 +109,14 @@ namespace TrainWindowsFormsApp
         private Button CreateButton(int indentLeftEdge, int indexRow, int width, string initialText = "")
         {   // Создание кнопок 
             int x = indentLeftEdge;
-            int y = indentUpEdge + indexRow * (indentBetween + cellHeight);  // Формула расчёта координат эллемента по ординате
+            int y = indentUpEdge + indexRow * (indentBetween + height);  // Формула расчёта координат эллемента по ординате
 
             var button = new Button
             {
                 BackColor = Color.IndianRed,
                 Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, 204),
                 Text = initialText,
-                Size = new Size(width, 60),
+                Size = new Size(width, height),
                 TextAlign = ContentAlignment.MiddleCenter,
                 Location = new Point(x, y)
             };
@@ -128,13 +128,13 @@ namespace TrainWindowsFormsApp
         private Label CreateLabel(int indentLeftEdge, int indexRow, int width)
         {   // Создание ячеек
             int x = indentLeftEdge;
-            int y = indentUpEdge + indexRow * (indentBetween + cellHeight); // Формула расчёта координат эллемента по ординате
+            int y = indentUpEdge + indexRow * (indentBetween + height); // Формула расчёта координат эллемента по ординате
 
             var label = new Label
             {
                 BackColor = Color.LightBlue,
                 Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, 204),
-                Size = new Size(width, 60),
+                Size = new Size(width, height),
                 TextAlign = ContentAlignment.MiddleCenter,
                 Location = new Point(x, y)
             };
