@@ -1,6 +1,6 @@
 ﻿namespace TrainWindowsFormsApp
 {
-    partial class warmUpForm
+    partial class WarmUpForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,17 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(warmUpForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WarmUpForm));
             this.SuspendLayout();
             // 
-            // warmUpForm
+            // WarmUpForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(978, 944);
-            this.Name = "warmUpForm";
+            this.ClientSize = new System.Drawing.Size(1010, 950);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Location = new System.Drawing.Point(0, 1303);
+            this.Name = "WarmUpForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Warm Up";
             this.Load += new System.EventHandler(this.warmUpForm_Load);
             this.ResumeLayout(false);

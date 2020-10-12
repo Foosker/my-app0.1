@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace TrainWindowsFormsApp
 {
-    public partial class warmUpForm : Form
+    public partial class WarmUpForm : Form
     {
-        private readonly int height = 60;       // Высота ЭУ
-        private readonly int indentBetween = 10;    // Расстояние между ЭУ по горизонтали,
-        private int indentUpEdge;                   // то же по вертикали.
+        private readonly int height = 60;           // Высота ЭУ
+        private readonly int indentBetween = 15;    // Расстояние между ЭУ по горизонтали,
+        private readonly int indentUpEdge = 60;     // то же по вертикали.
 
         private Exercise[] exercises;
         private List<string> fullWarmUp;
@@ -34,15 +34,27 @@ namespace TrainWindowsFormsApp
             AddOptions("10") + " быстрых ударов : "
         };
 
-        public warmUpForm(Exercise[] array)
-        {
+        public WarmUpForm(Exercise[] array, Form form)
+        {            
             InitializeComponent();
+
+            Location = new Point(form.Width, form.Top);
+
             exercises = array;
         }
 
         private void warmUpForm_Load(object sender, EventArgs e)
         {
             InitMap();
+
+            var butt = new Button();
+            butt.Click += Butt_Click;
+            CancelButton = butt;
+        }
+
+        private void Butt_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         private void InitMap()
@@ -57,6 +69,8 @@ namespace TrainWindowsFormsApp
 
         private void GetFullWarmUp()
         {
+            fullWarmUp = new List<string>();
+
             foreach (var exercise in exercises)
             {
                 fullWarmUp.Add(GetModifiers() + exercise.Text);
@@ -85,7 +99,7 @@ namespace TrainWindowsFormsApp
 
             var label = new Label
             {
-                BackColor = Color.LightBlue,
+                BackColor = Color.AntiqueWhite,
                 Font = new Font("Comic Sans MS", 18F, FontStyle.Bold, GraphicsUnit.Point, 204),
                 Size = new Size(width, height),
                 Text = fullWarmUp[indexRow],

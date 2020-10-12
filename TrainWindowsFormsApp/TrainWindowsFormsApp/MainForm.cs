@@ -446,13 +446,8 @@ namespace TrainWindowsFormsApp
         private void сформироватьРазминкуToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Exercise[] warmUp = GetExercises("warmUp");
-            var warmUpShow = new MyMessageBox();
-            var text = "";
-            foreach (var warm in warmUp)
-            {
-                text += warm.Text + "\n";
-            }
-            warmUpShow.ShowText(text);
+            var wF = new WarmUpForm(warmUp, this);
+            wF.Show();
         }
 
         private void мнеНехерДелатьToolStripMenuItem_Click(object sender, EventArgs e)

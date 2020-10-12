@@ -86,11 +86,11 @@
     <Compile Include="Exercise.cs" />
     <Compile Include="ExercisesType.cs" />
     <Compile Include="FileProvider.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="WarmUpForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="WarmUpForm.Designer.cs">
+      <DependentUpon>WarmUpForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -122,8 +122,8 @@
     </Compile>
     <Compile Include="TrainCommon.cs" />
     <Compile Include="TrainDay.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="WarmUpForm.resx">
+      <DependentUpon>WarmUpForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
