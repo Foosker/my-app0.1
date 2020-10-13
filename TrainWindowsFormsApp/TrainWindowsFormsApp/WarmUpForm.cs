@@ -17,17 +17,15 @@ namespace TrainWindowsFormsApp
         private readonly int indentUpEdge = 60;     // то же по вертикали.
 
         private Exercise[] exercises;
-        private List<string> fullWarmUp;
+        private List<string> warmUp;
         private int warmUpCount;
 
         private static Random random = new Random();
 
         private List<string> modifiers = new List<string>
         {
-            "",
             "Блок : ",
             "Уворот " + AddOptions("вправо : ", "влево : ", "вниз : "),
-            "Отскок " + AddOptions("назад : ", "вправо : ", "влево : "),
             "Шаг " + AddOptions("вперёд : ", "назад : ", "вправо : ", "влево : "),
             "Повтор удара : ",
             AddOptions("5") + " сильных ударов : ",
@@ -45,8 +43,6 @@ namespace TrainWindowsFormsApp
 
         private void warmUpForm_Load(object sender, EventArgs e)
         {
-            InitMap();
-
             var butt = new Button();
             butt.Click += Butt_Click;
             CancelButton = butt;
@@ -57,25 +53,14 @@ namespace TrainWindowsFormsApp
             Close();
         }
 
-        private void InitMap()
+        private void ShowLabels()
         {
-            GetFullWarmUp();
-
             for (int i = 0; i < warmUpCount; i++)
             {
                 CreateLabel(50, i, 600);
             }
-        }
 
-        private void GetFullWarmUp()
-        {
-            fullWarmUp = new List<string>();
-
-            foreach (var exercise in exercises)
-            {
-                fullWarmUp.Add(GetModifiers() + exercise.Text);
-            }
-            warmUpCount = fullWarmUp.Count();
+            Show();
         }
 
         private string GetModifiers()
@@ -102,12 +87,38 @@ namespace TrainWindowsFormsApp
                 BackColor = Color.AntiqueWhite,
                 Font = new Font("Comic Sans MS", 18F, FontStyle.Bold, GraphicsUnit.Point, 204),
                 Size = new Size(width, height),
-                Text = fullWarmUp[indexRow],
+                Text = warmUp[indexRow],
                 TextAlign = ContentAlignment.MiddleCenter,
                 Location = new Point(x, y)
             };
             Controls.Add(label);
             return label;
+        }
+
+        public void GetHitch()
+        {
+            warmUp = new List<string>();
+
+            foreach (var exercise in exercises)
+            {
+                warmUp.Add(GetModifiers() + exercise.Text);
+            }
+            warmUpCount = warmUp.Count();
+
+            ShowLabels();
+        }
+
+        public void GetWarmUp()
+        {
+            warmUp = new List<string>();
+
+            foreach (var exercise in exercises)
+            {
+                warmUp.Add(exercise.Text);
+            }
+            warmUpCount = warmUp.Count();
+
+            ShowLabels();
         }
     }
 }

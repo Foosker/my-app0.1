@@ -443,11 +443,18 @@ namespace TrainWindowsFormsApp
             saveExerc.ShowDialog();
         }
 
-        private void сформироватьРазминкуToolStripMenuItem_Click(object sender, EventArgs e)
+        private void разминкаToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Exercise[] warmUp = GetExercises("warmUp");
             var wF = new WarmUpForm(warmUp, this);
-            wF.Show();
+            wF.GetWarmUp();
+        }
+
+        private void заминкаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Exercise[] warmUp = GetExercises("warmUp");
+            var wF = new WarmUpForm(warmUp, this);
+            wF.GetHitch();
         }
 
         private void мнеНехерДелатьToolStripMenuItem_Click(object sender, EventArgs e)
