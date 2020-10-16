@@ -7,6 +7,8 @@
         CombatLegs,
 
         // Это двустороние упражнения
+        Forearm,
+        Neck,
         D_Trapezius,
         D_DeltoidFront,
         D_DeltoidMid,
@@ -29,6 +31,6 @@
         O_Core,
 
         Biceps,
-        Triceps
+        Triceps,
     }
 }

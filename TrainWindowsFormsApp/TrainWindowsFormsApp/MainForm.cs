@@ -12,14 +12,14 @@ namespace TrainWindowsFormsApp
     {
         private readonly string pathToProgressFile = "progress.txt";
         // Свойства элементов управления
-        private readonly int height = 60;       // Высота ЭУ
+        private readonly int height = 60;           // Высота ЭУ
         private readonly int indentBetween = 10;    // Расстояние между ЭУ по горизонтали,
         private int indentUpEdge;                   // то же по вертикали.
         private List<int> increaseIndentUpEdge;
         // Списки лейблов/кнопок
         private Label[] labelsMap;                  // Все лейблы
         private Button[] exercisesChangeButtons;    // Кнопки для смены упражнений
-        private Button[] plusButtons;               // Кнопки выполнения упражнений и увеличения количества повторов на 1
+        private Button[] repeatButtons;             // Кнопки выполнения упражнений и увеличения количества повторов на 1
         private Button[] megaPlusButtons;           // То же, только увеличение больше
 
         private MyMessageBox message;
@@ -51,6 +51,8 @@ namespace TrainWindowsFormsApp
             exercises = GetExercises();
             InitMap();
             FillInTheTable();
+            //var test = new SetNewProgramForm();
+            //test.ShowDialog();
         }
         //
         // Клиентская область
@@ -59,9 +61,9 @@ namespace TrainWindowsFormsApp
         {   // Заполнение формы ячейками и кнопками
             numberOfExercises = exercises.Count();
 
-            labelsMap = new Label[numberOfExercises * 3];   // Количество упражнений умноженное на количество лейблов
+            labelsMap = new Label[numberOfExercises * 2];   // Количество упражнений умноженное на количество лейблов
             exercisesChangeButtons = new Button[numberOfExercises];
-            plusButtons = new Button[numberOfExercises];
+            repeatButtons = new Button[numberOfExercises];
             megaPlusButtons = new Button[numberOfExercises];
 
             indentUpEdge = 60;
@@ -82,14 +84,11 @@ namespace TrainWindowsFormsApp
                 var loadLabel = CreateLabel(725, i, 200);
                 labelsMap[i + numberOfExercises] = loadLabel;
 
-                var repeatLabel = CreateLabel(950, i, 100);
-                labelsMap[i + numberOfExercises * 2] = repeatLabel;
+                var repeatButton = CreateButton(950, i, 100);
+                repeatButtons[i] = repeatButton;
+                repeatButton.Click += RepeatButton_Click;  // Событие нажатия на кнопку
 
-                var executedButton = CreateButton(1075, i, 100, "NOK");
-                plusButtons[i] = executedButton;
-                executedButton.Click += DoneButton_Click;  // Событие нажатия на кнопку
-
-                var megaPlusButton = CreateButton(1200, i, 100, "⮝⮝");
+                var megaPlusButton = CreateButton(1060, i, 50, "⮝");
                 megaPlusButtons[i] = megaPlusButton;
                 megaPlusButton.Click += MegaPlusButton_Click;
 
@@ -102,7 +101,7 @@ namespace TrainWindowsFormsApp
             {
                 labelsMap[i].Text = exercises[i].Text;                                      // название упражнения
                 labelsMap[i + numberOfExercises].Text = exercises[i].Load;                  // нагрузка
-                labelsMap[i + numberOfExercises * 2].Text = exercises[i].Repeat.ToString(); // повторения
+                repeatButtons[i].Text = exercises[i].Repeat.ToString(); // повторения
             }
         }
 
@@ -168,10 +167,11 @@ namespace TrainWindowsFormsApp
         {
             var modes = new List<string>()
             {
-                "Статическое удержание в пике",
+                "Напряжение в пике",
                 "1,5 повторения",
                 "\"На смерть\" в каждом подходе",
-                "Частичные повторения"
+                "Частичные повторения",
+                "Статическое удержание"
             };
 
             var selectedMode = modes[random.Next(modes.Count())];
@@ -379,7 +379,7 @@ namespace TrainWindowsFormsApp
 
             labelsMap[indexInCurExL].Text = exerciseChangeList[indexInExChL].Text;
             labelsMap[indexInCurExL + numberOfExercises].Text = exerciseChangeList[indexInExChL].Load.ToString();
-            labelsMap[indexInCurExL + numberOfExercises * 2].Text = exerciseChangeList[indexInExChL].Repeat.ToString();
+            repeatButtons[indexInCurExL].Text = exerciseChangeList[indexInExChL].Repeat.ToString();
         }
 
         private void CloseModeChangeExercise_Click(object sender, EventArgs e)
@@ -393,14 +393,13 @@ namespace TrainWindowsFormsApp
             exercisesChangeButtons[indexInCurExL].Enabled = true;
         }
 
-        private void DoneButton_Click(object sender, EventArgs e)
+        private void RepeatButton_Click(object sender, EventArgs e)
         {   // Нажатие на кнопку выполнения упражнения
             var doneButton = (sender as Button);        // Обращается к кнопке,
-            doneButton.BackColor = Color.ForestGreen;   // меняет окраску кнопки
-            doneButton.Text = "OK";                     // и текст на ней.
+            doneButton.BackColor = Color.ForestGreen;   // меняет окраску кнопки.
             doneButton.Enabled = false;                 // Отключение кнопки после нажатия.
                                       
-            var index = Array.IndexOf(plusButtons, doneButton);              // Получаем индекс кнопки в её специальном массиве,
+            var index = Array.IndexOf(repeatButtons, doneButton);              // Получаем индекс кнопки в её специальном массиве,
             exercises[index].Repeat++;                                       // меняем значение числа повторов.
 
             var megaButton = megaPlusButtons[index];
@@ -409,9 +408,9 @@ namespace TrainWindowsFormsApp
             megaButton.Enabled = false;
 
             // Если количество изменённых повторов стало больше максимально допустимого пишем "МАХ",
-            if (exercises[index].Repeat > exercises[index].MaxRepeat) labelsMap[index + numberOfExercises * 2].Text = "MAX";
+            if (exercises[index].Repeat > exercises[index].MaxRepeat) doneButton.Text = "MAX";
             // если нет - то меняем на новое значение.
-            else labelsMap[index + numberOfExercises * 2].Text = exercises[index].Repeat.ToString();
+            else doneButton.Text = "OK";
         }
 
         private void MegaPlusButton_Click(object sender, EventArgs e)
@@ -426,21 +425,14 @@ namespace TrainWindowsFormsApp
             exercises[index].Repeat += megaRepeat;                  // и меняем значение числа повторов.
 
             // Отключение обычных кнопок
-            var doneButton = plusButtons[index];
+            var doneButton = repeatButtons[index];
             doneButton.BackColor = Color.ForestGreen;
-            doneButton.Text = "OK";
             doneButton.Enabled = false;
 
             // Если количество изменённых повторов стало больше максимально допустимого пишем "МАХ",
-            if (exercises[index].Repeat > exercises[index].MaxRepeat) labelsMap[index + numberOfExercises * 2].Text = "MAX";
+            if (exercises[index].Repeat > exercises[index].MaxRepeat) doneButton.Text = "MAX";
             // если нет - то меняем на новое значение.
-            else labelsMap[index + numberOfExercises * 2].Text = exercises[index].Repeat.ToString();
-        }
-
-        private void сохранитьНовоеУпражнениеToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var saveExerc = new SaveNewExerciseForm();
-            saveExerc.ShowDialog();
+            else doneButton.Text = "OK";
         }
 
         private void разминкаToolStripMenuItem_Click(object sender, EventArgs e)
@@ -470,6 +462,18 @@ namespace TrainWindowsFormsApp
         {
             дополнительныйРежимToolStripMenuItem.Enabled = false;
             GetMode();
+        }
+
+        private void создатьНовуюПрограммуТренировокToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var newProgrForm = new SetNewProgramForm();
+            newProgrForm.ShowDialog();
+        }
+
+        private void сохранитьНовоеУпражнениеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var saveExerc = new SaveNewExerciseForm();
+            saveExerc.ShowDialog();
         }
 
         private void закончитьТренировкуToolStripMenuItem_Click(object sender, EventArgs e)

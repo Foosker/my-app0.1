@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TrainWindowsFormsApp
@@ -22,21 +18,11 @@ namespace TrainWindowsFormsApp
 
         private static Random random = new Random();
 
-        private List<string> modifiers = new List<string>
-        {
-            "Блок : ",
-            "Уворот " + AddOptions("вправо : ", "влево : ", "вниз : "),
-            "Шаг " + AddOptions("вперёд : ", "назад : ", "вправо : ", "влево : "),
-            "Повтор удара : ",
-            AddOptions("5") + " сильных ударов : ",
-            AddOptions("10") + " быстрых ударов : "
-        };
-
         public WarmUpForm(Exercise[] array, Form form)
         {            
             InitializeComponent();
 
-            Location = new Point(form.Width, form.Top);
+            Location = new Point(form.Right, form.Top);
 
             exercises = array;
         }
@@ -65,6 +51,16 @@ namespace TrainWindowsFormsApp
 
         private string GetModifiers()
         {
+            var modifiers = new List<string>
+            {
+                "Блок : ",
+                "Уворот " + AddOptions("вправо : ", "влево : ", "вниз : "),
+                "Шаг " + AddOptions("вперёд : ", "назад : ", "вправо : ", "влево : "),
+                "Повтор удара : ",
+                AddOptions("5") + " сильных ударов : ",
+                AddOptions("10") + " быстрых ударов : "
+            };
+
             return modifiers[random.Next(modifiers.Count())];
         }
 
