@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -51,6 +52,8 @@ namespace TrainWindowsFormsApp
             exercises = GetExercises();
             InitMap();
             FillInTheTable();
+            GetMode();
+            TrainX2Button();
             //var test = new SetNewProgramForm();
             //test.ShowDialog();
         }
@@ -142,19 +145,25 @@ namespace TrainWindowsFormsApp
             return label;
         }
 
-        private void ClearField()
-        {
-            Array.Clear(exercises, 0, 6);
+        private void TrainX2Button()
+        {   // Кнопка, добавляющая к стандартной тренировке ещё одну
+            var button = CreateButton(400, numberOfExercises, 200, "Ещё");
+            button.Click += TrainX2Button_Click;
+        }
+
+        private void ClearField(int controlsIndex)
+        {   // Очищение клиентской области - удаление списка упражнений
+            Array.Clear(exercises, 0, exercises.Length);
 
             while (Controls.Count > 2)
             {// Два члена Controls - верхняя панель и фоновая картинка
-                Controls.RemoveAt(Controls.Count-2);
+                Controls.RemoveAt(Controls.Count - controlsIndex);
             }
         }
 
         private void LaunchAddon()
-        {
-            ClearField();
+        {   // Дополнение к тренировке, одиностороние упражнения
+            ClearField(2);
             exercises = GetExercises("additional");
             InitMap();
             FillInTheTable();
@@ -164,24 +173,34 @@ namespace TrainWindowsFormsApp
         }
 
         private void GetMode()
-        {
-            var modes = new List<string>()
+        {   // Режим тренировки
+            Tuple<string, float>[] modes =
             {
-                "Напряжение в пике",
-                "1,5 повторения",
-                "\"На смерть\" в каждом подходе",
-                "Частичные повторения",
-                "Статическое удержание"
+                new Tuple<string, float>("Нижние 1,5", 0.6f),
+                new Tuple<string, float>("Напряжение при сокращении", 0.8f),
+                new Tuple<string, float>("\"На смерть\" в каждом подходе", 0),
+                new Tuple<string, float>("Частичные повторения", 1.5f),
+                new Tuple<string, float>("Статическое удержание в пике", 1),
+                new Tuple<string, float>("Верхние 1,5", 0.6f),
+                new Tuple<string, float>("Обычный", 1),
+                new Tuple<string, float>("0,5 + 1 + 0,5", 0.5f)
             };
 
-            var selectedMode = modes[random.Next(modes.Count())];
+            var selectedMode = progress % modes.Count();
 
             var modeLabel = CreateLabel(350, numberOfExercises + 1, 600);
             modeLabel.Font = new Font("Tahoma", 25F, FontStyle.Bold, GraphicsUnit.Point, 204);
             modeLabel.ForeColor = Color.DarkOrange;
             modeLabel.Height = 200;
             modeLabel.Image = Resources.Fire;
-            modeLabel.Text = selectedMode;
+            modeLabel.Text = modes[selectedMode].Item1;
+            foreach (var button in repeatButtons)
+            {
+                var num = float.Parse(button.Text);
+                num *= modes[selectedMode].Item2;
+                num = (float)Math.Round(num);
+                button.Text = num.ToString();
+            }
         }
         //
         // Работа с файлами
@@ -240,7 +259,7 @@ namespace TrainWindowsFormsApp
         {   // Получаем список тренируемых мышц
             List<ExercisesType> exercisesList;
 
-            if (option == "train")
+            if (option == "train" || option == "moreTrain")
             {
                 exercisesList = TrainDay.GetTrain(progress);
                 increaseIndentUpEdge = TrainDay.indentBetweenExercises;
@@ -276,9 +295,10 @@ namespace TrainWindowsFormsApp
                     if (differentExecriseTypes[i] == exercisesList[j])
                     {
                         int exerciseIndex;  // Индекс упражнения
-                        if (option == "warmUp") exerciseIndex = random.Next(deserializableDataExercises.Count);
-                        else if (option == "additional") exerciseIndex = (progress + 1) % deserializableDataExercises.Count;
-                        else exerciseIndex = progress % deserializableDataExercises.Count;
+                        if (option == "warmUp") exerciseIndex = random.Next(deserializableDataExercises.Count());
+                        else if (option == "additional") exerciseIndex = (progress) / deserializableDataExercises.Count % deserializableDataExercises.Count();
+                        else if (option == "moreTrain") exerciseIndex = random.Next(deserializableDataExercises.Count());
+                        else exerciseIndex = (progress) / deserializableDataExercises.Count % deserializableDataExercises.Count();
 
                         var exercise = deserializableDataExercises[exerciseIndex];  // Выбор упражнения по индексу,
                         exerciseArray[j] = exercise;                                // добавление его в основной массив,
@@ -301,6 +321,16 @@ namespace TrainWindowsFormsApp
         //
         // События
         //
+        private void TrainX2Button_Click(object sender, EventArgs e)
+        {
+            SaveTrainResults();
+            ClearField(3);
+            exercises = GetExercises("moreTrain");
+            InitMap();
+            FillInTheTable();
+            GetMode();
+        }
+
         private void mainTimer_Tick(object sender, EventArgs e)
         {
             timerCounter++;
@@ -452,16 +482,9 @@ namespace TrainWindowsFormsApp
         private void мнеНехерДелатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             мнеНехерДелатьToolStripMenuItem.Enabled = false;
-            дополнительныйРежимToolStripMenuItem.Enabled = true;
             backgroundPictureBox.BringToFront();
             mainTimer.Start();
             SaveTrainResults();
-        }
-
-        private void дополнительныйРежимToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            дополнительныйРежимToolStripMenuItem.Enabled = false;
-            GetMode();
         }
 
         private void создатьНовуюПрограммуТренировокToolStripMenuItem_Click(object sender, EventArgs e)
