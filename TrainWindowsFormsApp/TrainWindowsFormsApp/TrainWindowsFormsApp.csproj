@@ -86,6 +86,18 @@
     <Compile Include="Exercise.cs" />
     <Compile Include="ExercisesType.cs" />
     <Compile Include="FileProvider.cs" />
+    <Compile Include="SetNewProgramForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetNewProgramForm.Designer.cs">
+      <DependentUpon>SetNewProgramForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WarmUpForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WarmUpForm.Designer.cs">
+      <DependentUpon>WarmUpForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,7 +126,14 @@
     <Compile Include="SetNewLoadForm.Designer.cs">
       <DependentUpon>SetNewLoadForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TrainCommon.cs" />
     <Compile Include="TrainDay.cs" />
+    <EmbeddedResource Include="SetNewProgramForm.resx">
+      <DependentUpon>SetNewProgramForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WarmUpForm.resx">
+      <DependentUpon>WarmUpForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
