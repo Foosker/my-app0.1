@@ -1,12 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TrainWindowsFormsApp
@@ -34,10 +30,6 @@ namespace TrainWindowsFormsApp
         private List<Button> nameExercisesButtons = new List<Button>();
 
         private string pathToExercise;
-        private int indexInCurExL;  // Индекс упражнения в списке упражнений на тренировке
-        private int indexInExChL;   // Индекс того же упражнения в файле
-        private Button nextExerciseButton;  // Кнопка для перехода к следующему упражнению
-        private Button closeExChButton;     // Кнопка закрытия режима смены упражнения
 
         public FastTrainForm()
         {
@@ -60,12 +52,7 @@ namespace TrainWindowsFormsApp
             megaPlusButtons = new Button[numberOfExercises];
 
             for (int i = 0; i < numberOfExercises; i++)
-            {   // Отступ между сетами упражнений
-                // Надо будет потом доработать
-                // Кнопка начала режима смены упражнения
-                var exerciseChangeButton = CreateButton(10, i, 30, "⭯");
-                exercisesChangeButtons[i] = exerciseChangeButton;
-
+            {
                 var textLabel = CreateLabel(50, i, 650);
                 labelsMap[i] = textLabel;
                 textLabel.MouseClick += ExerciseName_MouseClick;   // Событие нажатия на текст с названием упражнения
@@ -244,6 +231,12 @@ namespace TrainWindowsFormsApp
         private void quitButton_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void FastTrainForm_SizeChanged(object sender, EventArgs e)
+        {
+            closeButton.Location = new Point(ClientSize.Width - closeButton.Width - 10, ClientSize.Height - closeButton.Height - 90);
+            quitButton.Location = new Point(ClientSize.Width - quitButton.Width - 10, ClientSize.Height - quitButton.Height - 50);
         }
     }
 }

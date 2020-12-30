@@ -72,6 +72,7 @@ namespace TrainWindowsFormsApp
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "FastTrainForm";
             this.Load += new System.EventHandler(this.FastTrainForm_Load);
+            this.SizeChanged += new System.EventHandler(this.FastTrainForm_SizeChanged);
             this.ResumeLayout(false);
 
         }
