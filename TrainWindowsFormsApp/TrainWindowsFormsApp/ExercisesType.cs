@@ -2,13 +2,11 @@
 {
     public enum ExercisesType
     {
-        // Эти упражнения для разминки
+        // Упражнения для разминки
         CombatArms,
         CombatLegs,
 
-        // Это двустороние упражнения
-        Forearm,
-        Neck,
+        // Двустороние упражнения
         D_Trapezius,
         D_DeltoidFront,
         D_DeltoidMid,
@@ -16,8 +14,8 @@
         D_Chest,
         D_Latissimus,
         D_Legs,
-        D_Calf,
         D_Core,
+        D_BackExtensor,
 
         // Одностороние
         O_Trapezius,
@@ -27,10 +25,17 @@
         O_Chest, 
         O_Latissimus,
         O_Legs,
-        O_Calf,
         O_Core,
+        O_BackExtensor,
 
-        Biceps,
+        // Лёгкие упражнения
+        Scapula,
+        Shin,
         Triceps,
+        Neck,
+        Forearm,
+        Calf,
+        HipBiceps,
+        Biceps
     }
 }

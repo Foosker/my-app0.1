@@ -9,7 +9,7 @@ using TrainWindowsFormsApp.Properties;
 
 namespace TrainWindowsFormsApp
 {
-    public partial class trainMainForm : Form
+    public partial class TrainMainForm : Form
     {
         private readonly string pathToProgressFile = "progress.txt";
         // Свойства элементов управления
@@ -41,13 +41,16 @@ namespace TrainWindowsFormsApp
         private Button nextExerciseButton;  // Кнопка для перехода к следующему упражнению
         private Button closeExChButton;     // Кнопка закрытия режима смены упражнения
 
-        public trainMainForm()
+        public TrainMainForm()
         {
             InitializeComponent();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            var start = new StartForm();
+            start.ShowDialog();
+
             progress = GetProgress();
             exercises = GetExercises();
             InitMap();
@@ -60,7 +63,7 @@ namespace TrainWindowsFormsApp
         //
         // Клиентская область
         //
-        private void InitMap()
+        public void InitMap()
         {   // Заполнение формы ячейками и кнопками
             numberOfExercises = exercises.Count();
 
@@ -98,7 +101,7 @@ namespace TrainWindowsFormsApp
             }
         }
 
-        private void FillInTheTable()
+        public void FillInTheTable()
         {   // Заполнение ячеек
             for (int i = 0; i < numberOfExercises; i++)
             {
@@ -146,18 +149,18 @@ namespace TrainWindowsFormsApp
         }
 
         private void TrainX2Button()
-        {   // Кнопка, добавляющая к стандартной тренировке ещё одну
+        {   // Кнопка, добавляющая к стандартной тренировке ещё одну, удаляется после нажатия
             var button = CreateButton(400, numberOfExercises, 200, "Ещё");
             button.Click += TrainX2Button_Click;
         }
 
-        private void ClearField(int controlsIndex)
+        private void ClearField(int restrictionOnDeletingIndexes /* В начале эллементы Controls, которые нужно сохранить, находятся в конце; после первой очистки один из них перемещается в начало*/)
         {   // Очищение клиентской области - удаление списка упражнений
-            Array.Clear(exercises, 0, exercises.Length);
+            Array.Clear(exercises, 0, exercises.Length);  // очистка массива с упражнениями
 
-            while (Controls.Count > 2)
-            {// Два члена Controls - верхняя панель и фоновая картинка
-                Controls.RemoveAt(Controls.Count - controlsIndex);
+            while (Controls.Count > 2/* Два члена Controls - верхняя панель и фоновая картинка*/)
+            {
+                Controls.RemoveAt(Controls.Count - restrictionOnDeletingIndexes);
             }
         }
 
@@ -209,8 +212,8 @@ namespace TrainWindowsFormsApp
         {
             var isExistFile = FileProvider.TryGet(pathToProgressFile, out var data);
 
-            if (!isExistFile)
-            {
+            if (!isExistFile) // если файл с прогрессом не существует,
+            {                 // то он создаётся со значением 1
                 FileProvider.Save(pathToProgressFile, "1");
                 data = "1";
             }
@@ -218,7 +221,7 @@ namespace TrainWindowsFormsApp
         }
 
         private void SaveProgress()
-        {
+        {   // сохранение номера дня тренировки
             progress++;
             var data = progress.ToString();
 
@@ -226,15 +229,15 @@ namespace TrainWindowsFormsApp
         }
 
         private void SaveTrainResults()
-        {
+        {   // сохранение увеличенного количества повторов
             for (int i = 0; i < pathsList.Count; i++)
             {
                 var deserializableData = GetDeserializedData(pathsList[i]);
 
                 for (int j = 0; j < exercises.Length; j++)
-                {   // Здесь сравнение количества повторов с максимальным количеством
-                    if (exercises[j].Repeat > exercises[j].MaxRepeat)
-                    {
+                {   // сравнение количества повторов с максимальным количеством
+                    if (exercises[j].Repeat > exercises[j].MaxRepeat) // и если если дошли до макимального количества,
+                    {                                                 // то открывается форма для увеличения нагрузки
                         var form = new SetNewLoadForm(exercises[j]);
                         form.ShowDialog();
                         exercises[j].Repeat = 10;
@@ -242,7 +245,7 @@ namespace TrainWindowsFormsApp
                     }
 
                     foreach (var exerc in deserializableData)
-                    {
+                    {   // переписывание количества повторов и нагрузки
                         if (exerc.Text == exercises[j].Text)
                         {
                             exerc.Repeat = exercises[j].Repeat;
@@ -259,7 +262,7 @@ namespace TrainWindowsFormsApp
         {   // Получаем список тренируемых мышц
             List<ExercisesType> exercisesList;
 
-            if (option == "train" || option == "moreTrain")
+            if (option == "train")
             {
                 exercisesList = TrainDay.GetTrain(progress);
                 increaseIndentUpEdge = TrainDay.indentBetweenExercises;
@@ -269,9 +272,9 @@ namespace TrainWindowsFormsApp
                 exercisesList = TrainDay.GetAdditional();
                 increaseIndentUpEdge = TrainDay.indentBetweenExercises;
             }
-            else
-            { 
-                exercisesList = TrainDay.GetWarmUpList(); 
+            else  // для разминки
+            {
+                exercisesList = TrainDay.GetWarmUpList();
             }
 
             var exercisesCount = exercisesList.Count();
@@ -283,7 +286,7 @@ namespace TrainWindowsFormsApp
 
             for (int i = 0; i < numberDifferentExercises; i++)
             {   // Название упражнения преобразуем в путь к файлу
-                var pathExerciseFile = "ExercisesType/" + differentExecriseTypes[i].ToString() + ".json";   
+                var pathExerciseFile = "ExercisesType/" + differentExecriseTypes[i].ToString() + ".json";
                 // и добавляем в список всех путей, если это тренировка или дополнение к ней
                 if (option != "warmUp") pathsList.Add(pathExerciseFile);
 
@@ -305,12 +308,11 @@ namespace TrainWindowsFormsApp
                         deserializableDataExercises.Remove(exercise);               // удаление из списка файла.
                     }
                 }
-
             }
             return exerciseArray;
         }
 
-        private List<Exercise> GetDeserializedData(string path)
+        public List<Exercise> GetDeserializedData(string path)
         {   // Получение данных из файла
             var dataExercises = FileProvider.GetData(path);
             // и десериализация в список.
@@ -332,25 +334,23 @@ namespace TrainWindowsFormsApp
         }
 
         private void mainTimer_Tick(object sender, EventArgs e)
-        {
+        {   // таймер нужен для того, чтобы очистка клиентской области покрасивше выглядела
             timerCounter++;
             if (timerCounter > 2)
             {
                 LaunchAddon();
-
             }
         }
 
-        private void ExerciseName_MouseClick(object sender, MouseEventArgs e)
+        public void ExerciseName_MouseClick(object sender, MouseEventArgs e)
         {   // Показ примечания к упражнению
             message = new MyMessageBox();
             var index = Array.IndexOf(labelsMap, sender); // Получаем индекс лейбла, на который нажали
-            message.ShowText(exercises[index].Remark);     // и выводим примечание к упражнению по полученному индексу.
-            
+            message.ShowText(exercises[index].Remark);     // и выводим примечание к упражнению по полученному индексу.            
         }
 
-        private void ExerciseChangeButton_Click(object sender, EventArgs e)
-        {
+        public void ExerciseChangeButton_Click(object sender, EventArgs e)
+        {   // кнопки для смены упражнения
             if (Controls.Contains(nextExerciseButton) || Controls.Contains(closeExChButton))
             {
                 Controls.Remove(nextExerciseButton);
@@ -399,8 +399,8 @@ namespace TrainWindowsFormsApp
 
         }
 
-        private void NextExerciseButton_Click(object sender, EventArgs e)
-        {
+        public void NextExerciseButton_Click(object sender, EventArgs e)
+        {   // промотка упражнений
             indexInExChL++;
             if (indexInExChL >= exerciseChangeList.Count())
             {
@@ -412,18 +412,18 @@ namespace TrainWindowsFormsApp
             repeatButtons[indexInCurExL].Text = exerciseChangeList[indexInExChL].Repeat.ToString();
         }
 
-        private void CloseModeChangeExercise_Click(object sender, EventArgs e)
-        {
+        public void CloseModeChangeExercise_Click(object sender, EventArgs e)
+        {   // закрытие режима смены упражнений
             exercises[indexInCurExL] = exerciseChangeList[indexInExChL];
 
-            Controls.Remove(nextExerciseButton);
-            Controls.Remove(closeExChButton);
+            Controls.Remove(nextExerciseButton);    // удаление кнопок промотки упражнения
+            Controls.Remove(closeExChButton);       // и кнопки закрытия режима
 
-            exercisesChangeButtons[indexInCurExL].Visible = true;
-            exercisesChangeButtons[indexInCurExL].Enabled = true;
+            exercisesChangeButtons[indexInCurExL].Visible = true;   // включается видимость кнопки начала режима смены упражнения
+            exercisesChangeButtons[indexInCurExL].Enabled = true;   // и становится активной
         }
 
-        private void RepeatButton_Click(object sender, EventArgs e)
+        public void RepeatButton_Click(object sender, EventArgs e)
         {   // Нажатие на кнопку выполнения упражнения
             var doneButton = (sender as Button);        // Обращается к кнопке,
             doneButton.BackColor = Color.ForestGreen;   // меняет окраску кнопки.
@@ -443,7 +443,7 @@ namespace TrainWindowsFormsApp
             else doneButton.Text = "OK";
         }
 
-        private void MegaPlusButton_Click(object sender, EventArgs e)
+        public void MegaPlusButton_Click(object sender, EventArgs e)
         {   // Нажатие на кнопку 
             var megaButton = (sender as Button);    // Обращается к кнопке,
             megaButton.BackColor = Color.Gold;      // меняет окраску кнопки

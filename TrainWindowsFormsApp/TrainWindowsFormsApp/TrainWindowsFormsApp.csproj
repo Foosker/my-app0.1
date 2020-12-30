@@ -85,12 +85,24 @@
   <ItemGroup>
     <Compile Include="Exercise.cs" />
     <Compile Include="ExercisesType.cs" />
+    <Compile Include="FastTrainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FastTrainForm.Designer.cs">
+      <DependentUpon>FastTrainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FileProvider.cs" />
     <Compile Include="SetNewProgramForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SetNewProgramForm.Designer.cs">
       <DependentUpon>SetNewProgramForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartForm.Designer.cs">
+      <DependentUpon>StartForm.cs</DependentUpon>
     </Compile>
     <Compile Include="WarmUpForm.cs">
       <SubType>Form</SubType>
@@ -128,8 +140,14 @@
     </Compile>
     <Compile Include="TrainCommon.cs" />
     <Compile Include="TrainDay.cs" />
+    <EmbeddedResource Include="FastTrainForm.resx">
+      <DependentUpon>FastTrainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SetNewProgramForm.resx">
       <DependentUpon>SetNewProgramForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartForm.resx">
+      <DependentUpon>StartForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WarmUpForm.resx">
       <DependentUpon>WarmUpForm.cs</DependentUpon>

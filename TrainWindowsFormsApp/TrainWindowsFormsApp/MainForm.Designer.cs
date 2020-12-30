@@ -1,6 +1,6 @@
 ﻿namespace TrainWindowsFormsApp
 {
-    partial class trainMainForm
+    partial class TrainMainForm
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(trainMainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrainMainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.выходБезСохраненияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.закончитьТренировкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
