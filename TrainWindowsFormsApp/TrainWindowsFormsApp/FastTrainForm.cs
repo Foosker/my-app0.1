@@ -10,13 +10,12 @@ namespace TrainWindowsFormsApp
     public partial class FastTrainForm : Form
     {
         private readonly int height = 60;           // Высота ЭУ
-        private readonly int indentBetween = 10;    // Расстояние между ЭУ по горизонтали,
+        private int indentBetween = 10;    // Расстояние между ЭУ по горизонтали,
         private int indentUpEdge = 300;             // то же по вертикали.
 
         private TrainMainForm mainForm = new TrainMainForm();
 
         private Label[] labelsMap;
-        private Button[] exercisesChangeButtons;
         private Button[] repeatButtons;
         private Button[] megaPlusButtons;
 
@@ -26,7 +25,8 @@ namespace TrainWindowsFormsApp
         private Exercise[] exercises;
         private int numberOfExercises;
 
-        private List<ExercisesType> muscles = new List<ExercisesType>();
+        private List<string> muscles = new List<string>();
+        private List<ExercisesType> muscleType = new List<ExercisesType>();
         private List<Button> nameExercisesButtons = new List<Button>();
 
         private string pathToExercise;
@@ -40,6 +40,12 @@ namespace TrainWindowsFormsApp
         {
             muscles = GetExercisedMuscles();
             CreateButtons();
+            ShowNextRegularTrain();
+        }
+
+        private int GetTheNumberOfColumns()
+        {
+            return Size.Height / (height + indentBetween);
         }
 
         private void InitMap()
@@ -47,7 +53,6 @@ namespace TrainWindowsFormsApp
             numberOfExercises = exercises.Count();
 
             labelsMap = new Label[numberOfExercises * 2];   // Количество упражнений умноженное на количество лейблов
-            exercisesChangeButtons = new Button[numberOfExercises];
             repeatButtons = new Button[numberOfExercises];
             megaPlusButtons = new Button[numberOfExercises];
 
@@ -117,35 +122,29 @@ namespace TrainWindowsFormsApp
             label.BringToFront();
             return label;
         }
-        private List<ExercisesType> GetExercisedMuscles()
-        {
-            var list = new List<ExercisesType>();
-
-            for (int i = Array.IndexOf(Enum.GetValues(typeof(ExercisesType)), ExercisesType.Scapula);
-                i < Enum.GetValues(typeof(ExercisesType)).Length;
-                i++)
-            {
-                list.Add((ExercisesType)Enum.GetValues(typeof(ExercisesType)).GetValue(i));
-            }
-            return list;
-        }
 
         private void CreateButtons()
         {
             var numberOfButtons = muscles.Count;
 
+            var numberOfColumns = GetTheNumberOfColumns();
+
+            var _indentBetween = 10;
+            var sizeX = 120;
             var sizeY = 60;
 
             for (int i = 0; i < numberOfButtons; i++)
             {
+                if (i % numberOfColumns == 0) _indentBetween += sizeX;
+
                 var button = new Button
                 {
                     BackColor = Color.OrangeRed,
                     Font = new Font("Microsoft Sans Serif", 15F, FontStyle.Bold, GraphicsUnit.Point, 204),
                     Text = muscles[i].ToString(),
-                    Size = new Size(120, sizeY),
+                    Size = new Size(sizeX, sizeY),
                     TextAlign = ContentAlignment.MiddleCenter,
-                    Location = new Point(12, 12 + sizeY * i)
+                    Location = new Point(_indentBetween, _indentBetween + sizeY * (i % numberOfColumns))
                 };
                 button.Click += NameExerciseButton_Click;
                 nameExercisesButtons.Add(button);
@@ -153,16 +152,48 @@ namespace TrainWindowsFormsApp
             }
         }
 
+        private List<string> GetExercisedMuscles()
+        {
+            var list = new List<string>();
+
+            for (int i = Array.IndexOf(Enum.GetValues(typeof(ExercisesType)), ExercisesType.O_Trapezius);
+                i < Enum.GetValues(typeof(ExercisesType)).Length;
+                i++)
+            {
+                list.Add(RusExerciseType.list[i]);
+                muscleType.Add((ExercisesType)Enum.GetValues(typeof(ExercisesType)).GetValue(i));
+            }
+            return list;
+        }
+
         private void GetExercises()
         {
-            Random random = new Random();
-
             deserializableData = mainForm.GetDeserializedData(pathToExercise);
 
             exercises = new Exercise[deserializableData.Count];
             for (int i = 0; i < deserializableData.Count; i++)
             {
                 exercises[i] = deserializableData[i];
+            }
+        }
+
+        private void ShowNextRegularTrain()
+        {
+            var pathToProgress = mainForm.pathToProgressFile;
+            FileProvider.TryGet(pathToProgress, out var progress);
+
+            var nextTrain = TrainDay.GetTrain(int.Parse(progress));
+
+            var headerLabel = CreateLabel(Width - 650, -1, 650);
+            headerLabel.BackColor = Color.Green;
+            headerLabel.Text = "Группы мышц, тренируемые на следующей тренировке:";
+
+            for (int i = 0; i < 2; i++)
+            {
+                var label = CreateLabel(Width - 650, i, 650);
+
+                var index = Array.IndexOf(Enum.GetValues(typeof(ExercisesType)), nextTrain[i]);
+                label.Text = RusExerciseType.list[index];
             }
         }
 
@@ -179,18 +210,16 @@ namespace TrainWindowsFormsApp
 
             var serializableData = JsonConvert.SerializeObject(deserializableData, Formatting.Indented);
             FileProvider.Save(pathToExercise, serializableData);
-
-            Close();
         }
 
-        public void ExerciseName_MouseClick(object sender, MouseEventArgs e)
+        private void ExerciseName_MouseClick(object sender, MouseEventArgs e)
         {   // Показ примечания к упражнению
             message = new MyMessageBox();
             var index = Array.IndexOf(labelsMap, sender); // Получаем индекс лейбла, на который нажали
-            message.ShowText(exercises[index].Remark);     // и выводим примечание к упражнению по полученному индексу.            
+            message.ShowText(exercises[index].Remark);     // и выводим примечание к упражнению по полученному индексу.
         }
 
-        public void RepeatButton_Click(object sender, EventArgs e)
+        private void RepeatButton_Click(object sender, EventArgs e)
         {   // Нажатие на кнопку выполнения упражнения
             var doneButton = (sender as Button);
             var index = Array.IndexOf(repeatButtons, doneButton);              // Получаем индекс кнопки в её специальном массиве,
@@ -199,7 +228,7 @@ namespace TrainWindowsFormsApp
             Save(index);
         }
 
-        public void MegaPlusButton_Click(object sender, EventArgs e)
+        private void MegaPlusButton_Click(object sender, EventArgs e)
         {   // Нажатие на кнопку 
             var megaButton = (sender as Button);    // Обращается к кнопке,
             var index = Array.IndexOf(megaPlusButtons, megaButton);              // Получаем индекс кнопки в её специальном массиве,
@@ -210,13 +239,21 @@ namespace TrainWindowsFormsApp
 
         private void NameExerciseButton_Click(object sender, EventArgs e)
         {
+            backgroundPictureBox.Visible = true;
+
             var nameButton = (sender as Button);
+            var index = nameExercisesButtons.IndexOf(nameButton);
+            var nameMuscle = muscleType[index];
 
-            pathToExercise = "ExercisesType/" + nameButton.Text + ".json";
+            pathToExercise = "ExercisesType/" + nameMuscle + ".json";
 
-            foreach (var button in nameExercisesButtons)
+            for (int i = Controls.Count - 1; Controls.Count > 3; i--)
             {
-                Controls.Remove(button);
+                if (Controls[i] == closeButton|| Controls[i] == quitButton || Controls[i] == backgroundPictureBox)
+                {
+                    continue;
+                }
+                Controls.Remove(Controls[i]);
             }
             GetExercises();
             InitMap();
@@ -237,6 +274,8 @@ namespace TrainWindowsFormsApp
         {
             closeButton.Location = new Point(ClientSize.Width - closeButton.Width - 10, ClientSize.Height - closeButton.Height - 90);
             quitButton.Location = new Point(ClientSize.Width - quitButton.Width - 10, ClientSize.Height - quitButton.Height - 50);
+            closeButton.BringToFront();
+            quitButton.BringToFront();
         }
     }
 }

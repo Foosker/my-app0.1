@@ -32,6 +32,8 @@ namespace TrainWindowsFormsApp
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FastTrainForm));
             this.quitButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
+            this.backgroundPictureBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.backgroundPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // quitButton
@@ -58,6 +60,18 @@ namespace TrainWindowsFormsApp
             this.closeButton.UseVisualStyleBackColor = false;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
+            // backgroundPictureBox
+            // 
+            this.backgroundPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.backgroundPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("backgroundPictureBox.Image")));
+            this.backgroundPictureBox.Location = new System.Drawing.Point(0, 0);
+            this.backgroundPictureBox.Name = "backgroundPictureBox";
+            this.backgroundPictureBox.Size = new System.Drawing.Size(1721, 1474);
+            this.backgroundPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.backgroundPictureBox.TabIndex = 2;
+            this.backgroundPictureBox.TabStop = false;
+            this.backgroundPictureBox.Visible = false;
+            // 
             // FastTrainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -65,6 +79,7 @@ namespace TrainWindowsFormsApp
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1721, 1474);
+            this.Controls.Add(this.backgroundPictureBox);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.quitButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -73,6 +88,7 @@ namespace TrainWindowsFormsApp
             this.Text = "FastTrainForm";
             this.Load += new System.EventHandler(this.FastTrainForm_Load);
             this.SizeChanged += new System.EventHandler(this.FastTrainForm_SizeChanged);
+            ((System.ComponentModel.ISupportInitialize)(this.backgroundPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -81,5 +97,6 @@ namespace TrainWindowsFormsApp
 
         private System.Windows.Forms.Button quitButton;
         private System.Windows.Forms.Button closeButton;
+        private System.Windows.Forms.PictureBox backgroundPictureBox;
     }
 }

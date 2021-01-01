@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrainMainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.выходБезСохраненияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,7 +37,6 @@
             this.сохранитьНовоеУпражнениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.заминкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.создатьНовуюПрограммуТренировокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mainTimer = new System.Windows.Forms.Timer(this.components);
             this.backgroundPictureBox = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.backgroundPictureBox)).BeginInit();
@@ -127,10 +125,6 @@
             this.создатьНовуюПрограммуТренировокToolStripMenuItem.Text = "Создать новую программу тренировок";
             this.создатьНовуюПрограммуТренировокToolStripMenuItem.Click += new System.EventHandler(this.создатьНовуюПрограммуТренировокToolStripMenuItem_Click);
             // 
-            // mainTimer
-            // 
-            this.mainTimer.Tick += new System.EventHandler(this.mainTimer_Tick);
-            // 
             // backgroundPictureBox
             // 
             this.backgroundPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
@@ -143,11 +137,12 @@
             this.backgroundPictureBox.TabIndex = 1;
             this.backgroundPictureBox.TabStop = false;
             // 
-            // trainMainForm
+            // TrainMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1920, 1080);
             this.Controls.Add(this.menuStrip1);
@@ -156,7 +151,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Location = new System.Drawing.Point(20, 0);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "trainMainForm";
+            this.Name = "TrainMainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Let\'s Rock";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -176,7 +171,6 @@
         private System.Windows.Forms.ToolStripMenuItem закончитьТренировкуToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem разминкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem мнеНехерДелатьToolStripMenuItem;
-        private System.Windows.Forms.Timer mainTimer;
         private System.Windows.Forms.PictureBox backgroundPictureBox;
         private System.Windows.Forms.ToolStripMenuItem заминкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem создатьНовуюПрограммуТренировокToolStripMenuItem;

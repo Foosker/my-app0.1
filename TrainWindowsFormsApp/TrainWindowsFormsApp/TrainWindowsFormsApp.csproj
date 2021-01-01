@@ -138,7 +138,6 @@
     <Compile Include="SetNewLoadForm.Designer.cs">
       <DependentUpon>SetNewLoadForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TrainCommon.cs" />
     <Compile Include="TrainDay.cs" />
     <EmbeddedResource Include="FastTrainForm.resx">
       <DependentUpon>FastTrainForm.cs</DependentUpon>

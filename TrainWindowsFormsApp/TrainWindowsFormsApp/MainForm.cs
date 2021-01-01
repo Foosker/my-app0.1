@@ -10,7 +10,7 @@ namespace TrainWindowsFormsApp
 {
     public partial class TrainMainForm : Form
     {
-        private readonly string pathToProgressFile = "progress.txt";
+        public readonly string pathToProgressFile = "progress.txt";
         // Свойства элементов управления
         private readonly int height = 60;           // Высота ЭУ
         private readonly int indentBetween = 10;    // Расстояние между ЭУ по горизонтали,
@@ -32,7 +32,6 @@ namespace TrainWindowsFormsApp
 
         private static Random random = new Random();
 
-        private int timerCounter;
         // Для смены упражнения
         private List<Exercise> exerciseChangeList;  // Список упражнений из конкретного файла для смены упражнения
         private int indexInCurExL;  // Индекс упражнения в списке упражнений на тренировке
@@ -169,9 +168,7 @@ namespace TrainWindowsFormsApp
             exercises = GetExercises("additional");
             InitMap();
             FillInTheTable();
-
-            mainTimer.Stop();
-            timerCounter = 0;
+            backgroundPictureBox.Visible = false;
         }
 
         private void GetMode()
@@ -332,23 +329,14 @@ namespace TrainWindowsFormsApp
             GetMode();
         }
 
-        private void mainTimer_Tick(object sender, EventArgs e)
-        {   // таймер нужен для того, чтобы очистка клиентской области покрасивше выглядела
-            timerCounter++;
-            if (timerCounter > 2)
-            {
-                LaunchAddon();
-            }
-        }
-
-        public void ExerciseName_MouseClick(object sender, MouseEventArgs e)
+        private void ExerciseName_MouseClick(object sender, MouseEventArgs e)
         {   // Показ примечания к упражнению
             message = new MyMessageBox();
             var index = Array.IndexOf(labelsMap, sender); // Получаем индекс лейбла, на который нажали
             message.ShowText(exercises[index].Remark);     // и выводим примечание к упражнению по полученному индексу.            
         }
 
-        public void ExerciseChangeButton_Click(object sender, EventArgs e)
+        private void ExerciseChangeButton_Click(object sender, EventArgs e)
         {   // кнопки для смены упражнения
             if (Controls.Contains(nextExerciseButton) || Controls.Contains(closeExChButton))
             {
@@ -398,7 +386,7 @@ namespace TrainWindowsFormsApp
 
         }
 
-        public void NextExerciseButton_Click(object sender, EventArgs e)
+        private void NextExerciseButton_Click(object sender, EventArgs e)
         {   // промотка упражнений
             indexInExChL++;
             if (indexInExChL >= exerciseChangeList.Count())
@@ -411,7 +399,7 @@ namespace TrainWindowsFormsApp
             repeatButtons[indexInCurExL].Text = exerciseChangeList[indexInExChL].Repeat.ToString();
         }
 
-        public void CloseModeChangeExercise_Click(object sender, EventArgs e)
+        private void CloseModeChangeExercise_Click(object sender, EventArgs e)
         {   // закрытие режима смены упражнений
             exercises[indexInCurExL] = exerciseChangeList[indexInExChL];
 
@@ -422,7 +410,7 @@ namespace TrainWindowsFormsApp
             exercisesChangeButtons[indexInCurExL].Enabled = true;   // и становится активной
         }
 
-        public void RepeatButton_Click(object sender, EventArgs e)
+        private void RepeatButton_Click(object sender, EventArgs e)
         {   // Нажатие на кнопку выполнения упражнения
             var doneButton = (sender as Button);        // Обращается к кнопке,
             doneButton.BackColor = Color.ForestGreen;   // меняет окраску кнопки.
@@ -442,7 +430,7 @@ namespace TrainWindowsFormsApp
             else doneButton.Text = "OK";
         }
 
-        public void MegaPlusButton_Click(object sender, EventArgs e)
+        private void MegaPlusButton_Click(object sender, EventArgs e)
         {   // Нажатие на кнопку 
             var megaButton = (sender as Button);    // Обращается к кнопке,
             megaButton.BackColor = Color.Gold;      // меняет окраску кнопки
@@ -480,10 +468,10 @@ namespace TrainWindowsFormsApp
 
         private void мнеНехерДелатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            SaveTrainResults();
             мнеНехерДелатьToolStripMenuItem.Enabled = false;
             backgroundPictureBox.BringToFront();
-            mainTimer.Start();
-            SaveTrainResults();
+            LaunchAddon();
         }
 
         private void создатьНовуюПрограммуТренировокToolStripMenuItem_Click(object sender, EventArgs e)
