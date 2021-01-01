@@ -11,7 +11,7 @@ namespace TrainWindowsFormsApp
     {
         private readonly int height = 60;           // Высота ЭУ
         private int indentBetween = 10;    // Расстояние между ЭУ по горизонтали,
-        private int indentUpEdge = 300;             // то же по вертикали.
+        private int indentUpEdge = 70;             // то же по вертикали.
 
         private TrainMainForm mainForm = new TrainMainForm();
 
@@ -69,7 +69,7 @@ namespace TrainWindowsFormsApp
                 repeatButtons[i] = repeatButton;
                 repeatButton.Click += RepeatButton_Click;  // Событие нажатия на кнопку
 
-                var megaPlusButton = CreateButton(1060, i, 50, "⮝");
+                var megaPlusButton = CreateButton(1060, i, 50, "☠");
                 megaPlusButtons[i] = megaPlusButton;
                 megaPlusButton.Click += MegaPlusButton_Click;
 
@@ -222,8 +222,11 @@ namespace TrainWindowsFormsApp
         private void RepeatButton_Click(object sender, EventArgs e)
         {   // Нажатие на кнопку выполнения упражнения
             var doneButton = (sender as Button);
-            var index = Array.IndexOf(repeatButtons, doneButton);              // Получаем индекс кнопки в её специальном массиве,
+            var index = Array.IndexOf(repeatButtons, doneButton);             // Получаем индекс кнопки в её специальном массиве,
             exercises[index].Repeat++;                                       // меняем значение числа повторов.
+            
+            doneButton.Text = "OK";
+            doneButton.BackColor = Color.GreenYellow;
 
             Save(index);
         }
@@ -233,6 +236,9 @@ namespace TrainWindowsFormsApp
             var megaButton = (sender as Button);    // Обращается к кнопке,
             var index = Array.IndexOf(megaPlusButtons, megaButton);              // Получаем индекс кнопки в её специальном массиве,
             exercises[index].Repeat++;                                       // меняем значение числа повторов.
+
+            megaButton.Text = "✔";
+            megaButton.BackColor = Color.Goldenrod;
 
             Save(index);
         }

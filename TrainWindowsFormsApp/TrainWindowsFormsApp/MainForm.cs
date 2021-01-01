@@ -92,7 +92,7 @@ namespace TrainWindowsFormsApp
                 repeatButtons[i] = repeatButton;
                 repeatButton.Click += RepeatButton_Click;  // Событие нажатия на кнопку
 
-                var megaPlusButton = CreateButton(1060, i, 50, "⮝");
+                var megaPlusButton = CreateButton(1060, i, 50, "☠");
                 megaPlusButtons[i] = megaPlusButton;
                 megaPlusButton.Click += MegaPlusButton_Click;
 
@@ -188,8 +188,8 @@ namespace TrainWindowsFormsApp
             var selectedMode = progress % modes.Count();
 
             var modeLabel = CreateLabel(350, numberOfExercises + 1, 600);
-            modeLabel.Font = new Font("Tahoma", 25F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            modeLabel.ForeColor = Color.DarkOrange;
+            modeLabel.Font = new Font("Tahoma", 30F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            modeLabel.ForeColor = Color.DarkCyan;
             modeLabel.Height = 200;
             modeLabel.Image = Resources.Fire;
             modeLabel.Text = modes[selectedMode].Item1;

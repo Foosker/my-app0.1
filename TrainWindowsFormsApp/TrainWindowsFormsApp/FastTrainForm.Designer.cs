@@ -62,7 +62,6 @@ namespace TrainWindowsFormsApp
             // 
             // backgroundPictureBox
             // 
-            this.backgroundPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.backgroundPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("backgroundPictureBox.Image")));
             this.backgroundPictureBox.Location = new System.Drawing.Point(0, 0);
             this.backgroundPictureBox.Name = "backgroundPictureBox";

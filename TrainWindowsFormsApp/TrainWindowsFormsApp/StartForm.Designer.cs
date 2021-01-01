@@ -122,6 +122,7 @@ namespace TrainWindowsFormsApp
             this.Controls.Add(this.startTrainButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "StartForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "StartForm";
             this.ResumeLayout(false);
 
